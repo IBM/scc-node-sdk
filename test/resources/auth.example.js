@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2019.
+ * Copyright 2019 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,13 @@
  */
 
 'use strict';
-const fs = require('fs');
-const path = require('path');
-const authPath = path.join(__dirname, './secrets.js');
 
-const hasAuth = fs.existsSync(authPath);
+const testingHeaders = {};
 
-if (hasAuth) {
-  exports.describe = describe;
-} else {
-  exports.describe = describe.skip.bind(describe);
-  exports.describe.skip = exports.describe;
-}
-exports.auth = hasAuth ? require(authPath) : null;
+module.exports = {
+  'findings-api': {
+    url: 'https://us-south.secadvisor.cloud.ibm.com/findings',
+    apikey: 'abc-123-fakeapikey',
+    headers: testingHeaders,
+  },
+};
