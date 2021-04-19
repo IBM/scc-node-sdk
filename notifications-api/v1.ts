@@ -25,7 +25,7 @@ import { getSdkHeaders } from '../lib/common';
 
 class NotificationsApiV1 extends BaseService {
 
-  static DEFAULT_SERVICE_URL: string = 'https://notifications-api.cloud.ibm.com/notifications';
+  static DEFAULT_SERVICE_URL: string = 'https://us-south.secadvisor.cloud.ibm.com/notifications';
   static DEFAULT_SERVICE_NAME: string = 'notifications_api';
 
   /*************************
