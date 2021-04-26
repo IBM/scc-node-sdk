@@ -1,10 +1,10 @@
 {
-  "name": "mysdk",
+  "name": "ibm_cloud_security_and_compliance_center_node_sdk",
   "version": "0.0.1",
-  "description": "IBM Cloud Node SDK",
+  "description": "IBM Cloud Security & Compliance Center Node SDK",
   "repository": {
     "type": "git",
-    "url": "https://github.ibm.com/CloudEngineering/node-sdk-template"
+    "url": "https://github.com/ibm-cloud-security/scc-node-sdk"
   },
   "keywords": [
     "ibm"

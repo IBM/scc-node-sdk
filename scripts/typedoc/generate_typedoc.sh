@@ -5,3 +5,10 @@
 #    --out ./service-name/v1.ts --target "ES5"
 
 # List the commands for each service here:
+
+./node_modules/.bin/typedoc --mode file --theme ./scripts/typedoc/theme --excludeExternals --excludePrivate --excludeProtected \
+    --out ./doc \
+    ./findings/v1.ts \
+    ./notifications/v1.ts \
+    ./configuration-governance/v1.ts \
+    --target "ES5"

@@ -6,7 +6,9 @@ auth/*.js
 **/*.js.map
 
 # service-specific tsc outputs (js files)
-findings-api/*.js
+findings/*.js
+notifications/*.js
+configuration-governance/*.js
 
 # file holding service credentials
 test/resources/auth.js

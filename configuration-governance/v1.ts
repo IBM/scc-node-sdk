@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-c6db7f4a-20210114-141015
+ * IBM OpenAPI SDK Code Generator Version: 3.30.0-bd714324-20210406-200538
  */
 
 
@@ -98,6 +98,8 @@ class ConfigurationGovernanceV1 extends BaseService {
    *
    * A successful `POST /config/rules` request defines a rule based on the target, conditions, and enforcement actions
    * that you specify. The response returns the ID value for your rule, along with other metadata.
+   *
+   * To learn more about rules, check out the [docs](/docs/security-compliance?topic=security-compliance-what-is-rule).
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {CreateRuleRequest[]} params.rules - A list of rules to be created.
@@ -273,7 +275,7 @@ class ConfigurationGovernanceV1 extends BaseService {
    * @param {string} params.name - A human-readable alias to assign to your rule.
    * @param {string} params.description - An extended description of your rule.
    * @param {TargetResource} params.target - The properties that describe the resource that you want to target
-   * with the rule.
+   * with the rule or template.
    * @param {RuleRequiredConfig} params.requiredConfig -
    * @param {EnforcementAction[]} params.enforcementActions - The actions that the service must run on your behalf when
    * a request to create or modify the target resource does not comply with your conditions.
@@ -394,7 +396,7 @@ class ConfigurationGovernanceV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.ruleId - The UUID that uniquely identifies the rule.
-   * @param {AttachmentRequest[]} params.attachments -
+   * @param {RuleAttachmentRequest[]} params.attachments -
    * @param {string} [params.transactionId] - The unique identifier that is used to trace an entire request. If you omit
    * this field, the service generates and sends a transaction ID as a response header of the request. In the case of an
    * error, the transaction ID is set in the `trace` field of the response body.
@@ -402,9 +404,9 @@ class ConfigurationGovernanceV1 extends BaseService {
    * **Note:** To help with debugging logs, it is strongly recommended that you generate and supply a `Transaction-Id`
    * with each request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.CreateAttachmentsResponse>>}
+   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.CreateRuleAttachmentsResponse>>}
    */
-  public createAttachments(params: ConfigurationGovernanceV1.CreateAttachmentsParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.CreateAttachmentsResponse>> {
+  public createRuleAttachments(params: ConfigurationGovernanceV1.CreateRuleAttachmentsParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.CreateRuleAttachmentsResponse>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['ruleId', 'attachments'];
 
@@ -421,7 +423,7 @@ class ConfigurationGovernanceV1 extends BaseService {
       'rule_id': _params.ruleId
     };
 
-    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'createAttachments');
+    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'createRuleAttachments');
 
     const parameters = {
       options: {
@@ -467,9 +469,9 @@ class ConfigurationGovernanceV1 extends BaseService {
    * **Usage:** If you have 100 rules, and you want to retrieve rules 26 through 50, use
    * `../rules?account_id={account_id}&offset=25&limit=5`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.AttachmentList>>}
+   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.RuleAttachmentList>>}
    */
-  public listAttachments(params: ConfigurationGovernanceV1.ListAttachmentsParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.AttachmentList>> {
+  public listRuleAttachments(params: ConfigurationGovernanceV1.ListRuleAttachmentsParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.RuleAttachmentList>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['ruleId'];
 
@@ -487,7 +489,7 @@ class ConfigurationGovernanceV1 extends BaseService {
       'rule_id': _params.ruleId
     };
 
-    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'listAttachments');
+    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'listRuleAttachments');
 
     const parameters = {
       options: {
@@ -522,9 +524,9 @@ class ConfigurationGovernanceV1 extends BaseService {
    * **Note:** To help with debugging logs, it is strongly recommended that you generate and supply a `Transaction-Id`
    * with each request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.Attachment>>}
+   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.RuleAttachment>>}
    */
-  public getAttachment(params: ConfigurationGovernanceV1.GetAttachmentParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.Attachment>> {
+  public getRuleAttachment(params: ConfigurationGovernanceV1.GetRuleAttachmentParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.RuleAttachment>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['ruleId', 'attachmentId'];
 
@@ -538,7 +540,7 @@ class ConfigurationGovernanceV1 extends BaseService {
       'attachment_id': _params.attachmentId
     };
 
-    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'getAttachment');
+    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'getRuleAttachment');
 
     const parameters = {
       options: {
@@ -581,9 +583,9 @@ class ConfigurationGovernanceV1 extends BaseService {
    * **Note:** To help with debugging logs, it is strongly recommended that you generate and supply a `Transaction-Id`
    * with each request.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.Attachment>>}
+   * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.TemplateAttachment>>}
    */
-  public updateAttachment(params: ConfigurationGovernanceV1.UpdateAttachmentParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.Attachment>> {
+  public updateRuleAttachment(params: ConfigurationGovernanceV1.UpdateRuleAttachmentParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.TemplateAttachment>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['ruleId', 'attachmentId', 'ifMatch', 'accountId', 'includedScope'];
 
@@ -603,7 +605,7 @@ class ConfigurationGovernanceV1 extends BaseService {
       'attachment_id': _params.attachmentId
     };
 
-    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'updateAttachment');
+    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'updateRuleAttachment');
 
     const parameters = {
       options: {
@@ -642,7 +644,7 @@ class ConfigurationGovernanceV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.Empty>>}
    */
-  public deleteAttachment(params: ConfigurationGovernanceV1.DeleteAttachmentParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.Empty>> {
+  public deleteRuleAttachment(params: ConfigurationGovernanceV1.DeleteRuleAttachmentParams): Promise<ConfigurationGovernanceV1.Response<ConfigurationGovernanceV1.Empty>> {
     const _params = Object.assign({}, params);
     const requiredParams = ['ruleId', 'attachmentId'];
 
@@ -656,7 +658,7 @@ class ConfigurationGovernanceV1 extends BaseService {
       'attachment_id': _params.attachmentId
     };
 
-    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteAttachment');
+    const sdkHeaders = getSdkHeaders(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteRuleAttachment');
 
     const parameters = {
       options: {
@@ -785,7 +787,7 @@ namespace ConfigurationGovernanceV1 {
     name: string;
     /** An extended description of your rule. */
     description: string;
-    /** The properties that describe the resource that you want to target with the rule. */
+    /** The properties that describe the resource that you want to target with the rule or template. */
     target: TargetResource;
     requiredConfig: RuleRequiredConfig;
     /** The actions that the service must run on your behalf when a request to create or modify the target resource
@@ -834,11 +836,11 @@ namespace ConfigurationGovernanceV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `createAttachments` operation. */
-  export interface CreateAttachmentsParams {
+  /** Parameters for the `createRuleAttachments` operation. */
+  export interface CreateRuleAttachmentsParams {
     /** The UUID that uniquely identifies the rule. */
     ruleId: string;
-    attachments: AttachmentRequest[];
+    attachments: RuleAttachmentRequest[];
     /** The unique identifier that is used to trace an entire request. If you omit this field, the service generates
      *  and sends a transaction ID as a response header of the request. In the case of an error, the transaction ID is
      *  set in the `trace` field of the response body.
@@ -850,8 +852,8 @@ namespace ConfigurationGovernanceV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `listAttachments` operation. */
-  export interface ListAttachmentsParams {
+  /** Parameters for the `listRuleAttachments` operation. */
+  export interface ListRuleAttachmentsParams {
     /** The UUID that uniquely identifies the rule. */
     ruleId: string;
     /** The unique identifier that is used to trace an entire request. If you omit this field, the service generates
@@ -879,8 +881,8 @@ namespace ConfigurationGovernanceV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `getAttachment` operation. */
-  export interface GetAttachmentParams {
+  /** Parameters for the `getRuleAttachment` operation. */
+  export interface GetRuleAttachmentParams {
     /** The UUID that uniquely identifies the rule. */
     ruleId: string;
     /** The UUID that uniquely identifies the attachment. */
@@ -896,8 +898,8 @@ namespace ConfigurationGovernanceV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `updateAttachment` operation. */
-  export interface UpdateAttachmentParams {
+  /** Parameters for the `updateRuleAttachment` operation. */
+  export interface UpdateRuleAttachmentParams {
     /** The UUID that uniquely identifies the rule. */
     ruleId: string;
     /** The UUID that uniquely identifies the attachment. */
@@ -926,8 +928,8 @@ namespace ConfigurationGovernanceV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `deleteAttachment` operation. */
-  export interface DeleteAttachmentParams {
+  /** Parameters for the `deleteRuleAttachment` operation. */
+  export interface DeleteRuleAttachmentParams {
     /** The UUID that uniquely identifies the rule. */
     ruleId: string;
     /** The UUID that uniquely identifies the attachment. */
@@ -947,48 +949,9 @@ namespace ConfigurationGovernanceV1 {
    * model interfaces
    ************************/
 
-  /** The scopes to attach to the rule. */
-  export interface Attachment {
-    /** The UUID that uniquely identifies the attachment. */
-    attachment_id: string;
-    /** The UUID that uniquely identifies the rule. */
-    rule_id: string;
-    /** Your IBM Cloud account ID. */
-    account_id: string;
-    /** The extent at which the rule can be attached across your accounts. */
-    included_scope: RuleScope;
-    /** The extent at which the rule can be excluded from the included scope. */
-    excluded_scopes?: RuleScope[];
-  }
-
-  /** A list of attachments. */
-  export interface AttachmentList {
-    /** The requested offset for the returned items. */
-    offset: number;
-    /** The requested limit for the returned items. */
-    limit: number;
-    /** The total number of available items. */
-    total_count: number;
-    /** The first page of available items. */
-    first: Link;
-    /** The last page of available items. */
-    last: Link;
-    attachments: Attachment[];
-  }
-
-  /** The scopes to attach to the rule. */
-  export interface AttachmentRequest {
-    /** Your IBM Cloud account ID. */
-    account_id: string;
-    /** The extent at which the rule can be attached across your accounts. */
-    included_scope: RuleScope;
-    /** The extent at which the rule can be excluded from the included scope. */
-    excluded_scopes?: RuleScope[];
-  }
-
-  /** CreateAttachmentsResponse. */
-  export interface CreateAttachmentsResponse {
-    attachments: Attachment[];
+  /** CreateRuleAttachmentsResponse. */
+  export interface CreateRuleAttachmentsResponse {
+    attachments: RuleAttachment[];
   }
 
   /** A rule to be created. */
@@ -1002,11 +965,11 @@ namespace ConfigurationGovernanceV1 {
      *  with each request.
      */
     request_id?: string;
-    /** User-settable properties associated with a rule to be created or updated. */
+    /** Properties that you can associate with a rule. */
     rule: RuleRequest;
   }
 
-  /** Response information for a rule request. If the 'status_code' property indicates success, the 'request_id' and 'rule' properties will be present.   If the 'status_code' property indicates an error, the 'request_id', 'errors', and 'trace' fields will be present. */
+  /** Response information for a rule request. If the 'status_code' property indicates success, the 'request_id' and 'rule' properties are returned in the response. If the 'status_code' property indicates an error, the 'request_id', 'errors', and 'trace' fields are returned. */
   export interface CreateRuleResponse {
     /** The identifier that is used to correlate an individual request.
      *
@@ -1018,17 +981,17 @@ namespace ConfigurationGovernanceV1 {
     status_code?: number;
     /** Information about a newly-created rule.
      *
-     *  This field will be present for a successful request.
+     *  This field is present for successful requests.
      */
     rule?: Rule;
     /** The error contents of the multi-status response.
      *
-     *  This field will be present for a failed rule request.
+     *  This field is present for unsuccessful requests.
      */
     errors?: RuleResponseError[];
     /** The UUID that uniquely identifies the request.
      *
-     *  This field will be present for a failed rule request.
+     *  This field is present for unsuccessful requests.
      */
     trace?: string;
   }
@@ -1053,7 +1016,7 @@ namespace ConfigurationGovernanceV1 {
     href: string;
   }
 
-  /** Properties associated with a rule, including both user-settable and server-populated properties. */
+  /** Properties associated with a rule, including both user-defined and server-populated properties. */
   export interface Rule {
     /** Your IBM Cloud account ID. */
     account_id?: string;
@@ -1063,7 +1026,7 @@ namespace ConfigurationGovernanceV1 {
     description: string;
     /** The type of rule. Rules that you create are `user_defined`. */
     rule_type?: string;
-    /** The properties that describe the resource that you want to target with the rule. */
+    /** The properties that describe the resource that you want to target with the rule or template. */
     target: TargetResource;
     required_config: RuleRequiredConfig;
     /** The actions that the service must run on your behalf when a request to create or modify the target resource
@@ -1088,6 +1051,45 @@ namespace ConfigurationGovernanceV1 {
     number_of_attachments?: number;
   }
 
+  /** The scopes to attach to a rule. */
+  export interface RuleAttachment {
+    /** The UUID that uniquely identifies the attachment. */
+    attachment_id: string;
+    /** The UUID that uniquely identifies the rule. */
+    rule_id: string;
+    /** Your IBM Cloud account ID. */
+    account_id: string;
+    /** The extent at which the rule can be attached across your accounts. */
+    included_scope: RuleScope;
+    /** The extent at which the rule can be excluded from the included scope. */
+    excluded_scopes?: RuleScope[];
+  }
+
+  /** A list of attachments. */
+  export interface RuleAttachmentList {
+    /** The requested offset for the returned items. */
+    offset: number;
+    /** The requested limit for the returned items. */
+    limit: number;
+    /** The total number of available items. */
+    total_count: number;
+    /** The first page of available items. */
+    first: Link;
+    /** The last page of available items. */
+    last: Link;
+    attachments: RuleAttachment[];
+  }
+
+  /** The scopes to attach to a rule. */
+  export interface RuleAttachmentRequest {
+    /** Your IBM Cloud account ID. */
+    account_id: string;
+    /** The extent at which the rule can be attached across your accounts. */
+    included_scope: RuleScope;
+    /** The extent at which the rule can be excluded from the included scope. */
+    excluded_scopes?: RuleScope[];
+  }
+
   /** RuleCondition. */
   export interface RuleCondition {
   }
@@ -1108,7 +1110,7 @@ namespace ConfigurationGovernanceV1 {
     rules: Rule[];
   }
 
-  /** User-settable properties associated with a rule to be created or updated. */
+  /** Properties that you can associate with a rule. */
   export interface RuleRequest {
     /** Your IBM Cloud account ID. */
     account_id?: string;
@@ -1118,7 +1120,7 @@ namespace ConfigurationGovernanceV1 {
     description: string;
     /** The type of rule. Rules that you create are `user_defined`. */
     rule_type?: string;
-    /** The properties that describe the resource that you want to target with the rule. */
+    /** The properties that describe the resource that you want to target with the rule or template. */
     target: TargetResource;
     required_config: RuleRequiredConfig;
     /** The actions that the service must run on your behalf when a request to create or modify the target resource
@@ -1163,7 +1165,7 @@ namespace ConfigurationGovernanceV1 {
     property: string;
     /** The way in which the `property` field is compared to its value.
      *
-     *  There are three types of operators: string, numeric, and boolean.
+     *  To learn more, see the [docs](/docs/security-compliance?topic=security-compliance-what-is-rule#rule-operators).
      */
     operator: string;
     /** The way in which you want your property to be applied.
@@ -1174,32 +1176,62 @@ namespace ConfigurationGovernanceV1 {
     value?: string;
   }
 
-  /** The attributes that are associated with a rule target. */
-  export interface RuleTargetAttribute {
+  /** The properties that describe the resource that you want to target with the rule or template. */
+  export interface TargetResource {
+    /** The programmatic name of the IBM Cloud service that you want to target with the rule or template. */
+    service_name: string;
+    /** The type of resource that you want to target. */
+    resource_kind: string;
+    /** An extra qualifier for the resource kind. When you include additional attributes, only the resources that
+     *  match the definition are included in the rule or template.
+     */
+    additional_target_attributes?: TargetResourceAdditionalTargetAttributesItem[];
+  }
+
+  /** The attributes that are associated with a rule or template target. */
+  export interface TargetResourceAdditionalTargetAttributesItem {
+    /** The name of the additional attribute that you want to use to further qualify the target.
+     *
+     *  Options differ depending on the service or resource that you are targeting with a rule or template. For more
+     *  information, refer to the service documentation.
+     */
     name: string;
+    /** The value that you want to apply to `name` field.
+     *
+     *  Options differ depending on the rule or template that you configure. For more information, refer to the service
+     *  documentation.
+     */
+    value: string;
     /** The way in which the `name` field is compared to its value.
      *
      *  There are three types of operators: string, numeric, and boolean.
      */
     operator: string;
-    /** The way in which you want your property to be applied.
-     *
-     *  Value options differ depending on the rule that you configure. If you use a boolean operator, you do not need to
-     *  input a value.
-     */
-    value?: string;
   }
 
-  /** The properties that describe the resource that you want to target with the rule. */
-  export interface TargetResource {
-    /** The programmatic name of the IBM Cloud service that you want to target with the rule. */
-    service_name: string;
-    /** The type of resource that you want to target. */
-    resource_kind: string;
-    /** An extra qualifier for the resource kind. When you include additional attributes, only the resources that
-     *  match the definition are included in the rule.
+  /** The scopes to attach to a template. */
+  export interface TemplateAttachment {
+    /** The UUID that uniquely identifies the attachment. */
+    attachment_id: string;
+    /** The UUID that uniquely identifies the template. */
+    template_id: string;
+    /** Your IBM Cloud account ID. */
+    account_id: string;
+    /** The extent at which the template can be attached across your accounts. */
+    included_scope: TemplateScope;
+    excluded_scopes?: TemplateScope[];
+  }
+
+  /** The extent at which the template can be attached across your accounts. */
+  export interface TemplateScope {
+    /** A short description or alias to assign to the scope. */
+    note?: string;
+    /** The ID of the scope, such as an enterprise, account, or account group, where you want to apply the
+     *  customized defaults that are associated with a template.
      */
-    additional_target_attributes?: RuleTargetAttribute[];
+    scope_id: string;
+    /** The type of scope. */
+    scope_type: string;
   }
 
   /** A condition with the `and` logical operator. */
@@ -1224,7 +1256,7 @@ namespace ConfigurationGovernanceV1 {
     property: string;
     /** The way in which the `property` field is compared to its value.
      *
-     *  There are three types of operators: string, numeric, and boolean.
+     *  To learn more, see the [docs](/docs/security-compliance?topic=security-compliance-what-is-rule#rule-operators).
      */
     operator: string;
     /** The way in which you want your property to be applied.
@@ -1249,7 +1281,7 @@ namespace ConfigurationGovernanceV1 {
     property: string;
     /** The way in which the `property` field is compared to its value.
      *
-     *  There are three types of operators: string, numeric, and boolean.
+     *  To learn more, see the [docs](/docs/security-compliance?topic=security-compliance-what-is-rule#rule-operators).
      */
     operator: string;
     /** The way in which you want your property to be applied.

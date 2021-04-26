@@ -103,18 +103,18 @@ describe('ConfigurationGovernanceV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // RuleTargetAttribute
-      const ruleTargetAttributeModel = {
+      // TargetResourceAdditionalTargetAttributesItem
+      const targetResourceAdditionalTargetAttributesItemModel = {
         name: 'resource_id',
+        value: '81f3db5e-f9db-4c46-9de3-a4a76e66adbf',
         operator: 'string_equals',
-        value: 'f0f8f7994e754ff38f9d370201966561',
       };
 
       // TargetResource
       const targetResourceModel = {
         service_name: 'iam-groups',
         resource_kind: 'service',
-        additional_target_attributes: [ruleTargetAttributeModel],
+        additional_target_attributes: [targetResourceAdditionalTargetAttributesItemModel],
       };
 
       // RuleRequiredConfigSingleProperty
@@ -139,7 +139,7 @@ describe('ConfigurationGovernanceV1', () => {
         target: targetResourceModel,
         required_config: ruleRequiredConfigModel,
         enforcement_actions: [enforcementActionModel],
-        labels: ['testString'],
+        labels: ['Access', 'IAM'],
       };
 
       // CreateRuleRequest
@@ -378,18 +378,18 @@ describe('ConfigurationGovernanceV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // RuleTargetAttribute
-      const ruleTargetAttributeModel = {
+      // TargetResourceAdditionalTargetAttributesItem
+      const targetResourceAdditionalTargetAttributesItemModel = {
         name: 'testString',
-        operator: 'string_equals',
         value: 'testString',
+        operator: 'string_equals',
       };
 
       // TargetResource
       const targetResourceModel = {
         service_name: 'iam-groups',
         resource_kind: 'service',
-        additional_target_attributes: [ruleTargetAttributeModel],
+        additional_target_attributes: [targetResourceAdditionalTargetAttributesItemModel],
       };
 
       // RuleRequiredConfigSingleProperty
@@ -416,7 +416,7 @@ describe('ConfigurationGovernanceV1', () => {
         const enforcementActions = [enforcementActionModel];
         const accountId = '531fc3e28bfc43c5a2cea07786d93f5c';
         const ruleType = 'user_defined';
-        const labels = ['testString'];
+        const labels = ['SOC2', 'ITCS300'];
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
@@ -584,7 +584,7 @@ describe('ConfigurationGovernanceV1', () => {
       });
     });
   });
-  describe('createAttachments', () => {
+  describe('createRuleAttachments', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
@@ -595,17 +595,17 @@ describe('ConfigurationGovernanceV1', () => {
         scope_type: 'enterprise',
       };
 
-      // AttachmentRequest
-      const attachmentRequestModel = {
+      // RuleAttachmentRequest
+      const ruleAttachmentRequestModel = {
         account_id: '531fc3e28bfc43c5a2cea07786d93f5c',
         included_scope: ruleScopeModel,
         excluded_scopes: [ruleScopeModel],
       };
 
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation createAttachments
+        // Construct the params object for operation createRuleAttachments
         const ruleId = 'testString';
-        const attachments = [attachmentRequestModel];
+        const attachments = [ruleAttachmentRequestModel];
         const transactionId = 'testString';
         const params = {
           ruleId: ruleId,
@@ -613,10 +613,10 @@ describe('ConfigurationGovernanceV1', () => {
           transactionId: transactionId,
         };
 
-        const createAttachmentsResult = configurationGovernanceService.createAttachments(params);
+        const createRuleAttachmentsResult = configurationGovernanceService.createRuleAttachments(params);
 
         // all methods should return a Promise
-        expectToBePromise(createAttachmentsResult);
+        expectToBePromise(createRuleAttachmentsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -635,7 +635,7 @@ describe('ConfigurationGovernanceV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const ruleId = 'testString';
-        const attachments = [attachmentRequestModel];
+        const attachments = [ruleAttachmentRequestModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -647,7 +647,7 @@ describe('ConfigurationGovernanceV1', () => {
           },
         };
 
-        configurationGovernanceService.createAttachments(params);
+        configurationGovernanceService.createRuleAttachments(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -656,7 +656,7 @@ describe('ConfigurationGovernanceV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await configurationGovernanceService.createAttachments({});
+          await configurationGovernanceService.createRuleAttachments({});
         } catch (e) {
           err = e;
         }
@@ -666,20 +666,20 @@ describe('ConfigurationGovernanceV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const createAttachmentsPromise = configurationGovernanceService.createAttachments();
-        expectToBePromise(createAttachmentsPromise);
+        const createRuleAttachmentsPromise = configurationGovernanceService.createRuleAttachments();
+        expectToBePromise(createRuleAttachmentsPromise);
 
-        createAttachmentsPromise.catch(err => {
+        createRuleAttachmentsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
       });
     });
   });
-  describe('listAttachments', () => {
+  describe('listRuleAttachments', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation listAttachments
+        // Construct the params object for operation listRuleAttachments
         const ruleId = 'testString';
         const transactionId = 'testString';
         const limit = 1000;
@@ -691,10 +691,10 @@ describe('ConfigurationGovernanceV1', () => {
           offset: offset,
         };
 
-        const listAttachmentsResult = configurationGovernanceService.listAttachments(params);
+        const listRuleAttachmentsResult = configurationGovernanceService.listRuleAttachments(params);
 
         // all methods should return a Promise
-        expectToBePromise(listAttachmentsResult);
+        expectToBePromise(listRuleAttachmentsResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -724,7 +724,7 @@ describe('ConfigurationGovernanceV1', () => {
           },
         };
 
-        configurationGovernanceService.listAttachments(params);
+        configurationGovernanceService.listRuleAttachments(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -733,7 +733,7 @@ describe('ConfigurationGovernanceV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await configurationGovernanceService.listAttachments({});
+          await configurationGovernanceService.listRuleAttachments({});
         } catch (e) {
           err = e;
         }
@@ -743,20 +743,20 @@ describe('ConfigurationGovernanceV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const listAttachmentsPromise = configurationGovernanceService.listAttachments();
-        expectToBePromise(listAttachmentsPromise);
+        const listRuleAttachmentsPromise = configurationGovernanceService.listRuleAttachments();
+        expectToBePromise(listRuleAttachmentsPromise);
 
-        listAttachmentsPromise.catch(err => {
+        listRuleAttachmentsPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
       });
     });
   });
-  describe('getAttachment', () => {
+  describe('getRuleAttachment', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation getAttachment
+        // Construct the params object for operation getRuleAttachment
         const ruleId = 'testString';
         const attachmentId = 'testString';
         const transactionId = 'testString';
@@ -766,10 +766,10 @@ describe('ConfigurationGovernanceV1', () => {
           transactionId: transactionId,
         };
 
-        const getAttachmentResult = configurationGovernanceService.getAttachment(params);
+        const getRuleAttachmentResult = configurationGovernanceService.getRuleAttachment(params);
 
         // all methods should return a Promise
-        expectToBePromise(getAttachmentResult);
+        expectToBePromise(getRuleAttachmentResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -800,7 +800,7 @@ describe('ConfigurationGovernanceV1', () => {
           },
         };
 
-        configurationGovernanceService.getAttachment(params);
+        configurationGovernanceService.getRuleAttachment(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -809,7 +809,7 @@ describe('ConfigurationGovernanceV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await configurationGovernanceService.getAttachment({});
+          await configurationGovernanceService.getRuleAttachment({});
         } catch (e) {
           err = e;
         }
@@ -819,17 +819,17 @@ describe('ConfigurationGovernanceV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const getAttachmentPromise = configurationGovernanceService.getAttachment();
-        expectToBePromise(getAttachmentPromise);
+        const getRuleAttachmentPromise = configurationGovernanceService.getRuleAttachment();
+        expectToBePromise(getRuleAttachmentPromise);
 
-        getAttachmentPromise.catch(err => {
+        getRuleAttachmentPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
       });
     });
   });
-  describe('updateAttachment', () => {
+  describe('updateRuleAttachment', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
@@ -841,7 +841,7 @@ describe('ConfigurationGovernanceV1', () => {
       };
 
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation updateAttachment
+        // Construct the params object for operation updateRuleAttachment
         const ruleId = 'testString';
         const attachmentId = 'testString';
         const ifMatch = 'testString';
@@ -859,10 +859,10 @@ describe('ConfigurationGovernanceV1', () => {
           transactionId: transactionId,
         };
 
-        const updateAttachmentResult = configurationGovernanceService.updateAttachment(params);
+        const updateRuleAttachmentResult = configurationGovernanceService.updateRuleAttachment(params);
 
         // all methods should return a Promise
-        expectToBePromise(updateAttachmentResult);
+        expectToBePromise(updateRuleAttachmentResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -903,7 +903,7 @@ describe('ConfigurationGovernanceV1', () => {
           },
         };
 
-        configurationGovernanceService.updateAttachment(params);
+        configurationGovernanceService.updateRuleAttachment(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -912,7 +912,7 @@ describe('ConfigurationGovernanceV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await configurationGovernanceService.updateAttachment({});
+          await configurationGovernanceService.updateRuleAttachment({});
         } catch (e) {
           err = e;
         }
@@ -922,20 +922,20 @@ describe('ConfigurationGovernanceV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const updateAttachmentPromise = configurationGovernanceService.updateAttachment();
-        expectToBePromise(updateAttachmentPromise);
+        const updateRuleAttachmentPromise = configurationGovernanceService.updateRuleAttachment();
+        expectToBePromise(updateRuleAttachmentPromise);
 
-        updateAttachmentPromise.catch(err => {
+        updateRuleAttachmentPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
       });
     });
   });
-  describe('deleteAttachment', () => {
+  describe('deleteRuleAttachment', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation deleteAttachment
+        // Construct the params object for operation deleteRuleAttachment
         const ruleId = 'testString';
         const attachmentId = 'testString';
         const transactionId = 'testString';
@@ -945,10 +945,10 @@ describe('ConfigurationGovernanceV1', () => {
           transactionId: transactionId,
         };
 
-        const deleteAttachmentResult = configurationGovernanceService.deleteAttachment(params);
+        const deleteRuleAttachmentResult = configurationGovernanceService.deleteRuleAttachment(params);
 
         // all methods should return a Promise
-        expectToBePromise(deleteAttachmentResult);
+        expectToBePromise(deleteRuleAttachmentResult);
 
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
@@ -979,7 +979,7 @@ describe('ConfigurationGovernanceV1', () => {
           },
         };
 
-        configurationGovernanceService.deleteAttachment(params);
+        configurationGovernanceService.deleteRuleAttachment(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -988,7 +988,7 @@ describe('ConfigurationGovernanceV1', () => {
       test('should enforce required parameters', async done => {
         let err;
         try {
-          await configurationGovernanceService.deleteAttachment({});
+          await configurationGovernanceService.deleteRuleAttachment({});
         } catch (e) {
           err = e;
         }
@@ -998,10 +998,10 @@ describe('ConfigurationGovernanceV1', () => {
       });
 
       test('should reject promise when required params are not given', done => {
-        const deleteAttachmentPromise = configurationGovernanceService.deleteAttachment();
-        expectToBePromise(deleteAttachmentPromise);
+        const deleteRuleAttachmentPromise = configurationGovernanceService.deleteRuleAttachment();
+        expectToBePromise(deleteRuleAttachmentPromise);
 
-        deleteAttachmentPromise.catch(err => {
+        deleteRuleAttachmentPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });

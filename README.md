@@ -1,4 +1,4 @@
-# IBM Cloud Security and Compliance center Node.js SDK
+# IBM Cloud Security & Compliance Center Node.js SDK
 [![Build Status](https://api.travis-ci.org/ibm-cloud-security/scc-node-sdk.svg?branch=master)](https://travis-ci.org/github/ibm-cloud-security/scc-node-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
@@ -41,6 +41,13 @@ Node JS client library to use the IBM Cloud Security and Compliance center APIs.
 ## Overview
 
 The IBM Cloud Security and Compliance center Node SDK allows developers to programmatically interact with the IBM Cloud Security and Compliance center Service.
+IBM Cloud services:
+
+Service Name | Imported Class Name
+--- | ---
+[FindingsApiV1](https://cloud.ibm.com/apidocs/security-and-compliance-center/findings) | FindingsApiV1
+[NotificationsApiV1](https://cloud.ibm.com/apidocs/security-and-compliance-center/notifications) | NotificationsApiV1
+[ConfigurationGovernanceApiV1](https://cloud.ibm.com/apidocs/security-and-compliance-center/configuration-governance) | ConfigurationGovernanceApiV1
 
 ## Prerequisites
 - You need an [IBM Cloud][ibm-cloud-onboarding] account.
@@ -90,7 +97,7 @@ To learn more about the Authenticators and how to use them with your services, s
 All SDK methods return a Promise that either resolves with the response from the service or rejects with an Error. The response contains the body, the headers, the status code, and the status text.
 
 ```js
-const FindingsAPI =  require('scc-node-sdk/findings-api/v1');
+const FindingsAPI =  require('scc-node-sdk/findings/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const findingsAPIClient = new FindingsAPI({
@@ -141,7 +148,7 @@ Currently there are two supported endpoints:
 
 
 ```js
-const NotificationsApi =  require('scc-node-sdk/notifications-api/v1');
+const NotificationsApi =  require('scc-node-sdk/notifications/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const notificationsAPIClient = new NotificationsApi({
@@ -158,7 +165,7 @@ Custom headers can be passed with any request. There are two ways of setting the
 Any headers passed in with the service client constructor will be stored and automatically added to every request made with said client.
 
 ```js
-const FindingsAPI =  require('scc-node-sdk/findings-api/v1');
+const FindingsAPI =  require('scc-node-sdk/findings/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const findingsAPIClient = new FindingsAPI({
@@ -181,7 +188,7 @@ To use the SDK (which makes HTTPS requests) behind an HTTP proxy, a special tunn
 
 ```js
 const tunnel = require('tunnel');
-const FindingsAPI =  require('scc-node-sdk/findings-api/v1');
+const FindingsAPI =  require('scc-node-sdk/findings/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const findingsAPIClient = new FindingsAPI({
@@ -201,7 +208,7 @@ To send custom certificates as a security measure in your request, use the `cert
 
 ```js
 const tunnel = require('tunnel');
-const NotificationsAPI =  require('scc-node-sdk/notifications-api/v1');
+const NotificationsAPI =  require('scc-node-sdk/notifications/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const certFile = fs.readFileSync('./my-cert.pem');
@@ -229,7 +236,7 @@ To do this, set `disableSslVerification` to `true` in the service constructor an
 
 #### Findings Api
 ```js
-const FindingsAPI =  require('scc-node-sdk/findings-api/v1');
+const FindingsAPI =  require('scc-node-sdk/findings/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const findingsAPIClient = new FindingsAPI({

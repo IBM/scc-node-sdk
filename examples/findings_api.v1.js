@@ -3,7 +3,7 @@
 /*
 export the following variables before running this example in a terminal
 export apikey=
-export account_id=
+export accountId=
 
 This would create a card in the given account with name SampleCard and a KPI called My sample KPI with value 10
 Visit https://cloud.ibm.com/security-advisor#/dashboard to view them
@@ -12,7 +12,7 @@ Visit https://cloud.ibm.com/security-advisor#/dashboard to view them
 let notes = require('./resources/notes');
 let occurrences = require('./resources/occurrences');
 
-const FindingsAPI = require('scc-node-sdk/findings-api/v1');
+const FindingsAPI = require('scc-node-sdk/findings/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const findingsAPIClient = new FindingsAPI({
@@ -23,7 +23,7 @@ const findingsAPIClient = new FindingsAPI({
 let listNotes = async () => {
   try {
     let response = await findingsAPIClient.listNotes({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       providerId: 'security-advisor',
     });
     console.log('List of notes');
@@ -36,7 +36,7 @@ let listNotes = async () => {
 let listOccurrences = async () => {
   try {
     let response = await findingsAPIClient.listOccurrences({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       providerId: 'security-advisor',
     });
     console.log('List of occurrences');
@@ -52,7 +52,7 @@ let createNotes = async () => {
       try {
         console.log('Creating note with id', n.id);
         await findingsAPIClient.createNote(
-          Object.assign({ accountId: process.env.account_id, providerId: 'security-advisor' }, n)
+          Object.assign({ accountId: process.env.accountId, providerId: 'security-advisor' }, n)
         );
         console.log('Created note with id', n.id);
       } catch (err) {
@@ -62,7 +62,7 @@ let createNotes = async () => {
             console.log('Trying to update note with id', n.id);
             await findingsAPIClient.updateNote(
               Object.assign(
-                { accountId: process.env.account_id, noteId: n.id, providerId: 'security-advisor' },
+                { accountId: process.env.accountId, noteId: n.id, providerId: 'security-advisor' },
                 n
               )
             );
@@ -82,7 +82,7 @@ let createOccurrences = async () => {
       try {
         console.log('Creating occurence with id', o.id);
         await findingsAPIClient.createOccurrence(
-          Object.assign({ accountId: process.env.account_id, providerId: 'security-advisor' }, o)
+          Object.assign({ accountId: process.env.accountId, providerId: 'security-advisor' }, o)
         );
         console.log('Created occurence with id', o.id);
       } catch (err) {
@@ -93,7 +93,7 @@ let createOccurrences = async () => {
             await findingsAPIClient.updateOccurrence(
               Object.assign(
                 {
-                  accountId: process.env.account_id,
+                  accountId: process.env.accountId,
                   providerId: 'security-advisor',
                   occurrenceId: o.id,
                 },
@@ -113,7 +113,7 @@ let createOccurrences = async () => {
 let deleteNote = async noteId => {
   try {
     await findingsAPIClient.deleteNote({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       providerId: 'security-advisor',
       noteId,
     });
@@ -126,7 +126,7 @@ let deleteNote = async noteId => {
 let deleteOccurrence = async occurrenceId => {
   try {
     await findingsAPIClient.deleteOccurrence({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       providerId: 'security-advisor',
       occurrenceId,
     });

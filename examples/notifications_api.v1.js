@@ -3,7 +3,7 @@
 /*
 export the following variables before running this example in a terminal
 export apikey=
-export account_id=
+export accountId=
 
 This would create a card in the given account with name SampleCard and a KPI called My sample KPI with value 10
 Visit https://cloud.ibm.com/security-advisor#/dashboard to view them
@@ -11,7 +11,7 @@ Visit https://cloud.ibm.com/security-advisor#/dashboard to view them
 
 let channels = require('./resources/channels');
 
-const NotificationsApiV1 = require('scc-node-sdk/notifications-api/v1');
+const NotificationsApiV1 = require('scc-node-sdk/notifications/v1');
 const { IamAuthenticator } = require('scc-node-sdk/auth');
 
 const client = new NotificationsApiV1({
@@ -22,7 +22,7 @@ const client = new NotificationsApiV1({
 let listChannels = async () => {
   try {
     let response = await client.listAllChannels({
-      accountId: process.env.account_id
+      accountId: process.env.accountId
     });
     console.log('List of Channels');
     console.log(JSON.stringify(response.result, null, 2));
@@ -34,7 +34,7 @@ let listChannels = async () => {
 let fetchChannel = async (id) => {
   try {
     let response = await client.getNotificationChannel({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       channelId: id
     });
     console.log('Fetching the channel info');
@@ -51,7 +51,7 @@ let createChannels = async () => {
       try {
         console.log('Creating channel', c.name);
         let resp = await client.createNotificationChannel(
-          Object.assign({ accountId: process.env.account_id }, c)
+          Object.assign({ accountId: process.env.accountId }, c)
         );
         console.log('Created channel', resp.result.channel_id);
       } catch (err) {
@@ -64,7 +64,7 @@ let createChannels = async () => {
             console.log('Trying to update channel with id', channel_id);
             let resp = await client.updateNotificationChannel(
               Object.assign(
-                { accountId: process.env.account_id, channelId: channel_id },
+                { accountId: process.env.accountId, channelId: channel_id },
                 c
               )
             );
@@ -81,7 +81,7 @@ let createChannels = async () => {
 let deleteChannel = async channelId => {
   try {
     await client.deleteNotificationChannel({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       channelId: channelId
     });
     console.log(`Deleted channel ${channelId}`);
@@ -93,7 +93,7 @@ let deleteChannel = async channelId => {
 let deleteChannels = async channelIds => {
   try {
     let resp = await client.deleteNotificationChannels({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       body: channelIds
     });
     console.log("Deleted channels: ", channelIds)
@@ -111,7 +111,7 @@ let updateNotificationChannel = async (channelId) => {
     let resp = await client.updateNotificationChannel(
       Object.assign(
         { 
-          accountId: process.env.account_id, 
+          accountId: process.env.accountId, 
           channelId: channelId
         },
         c
@@ -128,7 +128,7 @@ let getNotificationChannel = async (channelId) => {
   try {
     console.log("Fetching channel with id: ", channelId)
     let resp = await client.getNotificationChannel({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       channelId: channelId
     });
     console.log("Fetched channel:")
@@ -142,7 +142,7 @@ let getPublicKey = async () => {
   try {
     console.log("Fetching public key")
     let resp = await client.getPublicKey({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
     });
     console.log("Fetched public key:")
     console.log(resp.result)
@@ -155,7 +155,7 @@ let testNotificationChannel = async (channelId) => {
   try {
     console.log("Testing webhook for: ", channelId)
     let resp = await client.testNotificationChannel({
-      accountId: process.env.account_id,
+      accountId: process.env.accountId,
       channelId: channelId
     });
     console.log(resp.result)
