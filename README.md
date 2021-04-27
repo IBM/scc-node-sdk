@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/github/ibm-cloud-security/scc-node-sdk)](https://travis-ci.com/github/ibm-cloud-security/scc-node-sdk)
+[![Build Status](https://travis-ci.com/ibm-cloud-security/scc-node-sdk.svg?branch=main)](https://travis-ci.com/github/ibm-cloud-security/scc-node-sdk)
 [![Release](https://img.shields.io/github/v/release/ibm-cloud-security/scc-node-sdk)](https://img.shields.io/github/v/release/ibm-cloud-security/scc-node-sdk)
 [![npm](https://img.shields.io/npm/v/ibm-scc)](https://www.npmjs.com/package/ibm-scc)
 ![npm](https://img.shields.io/npm/dm/ibm-scc)
