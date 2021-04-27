@@ -21,5 +21,6 @@ deploy:
     skip_cleanup: true
     script: npx semantic-release
     on:
+      branch: main
       node: 12
       repo: ibm-cloud-security/scc-node-sdk

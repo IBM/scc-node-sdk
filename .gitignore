@@ -63,6 +63,8 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+.openapi-generator
+
 # dotenv environment variables file
 .env
 
