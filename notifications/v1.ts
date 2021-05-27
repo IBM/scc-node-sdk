@@ -15,13 +15,18 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.30.0-bd714324-20210406-200538
+ * IBM OpenAPI SDK Code Generator Version: 3.32.0-4c6a3129-20210514-210323
  */
-
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
@@ -29,8 +34,8 @@ import { getSdkHeaders } from '../lib/common';
  */
 
 class NotificationsV1 extends BaseService {
+  static DEFAULT_SERVICE_URL: string = 'https://us-south.secadvisor.cloud.ibm.com/notifications';
 
-  static DEFAULT_SERVICE_URL: string = 'https://notifications.cloud.ibm.com/notifications';
   static DEFAULT_SERVICE_NAME: string = 'notifications';
 
   /*************************
@@ -63,7 +68,6 @@ class NotificationsV1 extends BaseService {
     }
     return service;
   }
-
 
   /**
    * Construct a NotificationsV1 object.
@@ -104,8 +108,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.ChannelsList>>}
    */
-  public listAllChannels(params: NotificationsV1.ListAllChannelsParams): Promise<NotificationsV1.Response<NotificationsV1.ChannelsList>> {
-    const _params = Object.assign({}, params);
+  public listAllChannels(
+    params: NotificationsV1.ListAllChannelsParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.ChannelsList>> {
+    const _params = { ...params };
     const requiredParams = ['accountId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -115,11 +121,11 @@ class NotificationsV1 extends BaseService {
 
     const query = {
       'limit': _params.limit,
-      'skip': _params.skip
+      'skip': _params.skip,
     };
 
     const path = {
-      'account_id': _params.accountId
+      'account_id': _params.accountId,
     };
 
     const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'listAllChannels');
@@ -132,15 +138,20 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * create notification channel.
@@ -149,7 +160,8 @@ class NotificationsV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - Account ID.
-   * @param {string} params.name -
+   * @param {string} params.name - The name of the notification channel in the form
+   * "v1/{account_id}/notifications/channelName".
    * @param {string} params.type - Type of callback URL.
    * @param {string} params.endpoint - The callback URL which receives the notification.
    * @param {string} [params.description] - A one sentence description of this `Channel`.
@@ -160,8 +172,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.ChannelInfo>>}
    */
-  public createNotificationChannel(params: NotificationsV1.CreateNotificationChannelParams): Promise<NotificationsV1.Response<NotificationsV1.ChannelInfo>> {
-    const _params = Object.assign({}, params);
+  public createNotificationChannel(
+    params: NotificationsV1.CreateNotificationChannelParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.ChannelInfo>> {
+    const _params = { ...params };
     const requiredParams = ['accountId', 'name', 'type', 'endpoint'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -176,14 +190,18 @@ class NotificationsV1 extends BaseService {
       'description': _params.description,
       'severity': _params.severity,
       'enabled': _params.enabled,
-      'alert_source': _params.alertSource
+      'alert_source': _params.alertSource,
     };
 
     const path = {
-      'account_id': _params.accountId
+      'account_id': _params.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'createNotificationChannel');
+    const sdkHeaders = getSdkHeaders(
+      NotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createNotificationChannel'
+    );
 
     const parameters = {
       options: {
@@ -193,16 +211,21 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * bulk delete of channels.
@@ -216,8 +239,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.ChannelsDelete>>}
    */
-  public deleteNotificationChannels(params: NotificationsV1.DeleteNotificationChannelsParams): Promise<NotificationsV1.Response<NotificationsV1.ChannelsDelete>> {
-    const _params = Object.assign({}, params);
+  public deleteNotificationChannels(
+    params: NotificationsV1.DeleteNotificationChannelsParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.ChannelsDelete>> {
+    const _params = { ...params };
     const requiredParams = ['accountId', 'requestBody'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -227,10 +252,14 @@ class NotificationsV1 extends BaseService {
 
     const body = _params.requestBody;
     const path = {
-      'account_id': _params.accountId
+      'account_id': _params.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNotificationChannels');
+    const sdkHeaders = getSdkHeaders(
+      NotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteNotificationChannels'
+    );
 
     const parameters = {
       options: {
@@ -240,16 +269,21 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * delete the details of a specific channel.
@@ -263,8 +297,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.ChannelDelete>>}
    */
-  public deleteNotificationChannel(params: NotificationsV1.DeleteNotificationChannelParams): Promise<NotificationsV1.Response<NotificationsV1.ChannelDelete>> {
-    const _params = Object.assign({}, params);
+  public deleteNotificationChannel(
+    params: NotificationsV1.DeleteNotificationChannelParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.ChannelDelete>> {
+    const _params = { ...params };
     const requiredParams = ['accountId', 'channelId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -274,10 +310,14 @@ class NotificationsV1 extends BaseService {
 
     const path = {
       'account_id': _params.accountId,
-      'channel_id': _params.channelId
+      'channel_id': _params.channelId,
     };
 
-    const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNotificationChannel');
+    const sdkHeaders = getSdkHeaders(
+      NotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteNotificationChannel'
+    );
 
     const parameters = {
       options: {
@@ -286,15 +326,20 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * get the details of a specific channel.
@@ -308,8 +353,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.ChannelGet>>}
    */
-  public getNotificationChannel(params: NotificationsV1.GetNotificationChannelParams): Promise<NotificationsV1.Response<NotificationsV1.ChannelGet>> {
-    const _params = Object.assign({}, params);
+  public getNotificationChannel(
+    params: NotificationsV1.GetNotificationChannelParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.ChannelGet>> {
+    const _params = { ...params };
     const requiredParams = ['accountId', 'channelId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -319,10 +366,14 @@ class NotificationsV1 extends BaseService {
 
     const path = {
       'account_id': _params.accountId,
-      'channel_id': _params.channelId
+      'channel_id': _params.channelId,
     };
 
-    const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'getNotificationChannel');
+    const sdkHeaders = getSdkHeaders(
+      NotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getNotificationChannel'
+    );
 
     const parameters = {
       options: {
@@ -331,15 +382,20 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * update notification channel.
@@ -349,7 +405,8 @@ class NotificationsV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.accountId - Account ID.
    * @param {string} params.channelId - Channel ID.
-   * @param {string} params.name -
+   * @param {string} params.name - The name of the notification channel in the form
+   * "v1/{account_id}/notifications/channelName".
    * @param {string} params.type - Type of callback URL.
    * @param {string} params.endpoint - The callback URL which receives the notification.
    * @param {string} [params.description] - A one sentence description of this `Channel`.
@@ -360,8 +417,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.ChannelInfo>>}
    */
-  public updateNotificationChannel(params: NotificationsV1.UpdateNotificationChannelParams): Promise<NotificationsV1.Response<NotificationsV1.ChannelInfo>> {
-    const _params = Object.assign({}, params);
+  public updateNotificationChannel(
+    params: NotificationsV1.UpdateNotificationChannelParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.ChannelInfo>> {
+    const _params = { ...params };
     const requiredParams = ['accountId', 'channelId', 'name', 'type', 'endpoint'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -376,15 +435,19 @@ class NotificationsV1 extends BaseService {
       'description': _params.description,
       'severity': _params.severity,
       'enabled': _params.enabled,
-      'alert_source': _params.alertSource
+      'alert_source': _params.alertSource,
     };
 
     const path = {
       'account_id': _params.accountId,
-      'channel_id': _params.channelId
+      'channel_id': _params.channelId,
     };
 
-    const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNotificationChannel');
+    const sdkHeaders = getSdkHeaders(
+      NotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateNotificationChannel'
+    );
 
     const parameters = {
       options: {
@@ -394,16 +457,21 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * test notification channel.
@@ -417,8 +485,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.TestChannel>>}
    */
-  public testNotificationChannel(params: NotificationsV1.TestNotificationChannelParams): Promise<NotificationsV1.Response<NotificationsV1.TestChannel>> {
-    const _params = Object.assign({}, params);
+  public testNotificationChannel(
+    params: NotificationsV1.TestNotificationChannelParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.TestChannel>> {
+    const _params = { ...params };
     const requiredParams = ['accountId', 'channelId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -428,10 +498,14 @@ class NotificationsV1 extends BaseService {
 
     const path = {
       'account_id': _params.accountId,
-      'channel_id': _params.channelId
+      'channel_id': _params.channelId,
     };
 
-    const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'testNotificationChannel');
+    const sdkHeaders = getSdkHeaders(
+      NotificationsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'testNotificationChannel'
+    );
 
     const parameters = {
       options: {
@@ -440,15 +514,20 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * fetch notifications public key.
@@ -461,8 +540,10 @@ class NotificationsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<NotificationsV1.Response<NotificationsV1.PublicKeyGet>>}
    */
-  public getPublicKey(params: NotificationsV1.GetPublicKeyParams): Promise<NotificationsV1.Response<NotificationsV1.PublicKeyGet>> {
-    const _params = Object.assign({}, params);
+  public getPublicKey(
+    params: NotificationsV1.GetPublicKeyParams
+  ): Promise<NotificationsV1.Response<NotificationsV1.PublicKeyGet>> {
+    const _params = { ...params };
     const requiredParams = ['accountId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -471,7 +552,7 @@ class NotificationsV1 extends BaseService {
     }
 
     const path = {
-      'account_id': _params.accountId
+      'account_id': _params.accountId,
     };
 
     const sdkHeaders = getSdkHeaders(NotificationsV1.DEFAULT_SERVICE_NAME, 'v1', 'getPublicKey');
@@ -483,16 +564,20 @@ class NotificationsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
 }
 
 /*************************
@@ -500,9 +585,8 @@ class NotificationsV1 extends BaseService {
  ************************/
 
 namespace NotificationsV1 {
-
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -513,7 +597,7 @@ namespace NotificationsV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -541,6 +625,7 @@ namespace NotificationsV1 {
   export interface CreateNotificationChannelParams {
     /** Account ID. */
     accountId: string;
+    /** The name of the notification channel in the form "v1/{account_id}/notifications/channelName". */
     name: string;
     /** Type of callback URL. */
     type: CreateNotificationChannelConstants.Type | string;
@@ -612,6 +697,7 @@ namespace NotificationsV1 {
     accountId: string;
     /** Channel ID. */
     channelId: string;
+    /** The name of the notification channel in the form "v1/{account_id}/notifications/channelName". */
     name: string;
     /** Type of callback URL. */
     type: UpdateNotificationChannelConstants.Type | string;
@@ -692,53 +778,8 @@ namespace NotificationsV1 {
 
   /** The returned response when get channel is run. */
   export interface ChannelGet {
-    /** Response including channels. */
-    channel?: ChannelGetChannel;
-  }
-
-  /** Response including channels. */
-  export interface ChannelGetChannel {
-    /** A unique ID for the channel. */
-    channel_id?: string;
-    name?: string;
-    /** A one sentence description of this `Channel`. */
-    description?: string;
-    /** Type of callback URL. */
-    type?: string;
-    /** The severity of the notification. */
-    severity?: ChannelGetChannelSeverity;
-    /** The callback URL which receives the notification. */
-    endpoint?: string;
-    /** Whether the channel is enabled. The default is disabled. */
-    enabled?: boolean;
-    alert_source?: ChannelGetChannelAlertSourceItem[];
-    frequency?: string;
-  }
-
-  /** The providers that act as alert sources and the potential findings that can be flagged as alerts. */
-  export interface ChannelGetChannelAlertSourceItem {
-    /** The providers that you can receive alerts for. To view your available providers, you can call the
-     *  /v1/{account_id}/providers endpoint of the Findings API.
-     */
-    provider_name?: string;
-    /** The types of findings for each provider that you want to receive alerts for. Options are dependent upon the
-     *  provider that you select. Depending on that selection, some available options include
-     *  `image_with_vulnerabilities`, `anonym_server`, `server_suspected_ratio`, `appid`, `cos`, `expired_cert`, and
-     *  `expiring_1day_cert`For a full list of available finding types, see [the docs](/docs/).
-     */
-    finding_types?: any[];
-  }
-
-  /** The severity of the notification. */
-  export interface ChannelGetChannelSeverity {
-    /** Critical severity. */
-    critical?: boolean;
-    /** High severity. */
-    high?: boolean;
-    /** Medium severity. */
-    medium?: boolean;
-    /** Low severity. */
-    low?: boolean;
+    /** get channel. */
+    channel?: Channel;
   }
 
   /** The returned response when a channel is created or updated. */
@@ -769,6 +810,7 @@ namespace NotificationsV1 {
 
   /** Available channels in your account are listed. */
   export interface ChannelsList {
+    /** List of channels. */
     channels?: Channel[];
   }
 
@@ -816,6 +858,7 @@ namespace NotificationsV1 {
   export interface Channel {
     /** A unique ID for the channel. */
     channel_id?: string;
+    /** The name of the notification channel in the form "v1/{account_id}/notifications/channelName". */
     name?: string;
     /** A one sentence description of this `Channel`. */
     description?: string;
@@ -830,7 +873,6 @@ namespace NotificationsV1 {
     alert_source?: ChannelAlertSourceItem[];
     frequency?: string;
   }
-
 }
 
 export = NotificationsV1;

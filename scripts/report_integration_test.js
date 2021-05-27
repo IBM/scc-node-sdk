@@ -1,10 +1,12 @@
+/* eslint 'array-callback-return': 'off' */
+
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
-const test_output = fs.readFileSync(path.resolve('test-output.log'), { encoding: 'utf8' });
-const test_ouput_json = JSON.parse(test_output);
-const ansi_regex = new RegExp(
+const testOutput = fs.readFileSync(path.resolve('test-output.log'), { encoding: 'utf8' });
+const testOutputJson = JSON.parse(testOutput);
+const ansiRegex = new RegExp(
   [
     '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
     '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))',
@@ -12,30 +14,30 @@ const ansi_regex = new RegExp(
   'g'
 );
 
-const failed_suits = test_ouput_json.testResults.filter(suite => suite.status === 'failed');
+const failedSuits = testOutputJson.testResults.filter(suite => suite.status === 'failed');
 
 const errors = {
   service: [],
   test: [],
 };
 
-failed_suits.map(suite => {
-  const failed_tests = suite.assertionResults.filter(test => test.status === 'failed');
-  const error_suite = {
+failedSuits.map(suite => {
+  const failedTests = suite.assertionResults.filter(test => test.status === 'failed');
+  const errorSuite = {
     name: suite.name.split('node-sdk/test')[1],
     service: [],
     test: [],
   };
 
-  failed_tests.map(result => {
-    const message_clean = result.failureMessages.join('\n').replace(ansi_regex, '');
-    error_suite[message_clean.indexOf(/^Received: 5/m) > 0 ? 'service' : 'test'].push(
-      `${result.fullName}\n${message_clean}`
+  failedTests.map(result => {
+    const messageClean = result.failureMessages.join('\n').replace(ansiRegex, '');
+    errorSuite[messageClean.indexOf(/^Received: 5/m) > 0 ? 'service' : 'test'].push(
+      `${result.fullName}\n${messageClean}`
     );
   });
 
-  errors.service.push(`${error_suite.name}\n${error_suite.service.join('\n')}`);
-  errors.test.push(`${error_suite.name}\n${error_suite.test.join('\n')}`);
+  errors.service.push(`${errorSuite.name}\n${errorSuite.service.join('\n')}`);
+  errors.test.push(`${errorSuite.name}\n${errorSuite.test.join('\n')}`);
 });
 
 let body = '';
@@ -53,7 +55,7 @@ if (process.env.TRAVIS_PULL_REQUEST && process.env.TRAVIS_PULL_REQUEST !== 'fals
     .post(
       `https://api.github.com/repos/${process.env.TRAVIS_REPO_SLUG}/issues/${process.env.TRAVIS_PULL_REQUEST}/comments`,
       {
-        body: body,
+        body,
       },
       {
         headers: {

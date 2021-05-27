@@ -11,12 +11,23 @@ before_install:
     -iv $encrypted_iv -base64 || true'
 script:
   - npm run build
+  - curl https://us-south.functions.appdomain.cloud/api/v1/web/e6b54af6-ab44-4149-a8e4-e906dcc58136/default/secadvstg-location-shift.json
+  - echo "${FINDINGS_ENV}" | base64 -d >> findings_v1.env
+  - echo "${NOTIFICATIONS_ENV}" | base64 -d >> notifications_v1.env
+  # - echo "${CONFIGURATION_GOVERNANCE_ENV}" | base64 -d >> configuration_governance_v1.env
   - npm run test-unit-travis || travis_terminate 1
   - npm run test-integration-travis || travis_terminate 1
   - npm run check-packages
 after_success:
   - npm run report-coverage
 deploy:
+  - provider: pages
+    skip_cleanup: true
+    token: $GH_TOKEN
+    script: sh scripts/typedoc/generate_typedoc.sh
+    local_dir: doc
+    on:
+      branch: main
   - provider: script
     skip_cleanup: true
     script: npx semantic-release

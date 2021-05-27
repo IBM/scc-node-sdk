@@ -15,10 +15,13 @@
  * limitations under the License.
  */
 
-'use strict';
-const FindingsV1 = require('../../dist/findings/v1');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
+const FindingsV1 = require('../../dist/findings/v1');
 const authHelper = require('../resources/auth-helper.js');
+
+const accountId = process.env.ACCOUNT_ID;
+const providerId = process.env.PROVIDER_ID || 'sdk-it';
+const testString = 'testString';
 
 // testcase timeout value (200s).
 const timeout = 200000;
@@ -38,38 +41,83 @@ describe('FindingsV1_integration', () => {
 
   jest.setTimeout(timeout);
 
+  afterAll(async () => {
+    console.log(`cleaning up account: ${accountId} with provider ${providerId}\n`);
+    const listNotesParams = {
+      accountId,
+      providerId,
+    };
+
+    const listNotesRes = await findingsService.listNotes(listNotesParams);
+    listNotesRes.result.notes.forEach(async note => {
+      const deleteNoteParams = {
+        accountId,
+        providerId,
+        noteId: note.id,
+      };
+      await findingsService.deleteNote(deleteNoteParams);
+    });
+
+    const listOccurrencesParams = {
+      accountId,
+      providerId,
+    };
+
+    const listOccurrencesRes = await findingsService.listOccurrences(listOccurrencesParams);
+    listOccurrencesRes.result.occurrences.forEach(async occurrence => {
+      const deleteOccurrenceParams = {
+        accountId,
+        providerId,
+        occurrenceId: occurrence.id,
+      };
+      await findingsService.deleteOccurrence(deleteOccurrenceParams);
+    });
+    console.log(`cleanup was successful\n`);
+
+    const listProvidersParams = {
+      accountId,
+    };
+    const listProvidersRes = await findingsService.listProviders(listProvidersParams);
+    listProvidersRes.result.providers.forEach(async provider => {
+      if (provider.id === providerId) {
+        console.log(`
+        seems like account has some resources left even after a successful cleanup, please consider manual cleanup for account: ${accountId} and provider: ${providerId}\n
+        `);
+      }
+    });
+  });
+
   test('postGraph()', async () => {
     const params = {
-      accountId: 'testString',
-      body: 'testString',
-      contentType: 'application/json',
-      transactionId: 'testString',
+      accountId,
+      body: '{notes{id}}',
+      contentType: 'application/graphql',
     };
 
     const res = await findingsService.postGraph(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('createNote()', async () => {
+  test('createNoteFinding()', async () => {
     // Request models needed by this operation.
 
     // Reporter
     const reporterModel = {
-      id: 'testString',
-      title: 'testString',
-      url: 'testString',
+      id: testString,
+      title: testString,
+      url: testString,
     };
 
     // ApiNoteRelatedUrl
     const apiNoteRelatedUrlModel = {
-      label: 'testString',
-      url: 'testString',
+      label: testString,
+      url: testString,
     };
 
     // RemediationStep
     const remediationStepModel = {
-      title: 'testString',
-      url: 'testString',
+      title: testString,
+      url: testString,
     };
 
     // FindingType
@@ -78,22 +126,77 @@ describe('FindingsV1_integration', () => {
       next_steps: [remediationStepModel],
     };
 
+    const params = {
+      accountId,
+      providerId,
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'FINDING',
+      id: 'finding-note',
+      reportedBy: reporterModel,
+      relatedUrl: [apiNoteRelatedUrlModel],
+      expirationTime: '2019-01-01T12:00:00.000Z',
+      shared: true,
+      finding: findingTypeModel,
+    };
+
+    const res = await findingsService.createNote(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createNoteKpi()', async () => {
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: testString,
+      title: testString,
+      url: testString,
+    };
+
     // KpiType
     const kpiTypeModel = {
       aggregation_type: 'SUM',
     };
 
+    const params = {
+      accountId,
+      providerId,
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'KPI',
+      id: 'kpi-note',
+      reportedBy: reporterModel,
+      expirationTime: '2019-01-01T12:00:00.000Z',
+      shared: true,
+      kpi: kpiTypeModel,
+    };
+
+    const res = await findingsService.createNote(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createNoteCard()', async () => {
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: testString,
+      title: testString,
+      url: testString,
+    };
+
     // ValueTypeFindingCountValueType
     const valueTypeModel = {
       kind: 'FINDING_COUNT',
-      finding_note_names: ['testString'],
-      text: 'testString',
+      finding_note_names: [testString],
+      text: testString,
     };
 
     // CardElementTimeSeriesCardElement
     const cardElementModel = {
-      text: 'testString',
-      default_interval: 'testString',
+      text: testString,
+      default_interval: testString,
       kind: 'TIME_SERIES',
       default_time_range: '1d',
       value_types: [valueTypeModel],
@@ -101,41 +204,61 @@ describe('FindingsV1_integration', () => {
 
     // Card
     const cardModel = {
-      section: 'testString',
-      title: 'testString',
-      subtitle: 'testString',
+      section: testString,
+      title: testString,
+      subtitle: testString,
       order: 1,
-      finding_note_names: ['testString'],
+      finding_note_names: [testString],
       requires_configuration: true,
-      badge_text: 'testString',
-      badge_image: 'testString',
+      badge_text: testString,
+      badge_image: testString,
       elements: [cardElementModel],
+    };
+
+    const params = {
+      accountId,
+      providerId,
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'CARD',
+      id: 'card-note',
+      reportedBy: reporterModel,
+      expirationTime: '2019-01-01T12:00:00.000Z',
+      shared: true,
+      card: cardModel,
+    };
+
+    const res = await findingsService.createNote(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createNoteSection()', async () => {
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: testString,
+      title: testString,
+      url: testString,
     };
 
     // Section
     const sectionModel = {
-      title: 'testString',
-      image: 'testString',
+      title: testString,
+      image: testString,
     };
 
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      shortDescription: 'testString',
-      longDescription: 'testString',
-      kind: 'FINDING',
-      id: 'testString',
+      accountId,
+      providerId,
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'SECTION',
+      id: 'section-note',
       reportedBy: reporterModel,
-      relatedUrl: [apiNoteRelatedUrlModel],
       expirationTime: '2019-01-01T12:00:00.000Z',
-      createTime: '2019-01-01T12:00:00.000Z',
-      updateTime: '2019-01-01T12:00:00.000Z',
       shared: true,
-      finding: findingTypeModel,
-      kpi: kpiTypeModel,
-      card: cardModel,
       section: sectionModel,
-      transactionId: 'testString',
     };
 
     const res = await findingsService.createNote(params);
@@ -144,11 +267,8 @@ describe('FindingsV1_integration', () => {
   });
   test('listNotes()', async () => {
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      transactionId: 'testString',
-      pageSize: 2,
-      pageToken: 'testString',
+      accountId,
+      providerId,
     };
 
     const res = await findingsService.listNotes(params);
@@ -157,36 +277,35 @@ describe('FindingsV1_integration', () => {
   });
   test('getNote()', async () => {
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      noteId: 'testString',
-      transactionId: 'testString',
+      accountId,
+      providerId,
+      noteId: 'section-note',
     };
 
     const res = await findingsService.getNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('updateNote()', async () => {
+  test('updateNoteFinding()', async () => {
     // Request models needed by this operation.
 
     // Reporter
     const reporterModel = {
-      id: 'testString',
-      title: 'testString',
-      url: 'testString',
+      id: testString,
+      title: testString,
+      url: testString,
     };
 
     // ApiNoteRelatedUrl
     const apiNoteRelatedUrlModel = {
-      label: 'testString',
-      url: 'testString',
+      label: testString,
+      url: testString,
     };
 
     // RemediationStep
     const remediationStepModel = {
-      title: 'testString',
-      url: 'testString',
+      title: testString,
+      url: testString,
     };
 
     // FindingType
@@ -195,22 +314,79 @@ describe('FindingsV1_integration', () => {
       next_steps: [remediationStepModel],
     };
 
+    const params = {
+      accountId,
+      providerId,
+      noteId: 'finding-note',
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'FINDING',
+      id: 'finding-note',
+      reportedBy: reporterModel,
+      relatedUrl: [apiNoteRelatedUrlModel],
+      expirationTime: '2019-01-01T12:00:00.000Z',
+      shared: true,
+      finding: findingTypeModel,
+    };
+
+    const res = await findingsService.updateNote(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateNoteKpi()', async () => {
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: testString,
+      title: testString,
+      url: testString,
+    };
+
     // KpiType
     const kpiTypeModel = {
       aggregation_type: 'SUM',
     };
 
+    const params = {
+      accountId,
+      providerId,
+      noteId: 'kpi-note',
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'KPI',
+      id: 'kpi-note',
+      reportedBy: reporterModel,
+      expirationTime: '2019-01-01T12:00:00.000Z',
+      shared: true,
+      kpi: kpiTypeModel,
+    };
+
+    const res = await findingsService.updateNote(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateNoteCard()', async () => {
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: testString,
+      title: testString,
+      url: testString,
+    };
+
     // ValueTypeFindingCountValueType
     const valueTypeModel = {
       kind: 'FINDING_COUNT',
-      finding_note_names: ['testString'],
-      text: 'testString',
+      finding_note_names: [testString],
+      text: testString,
     };
 
     // CardElementTimeSeriesCardElement
     const cardElementModel = {
-      text: 'testString',
-      default_interval: 'testString',
+      text: testString,
+      default_interval: testString,
       kind: 'TIME_SERIES',
       default_time_range: '1d',
       value_types: [valueTypeModel],
@@ -218,93 +394,101 @@ describe('FindingsV1_integration', () => {
 
     // Card
     const cardModel = {
-      section: 'testString',
-      title: 'testString',
-      subtitle: 'testString',
-      order: 1,
-      finding_note_names: ['testString'],
+      section: testString,
+      title: testString,
+      subtitle: testString,
+      finding_note_names: [testString],
       requires_configuration: true,
-      badge_text: 'testString',
-      badge_image: 'testString',
+      badge_text: testString,
+      badge_image: testString,
       elements: [cardElementModel],
     };
 
-    // Section
-    const sectionModel = {
-      title: 'testString',
-      image: 'testString',
-    };
-
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      noteId: 'testString',
-      shortDescription: 'testString',
-      longDescription: 'testString',
-      kind: 'FINDING',
-      id: 'testString',
+      accountId,
+      providerId,
+      noteId: 'card-note',
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'CARD',
+      id: 'card-note',
       reportedBy: reporterModel,
-      relatedUrl: [apiNoteRelatedUrlModel],
       expirationTime: '2019-01-01T12:00:00.000Z',
-      createTime: '2019-01-01T12:00:00.000Z',
-      updateTime: '2019-01-01T12:00:00.000Z',
       shared: true,
-      finding: findingTypeModel,
-      kpi: kpiTypeModel,
       card: cardModel,
-      section: sectionModel,
-      transactionId: 'testString',
     };
 
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('getOccurrenceNote()', async () => {
-    const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      occurrenceId: 'testString',
-      transactionId: 'testString',
+  test('updateNoteSection()', async () => {
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: testString,
+      title: testString,
+      url: testString,
     };
 
-    const res = await findingsService.getOccurrenceNote(params);
+    // Section
+    const sectionModel = {
+      title: testString,
+      image: testString,
+    };
+
+    const params = {
+      accountId,
+      providerId,
+      noteId: 'section-note',
+      shortDescription: testString,
+      longDescription: testString,
+      kind: 'SECTION',
+      id: 'section-note',
+      reportedBy: reporterModel,
+      expirationTime: '2019-01-01T12:00:00.000Z',
+      shared: true,
+      section: sectionModel,
+    };
+
+    const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('createOccurrence()', async () => {
+  test('createOccurrenceFinding()', async () => {
     // Request models needed by this operation.
 
     // Context
     const contextModel = {
-      region: 'testString',
-      resource_crn: 'testString',
-      resource_id: 'testString',
-      resource_name: 'testString',
-      resource_type: 'testString',
-      service_crn: 'testString',
-      service_name: 'testString',
-      environment_name: 'testString',
-      component_name: 'testString',
-      toolchain_id: 'testString',
+      region: testString,
+      resource_crn: testString,
+      resource_id: testString,
+      resource_name: testString,
+      resource_type: testString,
+      service_crn: testString,
+      service_name: testString,
+      environment_name: testString,
+      component_name: testString,
+      toolchain_id: testString,
     };
 
     // RemediationStep
     const remediationStepModel = {
-      title: 'testString',
-      url: 'testString',
+      title: testString,
+      url: testString,
     };
 
     // SocketAddress
     const socketAddressModel = {
-      address: 'testString',
+      address: testString,
       port: 38,
     };
 
     // NetworkConnection
     const networkConnectionModel = {
-      direction: 'testString',
-      protocol: 'testString',
+      direction: testString,
+      protocol: testString,
       client: socketAddressModel,
       server: socketAddressModel,
     };
@@ -326,6 +510,40 @@ describe('FindingsV1_integration', () => {
       data_transferred: dataTransferredModel,
     };
 
+    const params = {
+      accountId,
+      providerId,
+      noteName: `${accountId}/providers/${providerId}/notes/finding-note`,
+      kind: 'FINDING',
+      id: 'finding-occurrence',
+      resourceUrl: testString,
+      remediation: testString,
+      context: contextModel,
+      finding: findingModel,
+      replaceIfExists: true,
+    };
+
+    const res = await findingsService.createOccurrence(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createOccurrenceKpi()', async () => {
+    // Request models needed by this operation.
+
+    // Context
+    const contextModel = {
+      region: testString,
+      resource_crn: testString,
+      resource_id: testString,
+      resource_name: testString,
+      resource_type: testString,
+      service_crn: testString,
+      service_name: testString,
+      environment_name: testString,
+      component_name: testString,
+      toolchain_id: testString,
+    };
+
     // Kpi
     const kpiModel = {
       value: 72.5,
@@ -333,34 +551,37 @@ describe('FindingsV1_integration', () => {
     };
 
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      noteName: 'testString',
-      kind: 'FINDING',
-      id: 'testString',
-      resourceUrl: 'testString',
-      remediation: 'testString',
-      createTime: '2019-01-01T12:00:00.000Z',
-      updateTime: '2019-01-01T12:00:00.000Z',
+      accountId,
+      providerId,
+      noteName: `${accountId}/providers/${providerId}/notes/kpi-note`,
+      kind: 'KPI',
+      id: 'kpi-occurrence',
+      resourceUrl: testString,
+      remediation: testString,
       context: contextModel,
-      finding: findingModel,
       kpi: kpiModel,
-      referenceData: { foo: 'bar' },
       replaceIfExists: true,
-      transactionId: 'testString',
     };
 
     const res = await findingsService.createOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
+  test('getOccurrenceNote()', async () => {
+    const params = {
+      accountId,
+      providerId,
+      occurrenceId: 'finding-occurrence',
+    };
+
+    const res = await findingsService.getOccurrenceNote(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
   test('listOccurrences()', async () => {
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      transactionId: 'testString',
-      pageSize: 2,
-      pageToken: 'testString',
+      accountId,
+      providerId,
     };
 
     const res = await findingsService.listOccurrences(params);
@@ -369,12 +590,9 @@ describe('FindingsV1_integration', () => {
   });
   test('listNoteOccurrences()', async () => {
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      noteId: 'testString',
-      transactionId: 'testString',
-      pageSize: 2,
-      pageToken: 'testString',
+      accountId,
+      providerId,
+      noteId: 'finding-note',
     };
 
     const res = await findingsService.listNoteOccurrences(params);
@@ -383,49 +601,48 @@ describe('FindingsV1_integration', () => {
   });
   test('getOccurrence()', async () => {
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      occurrenceId: 'testString',
-      transactionId: 'testString',
+      accountId,
+      providerId,
+      occurrenceId: 'finding-occurrence',
     };
 
     const res = await findingsService.getOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('updateOccurrence()', async () => {
+  test('updateOccurrenceFinding()', async () => {
     // Request models needed by this operation.
 
     // Context
     const contextModel = {
-      region: 'testString',
-      resource_crn: 'testString',
-      resource_id: 'testString',
-      resource_name: 'testString',
-      resource_type: 'testString',
-      service_crn: 'testString',
-      service_name: 'testString',
-      environment_name: 'testString',
-      component_name: 'testString',
-      toolchain_id: 'testString',
+      region: testString,
+      resource_crn: testString,
+      resource_id: testString,
+      resource_name: testString,
+      resource_type: testString,
+      service_crn: testString,
+      service_name: testString,
+      environment_name: testString,
+      component_name: testString,
+      toolchain_id: testString,
     };
 
     // RemediationStep
     const remediationStepModel = {
-      title: 'testString',
-      url: 'testString',
+      title: testString,
+      url: testString,
     };
 
     // SocketAddress
     const socketAddressModel = {
-      address: 'testString',
+      address: testString,
       port: 38,
     };
 
     // NetworkConnection
     const networkConnectionModel = {
-      direction: 'testString',
-      protocol: 'testString',
+      direction: testString,
+      protocol: testString,
       client: socketAddressModel,
       server: socketAddressModel,
     };
@@ -447,6 +664,40 @@ describe('FindingsV1_integration', () => {
       data_transferred: dataTransferredModel,
     };
 
+    const params = {
+      accountId,
+      providerId,
+      occurrenceId: 'finding-occurrence',
+      noteName: `${accountId}/providers/${providerId}/notes/finding-note`,
+      kind: 'FINDING',
+      id: 'finding-occurrence',
+      resourceUrl: testString,
+      remediation: testString,
+      context: contextModel,
+      finding: findingModel,
+    };
+
+    const res = await findingsService.updateOccurrence(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateOccurrenceKpi()', async () => {
+    // Request models needed by this operation.
+
+    // Context
+    const contextModel = {
+      region: testString,
+      resource_crn: testString,
+      resource_id: testString,
+      resource_name: testString,
+      resource_type: testString,
+      service_crn: testString,
+      service_name: testString,
+      environment_name: testString,
+      component_name: testString,
+      toolchain_id: testString,
+    };
+
     // Kpi
     const kpiModel = {
       value: 72.5,
@@ -454,21 +705,16 @@ describe('FindingsV1_integration', () => {
     };
 
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      occurrenceId: 'testString',
-      noteName: 'testString',
-      kind: 'FINDING',
-      id: 'testString',
-      resourceUrl: 'testString',
-      remediation: 'testString',
-      createTime: '2019-01-01T12:00:00.000Z',
-      updateTime: '2019-01-01T12:00:00.000Z',
+      accountId,
+      providerId,
+      occurrenceId: 'kpi-occurrence',
+      noteName: `${accountId}/providers/${providerId}/notes/kpi-note`,
+      kind: 'KPI',
+      id: 'kpi-occurrence',
+      resourceUrl: testString,
+      remediation: testString,
       context: contextModel,
-      finding: findingModel,
       kpi: kpiModel,
-      referenceData: { foo: 'bar' },
-      transactionId: 'testString',
     };
 
     const res = await findingsService.updateOccurrence(params);
@@ -477,12 +723,7 @@ describe('FindingsV1_integration', () => {
   });
   test('listProviders()', async () => {
     const params = {
-      accountId: 'testString',
-      transactionId: 'testString',
-      limit: 2,
-      skip: 38,
-      startProviderId: 'testString',
-      endProviderId: 'testString',
+      accountId,
     };
 
     const res = await findingsService.listProviders(params);
@@ -491,10 +732,9 @@ describe('FindingsV1_integration', () => {
   });
   test('deleteOccurrence()', async () => {
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      occurrenceId: 'testString',
-      transactionId: 'testString',
+      accountId,
+      providerId,
+      occurrenceId: 'finding-occurrence',
     };
 
     const res = await findingsService.deleteOccurrence(params);
@@ -503,10 +743,9 @@ describe('FindingsV1_integration', () => {
   });
   test('deleteNote()', async () => {
     const params = {
-      accountId: 'testString',
-      providerId: 'testString',
-      noteId: 'testString',
-      transactionId: 'testString',
+      accountId,
+      providerId,
+      noteId: 'finding-note',
     };
 
     const res = await findingsService.deleteNote(params);

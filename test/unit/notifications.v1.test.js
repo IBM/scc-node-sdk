@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const NotificationsV1 = require('../../dist/notifications/v1');
@@ -31,7 +31,7 @@ const {
 
 const service = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://notifications.cloud.ibm.com/notifications',
+  url: 'https://us-south.secadvisor.cloud.ibm.com/notifications',
 };
 
 const notificationsService = new NotificationsV1(service);
@@ -108,10 +108,10 @@ describe('NotificationsV1', () => {
         const limit = 38;
         const skip = 38;
         const params = {
-          accountId: accountId,
-          transactionId: transactionId,
-          limit: limit,
-          skip: skip,
+          accountId,
+          transactionId,
+          limit,
+          skip,
         };
 
         const listAllChannelsResult = notificationsService.listAllChannels(params);
@@ -129,9 +129,9 @@ describe('NotificationsV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['skip']).toEqual(skip);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(options.qs.limit).toEqual(limit);
+        expect(options.qs.skip).toEqual(skip);
+        expect(options.path.account_id).toEqual(accountId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -198,18 +198,20 @@ describe('NotificationsV1', () => {
         const alertSource = [notificationChannelAlertSourceItemModel];
         const transactionId = 'testString';
         const params = {
-          accountId: accountId,
-          name: name,
-          type: type,
-          endpoint: endpoint,
-          description: description,
-          severity: severity,
-          enabled: enabled,
-          alertSource: alertSource,
-          transactionId: transactionId,
+          accountId,
+          name,
+          type,
+          endpoint,
+          description,
+          severity,
+          enabled,
+          alertSource,
+          transactionId,
         };
 
-        const createNotificationChannelResult = notificationsService.createNotificationChannel(params);
+        const createNotificationChannelResult = notificationsService.createNotificationChannel(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(createNotificationChannelResult);
@@ -224,14 +226,14 @@ describe('NotificationsV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['endpoint']).toEqual(endpoint);
-        expect(options.body['description']).toEqual(description);
-        expect(options.body['severity']).toEqual(severity);
-        expect(options.body['enabled']).toEqual(enabled);
-        expect(options.body['alert_source']).toEqual(alertSource);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(options.body.name).toEqual(name);
+        expect(options.body.type).toEqual(type);
+        expect(options.body.endpoint).toEqual(endpoint);
+        expect(options.body.description).toEqual(description);
+        expect(options.body.severity).toEqual(severity);
+        expect(options.body.enabled).toEqual(enabled);
+        expect(options.body.alert_source).toEqual(alertSource);
+        expect(options.path.account_id).toEqual(accountId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -290,12 +292,14 @@ describe('NotificationsV1', () => {
         const requestBody = ['testString'];
         const transactionId = 'testString';
         const params = {
-          accountId: accountId,
-          requestBody: requestBody,
-          transactionId: transactionId,
+          accountId,
+          requestBody,
+          transactionId,
         };
 
-        const deleteNotificationChannelsResult = notificationsService.deleteNotificationChannels(params);
+        const deleteNotificationChannelsResult = notificationsService.deleteNotificationChannels(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteNotificationChannelsResult);
@@ -311,7 +315,7 @@ describe('NotificationsV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(options.body).toEqual(requestBody);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(options.path.account_id).toEqual(accountId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -366,12 +370,14 @@ describe('NotificationsV1', () => {
         const channelId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId: accountId,
-          channelId: channelId,
-          transactionId: transactionId,
+          accountId,
+          channelId,
+          transactionId,
         };
 
-        const deleteNotificationChannelResult = notificationsService.deleteNotificationChannel(params);
+        const deleteNotificationChannelResult = notificationsService.deleteNotificationChannel(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteNotificationChannelResult);
@@ -381,13 +387,17 @@ describe('NotificationsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/notifications/channels/{channel_id}', 'DELETE');
+        checkUrlAndMethod(
+          options,
+          '/v1/{account_id}/notifications/channels/{channel_id}',
+          'DELETE'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['channel_id']).toEqual(channelId);
+        expect(options.path.account_id).toEqual(accountId);
+        expect(options.path.channel_id).toEqual(channelId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -442,9 +452,9 @@ describe('NotificationsV1', () => {
         const channelId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId: accountId,
-          channelId: channelId,
-          transactionId: transactionId,
+          accountId,
+          channelId,
+          transactionId,
         };
 
         const getNotificationChannelResult = notificationsService.getNotificationChannel(params);
@@ -462,8 +472,8 @@ describe('NotificationsV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['channel_id']).toEqual(channelId);
+        expect(options.path.account_id).toEqual(accountId);
+        expect(options.path.channel_id).toEqual(channelId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -533,19 +543,21 @@ describe('NotificationsV1', () => {
         const alertSource = [notificationChannelAlertSourceItemModel];
         const transactionId = 'testString';
         const params = {
-          accountId: accountId,
-          channelId: channelId,
-          name: name,
-          type: type,
-          endpoint: endpoint,
-          description: description,
-          severity: severity,
-          enabled: enabled,
-          alertSource: alertSource,
-          transactionId: transactionId,
+          accountId,
+          channelId,
+          name,
+          type,
+          endpoint,
+          description,
+          severity,
+          enabled,
+          alertSource,
+          transactionId,
         };
 
-        const updateNotificationChannelResult = notificationsService.updateNotificationChannel(params);
+        const updateNotificationChannelResult = notificationsService.updateNotificationChannel(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateNotificationChannelResult);
@@ -560,15 +572,15 @@ describe('NotificationsV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['endpoint']).toEqual(endpoint);
-        expect(options.body['description']).toEqual(description);
-        expect(options.body['severity']).toEqual(severity);
-        expect(options.body['enabled']).toEqual(enabled);
-        expect(options.body['alert_source']).toEqual(alertSource);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['channel_id']).toEqual(channelId);
+        expect(options.body.name).toEqual(name);
+        expect(options.body.type).toEqual(type);
+        expect(options.body.endpoint).toEqual(endpoint);
+        expect(options.body.description).toEqual(description);
+        expect(options.body.severity).toEqual(severity);
+        expect(options.body.enabled).toEqual(enabled);
+        expect(options.body.alert_source).toEqual(alertSource);
+        expect(options.path.account_id).toEqual(accountId);
+        expect(options.path.channel_id).toEqual(channelId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -629,9 +641,9 @@ describe('NotificationsV1', () => {
         const channelId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId: accountId,
-          channelId: channelId,
-          transactionId: transactionId,
+          accountId,
+          channelId,
+          transactionId,
         };
 
         const testNotificationChannelResult = notificationsService.testNotificationChannel(params);
@@ -644,13 +656,17 @@ describe('NotificationsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/notifications/channels/{channel_id}/test', 'GET');
+        checkUrlAndMethod(
+          options,
+          '/v1/{account_id}/notifications/channels/{channel_id}/test',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(accountId);
-        expect(options.path['channel_id']).toEqual(channelId);
+        expect(options.path.account_id).toEqual(accountId);
+        expect(options.path.channel_id).toEqual(channelId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -704,8 +720,8 @@ describe('NotificationsV1', () => {
         const accountId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId: accountId,
-          transactionId: transactionId,
+          accountId,
+          transactionId,
         };
 
         const getPublicKeyResult = notificationsService.getPublicKey(params);
@@ -723,7 +739,7 @@ describe('NotificationsV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(accountId);
+        expect(options.path.account_id).toEqual(accountId);
       });
 
       test('should prioritize user-given headers', () => {

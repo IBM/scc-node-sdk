@@ -15,9 +15,8 @@
  * limitations under the License.
  */
 
-'use strict';
-const ConfigurationGovernanceV1 = require('../../dist/configuration-governance/v1');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
+const ConfigurationGovernanceV1 = require('../../dist/configuration-governance/v1');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
