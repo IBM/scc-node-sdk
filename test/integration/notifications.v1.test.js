@@ -23,7 +23,6 @@ const accountId = process.env.ACCOUNT_ID;
 const testString = 'testString';
 const identifier = process.env.TRAVIS_JOB_ID || Date.now();
 let channelId = '';
-console.log(identifier);
 
 // testcase timeout value (200s).
 const timeout = 200000;
