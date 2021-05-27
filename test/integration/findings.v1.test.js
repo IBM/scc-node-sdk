@@ -23,6 +23,7 @@ const accountId = process.env.ACCOUNT_ID;
 const providerId = process.env.PROVIDER_ID || 'sdk-it';
 const testString = 'testString';
 const identifier = process.env.TRAVIS_JOB_ID || Date.now();
+console.log(identifier);
 
 // testcase timeout value (200s).
 const timeout = 200000;
