@@ -15,10 +15,14 @@
  * limitations under the License.
  */
 
-'use strict';
-const NotificationsV1 = require('../../dist/notifications/v1');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
+const NotificationsV1 = require('../../dist/notifications/v1');
 const authHelper = require('../resources/auth-helper.js');
+
+const accountId = process.env.ACCOUNT_ID;
+const testString = 'testString';
+const identifier = process.env.TRAVIS_JOB_ID || Date.now();
+let channelId = '';
 
 // testcase timeout value (200s).
 const timeout = 200000;
@@ -38,12 +42,28 @@ describe('NotificationsV1_integration', () => {
 
   jest.setTimeout(timeout);
 
+  afterAll(async () => {
+    console.log(`cleaning up account: ${accountId}\n`);
+    const params = {
+      accountId,
+    };
+
+    const res = await notificationsService.listAllChannels(params);
+    res.result.channels.forEach(async channel => {
+      if (channel.channel_id === channelId) {
+        const params = {
+          accountId,
+          channelId,
+        };
+        await notificationsService.deleteNotificationChannel(params);
+      }
+    });
+    console.log(`cleanup was successful\n`);
+  });
+
   test('listAllChannels()', async () => {
     const params = {
-      accountId: 'testString',
-      transactionId: 'testString',
-      limit: 38,
-      skip: 38,
+      accountId,
     };
 
     const res = await notificationsService.listAllChannels(params);
@@ -55,31 +75,30 @@ describe('NotificationsV1_integration', () => {
 
     // NotificationChannelAlertSourceItem
     const notificationChannelAlertSourceItemModel = {
-      provider_name: 'testString',
-      finding_types: ['testString'],
+      provider_name: 'VA',
+      finding_types: ['image_with_vulnerabilities'],
     };
 
     const params = {
-      accountId: 'testString',
-      name: 'testString',
+      accountId,
+      name: `testString-${identifier}`,
       type: 'Webhook',
-      endpoint: 'testString',
-      description: 'testString',
+      endpoint: 'https://webhook.site/136fe1e2-3c3f-4bff-925f-391fbb202546',
+      description: testString,
       severity: ['low'],
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
-      transactionId: 'testString',
     };
 
     const res = await notificationsService.createNotificationChannel(params);
+    channelId = res.result.channel_id;
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
   test('getNotificationChannel()', async () => {
     const params = {
-      accountId: 'testString',
-      channelId: 'testString',
-      transactionId: 'testString',
+      accountId,
+      channelId,
     };
 
     const res = await notificationsService.getNotificationChannel(params);
@@ -91,21 +110,20 @@ describe('NotificationsV1_integration', () => {
 
     // NotificationChannelAlertSourceItem
     const notificationChannelAlertSourceItemModel = {
-      provider_name: 'testString',
-      finding_types: ['testString'],
+      provider_name: 'VA',
+      finding_types: ['image_with_vulnerabilities'],
     };
 
     const params = {
-      accountId: 'testString',
-      channelId: 'testString',
-      name: 'testString',
+      accountId,
+      channelId,
+      name: `testString-${identifier}`,
       type: 'Webhook',
-      endpoint: 'testString',
-      description: 'testString',
+      endpoint: 'https://webhook.site/136fe1e2-3c3f-4bff-925f-391fbb202546',
+      description: testString,
       severity: ['low'],
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
-      transactionId: 'testString',
     };
 
     const res = await notificationsService.updateNotificationChannel(params);
@@ -114,9 +132,8 @@ describe('NotificationsV1_integration', () => {
   });
   test('testNotificationChannel()', async () => {
     const params = {
-      accountId: 'testString',
-      channelId: 'testString',
-      transactionId: 'testString',
+      accountId,
+      channelId,
     };
 
     const res = await notificationsService.testNotificationChannel(params);
@@ -125,34 +142,54 @@ describe('NotificationsV1_integration', () => {
   });
   test('getPublicKey()', async () => {
     const params = {
-      accountId: 'testString',
-      transactionId: 'testString',
+      accountId,
     };
 
     const res = await notificationsService.getPublicKey(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('deleteNotificationChannels()', async () => {
-    const params = {
-      accountId: 'testString',
-      requestBody: ['testString'],
-      transactionId: 'testString',
-    };
-
-    const res = await notificationsService.deleteNotificationChannels(params);
-    expect(res).toBeDefined();
-    expect(res.result).toBeDefined();
-  });
   test('deleteNotificationChannel()', async () => {
     const params = {
-      accountId: 'testString',
-      channelId: 'testString',
-      transactionId: 'testString',
+      accountId,
+      channelId,
     };
 
     const res = await notificationsService.deleteNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+  });
+  test('deleteNotificationChannels()', async () => {
+    const notificationChannelAlertSourceItemModel = {
+      provider_name: 'VA',
+      finding_types: ['image_with_vulnerabilities'],
+    };
+
+    const createChannelParams = {
+      accountId,
+      name: testString,
+      type: 'Webhook',
+      endpoint: 'https://webhook.site/136fe1e2-3c3f-4bff-925f-391fbb202546',
+      description: testString,
+      severity: ['low'],
+      enabled: true,
+      alertSource: [notificationChannelAlertSourceItemModel],
+    };
+
+    const createChannelRes = await notificationsService.createNotificationChannel(
+      createChannelParams
+    );
+    const channelId = createChannelRes.result.channel_id;
+
+    const deleteChannelsParams = {
+      accountId,
+      requestBody: [channelId],
+    };
+
+    const deleteChannelsRes = await notificationsService.deleteNotificationChannels(
+      deleteChannelsParams
+    );
+    expect(deleteChannelsRes).toBeDefined();
+    expect(deleteChannelsRes.result).toBeDefined();
   });
 });

@@ -6,9 +6,8 @@ auth/*.js
 **/*.js.map
 
 # service-specific tsc outputs (js files)
-findings/*.js
-notifications/*.js
-configuration-governance/*.js
+example-service/*.js
+# IGNORE YOUR SERVICE FILES HERE
 
 # file holding service credentials
 test/resources/auth.js
@@ -63,10 +62,8 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-.openapi-generator
-
 # dotenv environment variables file
-.env
+*.env
 
 # next.js build output
 .next
@@ -81,6 +78,8 @@ typings/
 # secrets.tar produced by scripts/update-auth-file.sh
 secrets.tar
 
+.project
+.classpath
 
-# file holding credentials for integration tests
-test/resources/secrets.js
+# SDK generator
+.openapi-generator*

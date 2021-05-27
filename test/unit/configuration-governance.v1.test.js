@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const ConfigurationGovernanceV1 = require('../../dist/configuration-governance/v1');
@@ -31,7 +31,7 @@ const {
 
 const service = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://compliance.cloud.ibm.com',
+  url: 'https://us.compliance.cloud.ibm.com',
 };
 
 const configurationGovernanceService = new ConfigurationGovernanceV1(service);
@@ -56,8 +56,12 @@ describe('ConfigurationGovernanceV1', () => {
 
       expect(getAuthenticatorMock).toHaveBeenCalled();
       expect(testInstance.baseOptions.authenticator).toBeInstanceOf(NoAuthAuthenticator);
-      expect(testInstance.baseOptions.serviceName).toBe(ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME);
-      expect(testInstance.baseOptions.serviceUrl).toBe(ConfigurationGovernanceV1.DEFAULT_SERVICE_URL);
+      expect(testInstance.baseOptions.serviceName).toBe(
+        ConfigurationGovernanceV1.DEFAULT_SERVICE_NAME
+      );
+      expect(testInstance.baseOptions.serviceUrl).toBe(
+        ConfigurationGovernanceV1.DEFAULT_SERVICE_URL
+      );
       expect(testInstance).toBeInstanceOf(ConfigurationGovernanceV1);
     });
 
@@ -96,7 +100,9 @@ describe('ConfigurationGovernanceV1', () => {
 
       const testInstance = new ConfigurationGovernanceV1(options);
 
-      expect(testInstance.baseOptions.serviceUrl).toBe(ConfigurationGovernanceV1.DEFAULT_SERVICE_URL);
+      expect(testInstance.baseOptions.serviceUrl).toBe(
+        ConfigurationGovernanceV1.DEFAULT_SERVICE_URL
+      );
     });
   });
   describe('createRules', () => {
@@ -153,8 +159,8 @@ describe('ConfigurationGovernanceV1', () => {
         const rules = [createRuleRequestModel];
         const transactionId = 'testString';
         const params = {
-          rules: rules,
-          transactionId: transactionId,
+          rules,
+          transactionId,
         };
 
         const createRulesResult = configurationGovernanceService.createRules(params);
@@ -172,7 +178,7 @@ describe('ConfigurationGovernanceV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['rules']).toEqual(rules);
+        expect(options.body.rules).toEqual(rules);
       });
 
       test('should prioritize user-given headers', () => {
@@ -229,13 +235,13 @@ describe('ConfigurationGovernanceV1', () => {
         const limit = 1000;
         const offset = 38;
         const params = {
-          accountId: accountId,
-          transactionId: transactionId,
-          attached: attached,
-          labels: labels,
-          scopes: scopes,
-          limit: limit,
-          offset: offset,
+          accountId,
+          transactionId,
+          attached,
+          labels,
+          scopes,
+          limit,
+          offset,
         };
 
         const listRulesResult = configurationGovernanceService.listRules(params);
@@ -253,12 +259,12 @@ describe('ConfigurationGovernanceV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['account_id']).toEqual(accountId);
-        expect(options.qs['attached']).toEqual(attached);
-        expect(options.qs['labels']).toEqual(labels);
-        expect(options.qs['scopes']).toEqual(scopes);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['offset']).toEqual(offset);
+        expect(options.qs.account_id).toEqual(accountId);
+        expect(options.qs.attached).toEqual(attached);
+        expect(options.qs.labels).toEqual(labels);
+        expect(options.qs.scopes).toEqual(scopes);
+        expect(options.qs.limit).toEqual(limit);
+        expect(options.qs.offset).toEqual(offset);
       });
 
       test('should prioritize user-given headers', () => {
@@ -310,8 +316,8 @@ describe('ConfigurationGovernanceV1', () => {
         const ruleId = 'testString';
         const transactionId = 'testString';
         const params = {
-          ruleId: ruleId,
-          transactionId: transactionId,
+          ruleId,
+          transactionId,
         };
 
         const getRuleResult = configurationGovernanceService.getRule(params);
@@ -329,7 +335,7 @@ describe('ConfigurationGovernanceV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(options.path.rule_id).toEqual(ruleId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -419,17 +425,17 @@ describe('ConfigurationGovernanceV1', () => {
         const labels = ['SOC2', 'ITCS300'];
         const transactionId = 'testString';
         const params = {
-          ruleId: ruleId,
-          ifMatch: ifMatch,
-          name: name,
-          description: description,
-          target: target,
-          requiredConfig: requiredConfig,
-          enforcementActions: enforcementActions,
-          accountId: accountId,
-          ruleType: ruleType,
-          labels: labels,
-          transactionId: transactionId,
+          ruleId,
+          ifMatch,
+          name,
+          description,
+          target,
+          requiredConfig,
+          enforcementActions,
+          accountId,
+          ruleType,
+          labels,
+          transactionId,
         };
 
         const updateRuleResult = configurationGovernanceService.updateRule(params);
@@ -448,15 +454,15 @@ describe('ConfigurationGovernanceV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['description']).toEqual(description);
-        expect(options.body['target']).toEqual(target);
-        expect(options.body['required_config']).toEqual(requiredConfig);
-        expect(options.body['enforcement_actions']).toEqual(enforcementActions);
-        expect(options.body['account_id']).toEqual(accountId);
-        expect(options.body['rule_type']).toEqual(ruleType);
-        expect(options.body['labels']).toEqual(labels);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(options.body.name).toEqual(name);
+        expect(options.body.description).toEqual(description);
+        expect(options.body.target).toEqual(target);
+        expect(options.body.required_config).toEqual(requiredConfig);
+        expect(options.body.enforcement_actions).toEqual(enforcementActions);
+        expect(options.body.account_id).toEqual(accountId);
+        expect(options.body.rule_type).toEqual(ruleType);
+        expect(options.body.labels).toEqual(labels);
+        expect(options.path.rule_id).toEqual(ruleId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -520,8 +526,8 @@ describe('ConfigurationGovernanceV1', () => {
         const ruleId = 'testString';
         const transactionId = 'testString';
         const params = {
-          ruleId: ruleId,
-          transactionId: transactionId,
+          ruleId,
+          transactionId,
         };
 
         const deleteRuleResult = configurationGovernanceService.deleteRule(params);
@@ -539,7 +545,7 @@ describe('ConfigurationGovernanceV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(options.path.rule_id).toEqual(ruleId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -608,12 +614,14 @@ describe('ConfigurationGovernanceV1', () => {
         const attachments = [ruleAttachmentRequestModel];
         const transactionId = 'testString';
         const params = {
-          ruleId: ruleId,
-          attachments: attachments,
-          transactionId: transactionId,
+          ruleId,
+          attachments,
+          transactionId,
         };
 
-        const createRuleAttachmentsResult = configurationGovernanceService.createRuleAttachments(params);
+        const createRuleAttachmentsResult = configurationGovernanceService.createRuleAttachments(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(createRuleAttachmentsResult);
@@ -628,8 +636,8 @@ describe('ConfigurationGovernanceV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['attachments']).toEqual(attachments);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(options.body.attachments).toEqual(attachments);
+        expect(options.path.rule_id).toEqual(ruleId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -685,13 +693,15 @@ describe('ConfigurationGovernanceV1', () => {
         const limit = 1000;
         const offset = 38;
         const params = {
-          ruleId: ruleId,
-          transactionId: transactionId,
-          limit: limit,
-          offset: offset,
+          ruleId,
+          transactionId,
+          limit,
+          offset,
         };
 
-        const listRuleAttachmentsResult = configurationGovernanceService.listRuleAttachments(params);
+        const listRuleAttachmentsResult = configurationGovernanceService.listRuleAttachments(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(listRuleAttachmentsResult);
@@ -706,9 +716,9 @@ describe('ConfigurationGovernanceV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['offset']).toEqual(offset);
-        expect(options.path['rule_id']).toEqual(ruleId);
+        expect(options.qs.limit).toEqual(limit);
+        expect(options.qs.offset).toEqual(offset);
+        expect(options.path.rule_id).toEqual(ruleId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -761,9 +771,9 @@ describe('ConfigurationGovernanceV1', () => {
         const attachmentId = 'testString';
         const transactionId = 'testString';
         const params = {
-          ruleId: ruleId,
-          attachmentId: attachmentId,
-          transactionId: transactionId,
+          ruleId,
+          attachmentId,
+          transactionId,
         };
 
         const getRuleAttachmentResult = configurationGovernanceService.getRuleAttachment(params);
@@ -781,8 +791,8 @@ describe('ConfigurationGovernanceV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['rule_id']).toEqual(ruleId);
-        expect(options.path['attachment_id']).toEqual(attachmentId);
+        expect(options.path.rule_id).toEqual(ruleId);
+        expect(options.path.attachment_id).toEqual(attachmentId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -850,16 +860,18 @@ describe('ConfigurationGovernanceV1', () => {
         const excludedScopes = [ruleScopeModel];
         const transactionId = 'testString';
         const params = {
-          ruleId: ruleId,
-          attachmentId: attachmentId,
-          ifMatch: ifMatch,
-          accountId: accountId,
-          includedScope: includedScope,
-          excludedScopes: excludedScopes,
-          transactionId: transactionId,
+          ruleId,
+          attachmentId,
+          ifMatch,
+          accountId,
+          includedScope,
+          excludedScopes,
+          transactionId,
         };
 
-        const updateRuleAttachmentResult = configurationGovernanceService.updateRuleAttachment(params);
+        const updateRuleAttachmentResult = configurationGovernanceService.updateRuleAttachment(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateRuleAttachmentResult);
@@ -875,11 +887,11 @@ describe('ConfigurationGovernanceV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['account_id']).toEqual(accountId);
-        expect(options.body['included_scope']).toEqual(includedScope);
-        expect(options.body['excluded_scopes']).toEqual(excludedScopes);
-        expect(options.path['rule_id']).toEqual(ruleId);
-        expect(options.path['attachment_id']).toEqual(attachmentId);
+        expect(options.body.account_id).toEqual(accountId);
+        expect(options.body.included_scope).toEqual(includedScope);
+        expect(options.body.excluded_scopes).toEqual(excludedScopes);
+        expect(options.path.rule_id).toEqual(ruleId);
+        expect(options.path.attachment_id).toEqual(attachmentId);
       });
 
       test('should prioritize user-given headers', () => {
@@ -940,12 +952,14 @@ describe('ConfigurationGovernanceV1', () => {
         const attachmentId = 'testString';
         const transactionId = 'testString';
         const params = {
-          ruleId: ruleId,
-          attachmentId: attachmentId,
-          transactionId: transactionId,
+          ruleId,
+          attachmentId,
+          transactionId,
         };
 
-        const deleteRuleAttachmentResult = configurationGovernanceService.deleteRuleAttachment(params);
+        const deleteRuleAttachmentResult = configurationGovernanceService.deleteRuleAttachment(
+          params
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteRuleAttachmentResult);
@@ -955,13 +969,17 @@ describe('ConfigurationGovernanceV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/config/v1/rules/{rule_id}/attachments/{attachment_id}', 'DELETE');
+        checkUrlAndMethod(
+          options,
+          '/config/v1/rules/{rule_id}/attachments/{attachment_id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['rule_id']).toEqual(ruleId);
-        expect(options.path['attachment_id']).toEqual(attachmentId);
+        expect(options.path.rule_id).toEqual(ruleId);
+        expect(options.path.attachment_id).toEqual(attachmentId);
       });
 
       test('should prioritize user-given headers', () => {

@@ -21,7 +21,7 @@ const pkg = require('../package.json');
 
 export type SdkHeaders = {
   'User-Agent': string;
-}
+};
 
 /**
  * Get the request headers to be sent in requests by the SDK.
@@ -40,8 +40,12 @@ export type SdkHeaders = {
  * Note: It is very important that the sdk name ends with the string `-sdk`,
  * as the analytics data collector uses this to gather usage data.
  */
-export function getSdkHeaders(serviceName: string, serviceVersion: string, operationId: string): SdkHeaders | {} {
-  const sdkName = 'my-node-sdk';
+export function getSdkHeaders(
+  serviceName: string,
+  serviceVersion: string,
+  operationId: string
+): SdkHeaders | {} {
+  const sdkName = 'scc-node-sdk';
   const sdkVersion = pkg.version;
   const osName = os.platform();
   const osVersion = os.release();
@@ -49,7 +53,7 @@ export function getSdkHeaders(serviceName: string, serviceVersion: string, opera
 
   const headers = {
     'User-Agent': `${sdkName}/${sdkVersion} (lang=node.js; os.name=${osName} os.version=${osVersion} node.version=${nodeVersion})`,
-  }
+  };
 
   return headers;
 }
