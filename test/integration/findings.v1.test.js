@@ -22,6 +22,7 @@ const authHelper = require('../resources/auth-helper.js');
 const accountId = process.env.ACCOUNT_ID;
 const providerId = process.env.PROVIDER_ID || 'sdk-it';
 const testString = 'testString';
+const identifier = process.env.TRAVIS_JOB_ID || Date.now();
 
 // testcase timeout value (200s).
 const timeout = 200000;
@@ -132,7 +133,7 @@ describe('FindingsV1_integration', () => {
       shortDescription: testString,
       longDescription: testString,
       kind: 'FINDING',
-      id: 'finding-note',
+      id: `finding-note-${identifier}`,
       reportedBy: reporterModel,
       relatedUrl: [apiNoteRelatedUrlModel],
       expirationTime: '2019-01-01T12:00:00.000Z',
@@ -165,7 +166,7 @@ describe('FindingsV1_integration', () => {
       shortDescription: testString,
       longDescription: testString,
       kind: 'KPI',
-      id: 'kpi-note',
+      id: `kpi-note-${identifier}`,
       reportedBy: reporterModel,
       expirationTime: '2019-01-01T12:00:00.000Z',
       shared: true,
@@ -221,7 +222,7 @@ describe('FindingsV1_integration', () => {
       shortDescription: testString,
       longDescription: testString,
       kind: 'CARD',
-      id: 'card-note',
+      id: `card-note-${identifier}`,
       reportedBy: reporterModel,
       expirationTime: '2019-01-01T12:00:00.000Z',
       shared: true,
@@ -254,7 +255,7 @@ describe('FindingsV1_integration', () => {
       shortDescription: testString,
       longDescription: testString,
       kind: 'SECTION',
-      id: 'section-note',
+      id: `section-note-${identifier}`,
       reportedBy: reporterModel,
       expirationTime: '2019-01-01T12:00:00.000Z',
       shared: true,
@@ -279,7 +280,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: 'section-note',
+      noteId: `section-note-${identifier}`,
     };
 
     const res = await findingsService.getNote(params);
@@ -317,11 +318,11 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: 'finding-note',
+      noteId: `finding-note-${identifier}`,
       shortDescription: testString,
       longDescription: testString,
       kind: 'FINDING',
-      id: 'finding-note',
+      id: `finding-note-${identifier}`,
       reportedBy: reporterModel,
       relatedUrl: [apiNoteRelatedUrlModel],
       expirationTime: '2019-01-01T12:00:00.000Z',
@@ -351,11 +352,11 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: 'kpi-note',
+      noteId: `kpi-note-${identifier}`,
       shortDescription: testString,
       longDescription: testString,
       kind: 'KPI',
-      id: 'kpi-note',
+      id: `kpi-note-${identifier}`,
       reportedBy: reporterModel,
       expirationTime: '2019-01-01T12:00:00.000Z',
       shared: true,
@@ -407,11 +408,11 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: 'card-note',
+      noteId: `card-note-${identifier}`,
       shortDescription: testString,
       longDescription: testString,
       kind: 'CARD',
-      id: 'card-note',
+      id: `card-note-${identifier}`,
       reportedBy: reporterModel,
       expirationTime: '2019-01-01T12:00:00.000Z',
       shared: true,
@@ -441,11 +442,11 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: 'section-note',
+      noteId: `section-note-${identifier}`,
       shortDescription: testString,
       longDescription: testString,
       kind: 'SECTION',
-      id: 'section-note',
+      id: `section-note-${identifier}`,
       reportedBy: reporterModel,
       expirationTime: '2019-01-01T12:00:00.000Z',
       shared: true,
@@ -513,9 +514,9 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteName: `${accountId}/providers/${providerId}/notes/finding-note`,
+      noteName: `${accountId}/providers/${providerId}/notes/finding-note-${identifier}`,
       kind: 'FINDING',
-      id: 'finding-occurrence',
+      id: `finding-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
       context: contextModel,
@@ -553,9 +554,9 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteName: `${accountId}/providers/${providerId}/notes/kpi-note`,
+      noteName: `${accountId}/providers/${providerId}/notes/kpi-note-${identifier}`,
       kind: 'KPI',
-      id: 'kpi-occurrence',
+      id: `kpi-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
       context: contextModel,
@@ -571,7 +572,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      occurrenceId: 'finding-occurrence',
+      occurrenceId: `finding-occurrence-${identifier}`,
     };
 
     const res = await findingsService.getOccurrenceNote(params);
@@ -592,7 +593,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: 'finding-note',
+      noteId: `finding-note-${identifier}`,
     };
 
     const res = await findingsService.listNoteOccurrences(params);
@@ -603,7 +604,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      occurrenceId: 'finding-occurrence',
+      occurrenceId: `finding-occurrence-${identifier}`,
     };
 
     const res = await findingsService.getOccurrence(params);
@@ -667,10 +668,10 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      occurrenceId: 'finding-occurrence',
-      noteName: `${accountId}/providers/${providerId}/notes/finding-note`,
+      occurrenceId: `finding-occurrence-${identifier}`,
+      noteName: `${accountId}/providers/${providerId}/notes/finding-note-${identifier}`,
       kind: 'FINDING',
-      id: 'finding-occurrence',
+      id: `finding-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
       context: contextModel,
@@ -707,10 +708,10 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      occurrenceId: 'kpi-occurrence',
-      noteName: `${accountId}/providers/${providerId}/notes/kpi-note`,
+      occurrenceId: `kpi-occurrence-${identifier}`,
+      noteName: `${accountId}/providers/${providerId}/notes/kpi-note-${identifier}`,
       kind: 'KPI',
-      id: 'kpi-occurrence',
+      id: `kpi-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
       context: contextModel,
@@ -734,7 +735,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      occurrenceId: 'finding-occurrence',
+      occurrenceId: `finding-occurrence-${identifier}`,
     };
 
     const res = await findingsService.deleteOccurrence(params);
@@ -745,7 +746,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: 'finding-note',
+      noteId: `finding-note-${identifier}`,
     };
 
     const res = await findingsService.deleteNote(params);

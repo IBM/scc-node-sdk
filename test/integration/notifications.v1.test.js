@@ -21,6 +21,7 @@ const authHelper = require('../resources/auth-helper.js');
 
 const accountId = process.env.ACCOUNT_ID;
 const testString = 'testString';
+const identifier = process.env.TRAVIS_JOB_ID || Date.now();
 let channelId = '';
 
 // testcase timeout value (200s).
@@ -80,7 +81,7 @@ describe('NotificationsV1_integration', () => {
 
     const params = {
       accountId,
-      name: testString,
+      name: `testString-${identifier}`,
       type: 'Webhook',
       endpoint: 'https://webhook.site/136fe1e2-3c3f-4bff-925f-391fbb202546',
       description: testString,
@@ -116,7 +117,7 @@ describe('NotificationsV1_integration', () => {
     const params = {
       accountId,
       channelId,
-      name: testString,
+      name: `testString-${identifier}`,
       type: 'Webhook',
       endpoint: 'https://webhook.site/136fe1e2-3c3f-4bff-925f-391fbb202546',
       description: testString,
