@@ -208,7 +208,6 @@ describe('FindingsV1_integration', () => {
       section: testString,
       title: testString,
       subtitle: testString,
-      order: 1,
       finding_note_names: [testString],
       requires_configuration: true,
       badge_text: testString,
