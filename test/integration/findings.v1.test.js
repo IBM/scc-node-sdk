@@ -58,7 +58,6 @@ describe('FindingsV1_integration', () => {
           providerId,
           noteId: note.id,
         };
-        console.log(`deleting ${note.id}`);
         await findingsService.deleteNote(deleteNoteParams);
       }
     });
@@ -77,7 +76,6 @@ describe('FindingsV1_integration', () => {
           providerId,
           occurrenceId: occurrence.id,
         };
-        console.log(`deleting ${occurrence.id}`);
         await findingsService.deleteOccurrence(deleteOccurrenceParams);
       }
     });

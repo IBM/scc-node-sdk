@@ -44,6 +44,7 @@ describe('NotificationsV1_integration', () => {
 
   afterAll(async () => {
     console.log(`cleaning up account: ${accountId}\n`);
+
     const params = {
       accountId,
     };
@@ -149,6 +150,7 @@ describe('NotificationsV1_integration', () => {
       accountId,
       channelId,
     };
+
     const res = await notificationsService.deleteNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -169,6 +171,7 @@ describe('NotificationsV1_integration', () => {
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
     };
+
     const createChannelRes = await notificationsService.createNotificationChannel(
       createChannelParams
     );
@@ -177,6 +180,7 @@ describe('NotificationsV1_integration', () => {
       accountId,
       requestBody: [channelId],
     };
+
     const deleteChannelsRes = await notificationsService.deleteNotificationChannels(
       deleteChannelsParams
     );
