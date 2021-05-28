@@ -89,10 +89,8 @@ describe('NotificationsV1_integration', () => {
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
     };
-    console.log(`creating channel ${params.name}`);
     const res = await notificationsService.createNotificationChannel(params);
     channelId = res.result.channel_id;
-    console.log(`channel create ${channelId}`);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
@@ -101,7 +99,6 @@ describe('NotificationsV1_integration', () => {
       accountId,
       channelId,
     };
-    console.log(`getting channel ${params.channelId}`);
     const res = await notificationsService.getNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -126,7 +123,6 @@ describe('NotificationsV1_integration', () => {
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
     };
-    console.log(`updating channel ${params.channelId}`);
     const res = await notificationsService.updateNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -136,7 +132,6 @@ describe('NotificationsV1_integration', () => {
       accountId,
       channelId,
     };
-    console.log(`testing channel ${params.channelId}`);
     const res = await notificationsService.testNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -145,7 +140,6 @@ describe('NotificationsV1_integration', () => {
     const params = {
       accountId,
     };
-    console.log(`getting public key`);
     const res = await notificationsService.getPublicKey(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -155,7 +149,6 @@ describe('NotificationsV1_integration', () => {
       accountId,
       channelId,
     };
-    console.log(`deleting channel ${params.channelId}`);
     const res = await notificationsService.deleteNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -176,17 +169,14 @@ describe('NotificationsV1_integration', () => {
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
     };
-    console.log(`creating channel ${createChannelParams.name}`);
     const createChannelRes = await notificationsService.createNotificationChannel(
       createChannelParams
     );
     const channelId = createChannelRes.result.channel_id;
-    console.log(`created channel ${channelId}`);
     const deleteChannelsParams = {
       accountId,
       requestBody: [channelId],
     };
-    console.log(`deleting channels ${deleteChannelsParams.requestBody}`);
     const deleteChannelsRes = await notificationsService.deleteNotificationChannels(
       deleteChannelsParams
     );
