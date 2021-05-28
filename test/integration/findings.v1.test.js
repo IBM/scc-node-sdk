@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+const {
+  readExternalSources
+} = require('ibm-cloud-sdk-core');
 const FindingsV1 = require('../../dist/findings/v1');
 const authHelper = require('../resources/auth-helper.js');
 
@@ -51,13 +53,16 @@ describe('FindingsV1_integration', () => {
 
     const listNotesRes = await findingsService.listNotes(listNotesParams);
     listNotesRes.result.notes.forEach(async note => {
-      const deleteNoteParams = {
-        accountId,
-        providerId,
-        noteId: note.id,
-      };
-      console.log(`deleting ${note.id}`);
-      await findingsService.deleteNote(deleteNoteParams);
+      let parts = note.id.split("-");
+      if (parts[parts.length - 1] === identifier) {
+        const deleteNoteParams = {
+          accountId,
+          providerId,
+          noteId: note.id,
+        };
+        console.log(`deleting ${note.id}`);
+        await findingsService.deleteNote(deleteNoteParams);
+      }
     });
 
     const listOccurrencesParams = {
@@ -67,17 +72,18 @@ describe('FindingsV1_integration', () => {
 
     const listOccurrencesRes = await findingsService.listOccurrences(listOccurrencesParams);
     listOccurrencesRes.result.occurrences.forEach(async occurrence => {
-      const deleteOccurrenceParams = {
-        accountId,
-        providerId,
-        occurrenceId: occurrence.id,
-      };
-      console.log(`deleting ${occurrence.id}`);
-      await findingsService.deleteOccurrence(deleteOccurrenceParams);
+      let parts = occurrence.id.split("-");
+      if (parts[parts.length - 1] === identifier) {
+        const deleteOccurrenceParams = {
+          accountId,
+          providerId,
+          occurrenceId: occurrence.id,
+        };
+        console.log(`deleting ${occurrence.id}`);
+        await findingsService.deleteOccurrence(deleteOccurrenceParams);
+      }
     });
     console.log(`cleanup was successful\n`);
-
-    await new Promise(r => setTimeout(r, timeout));
 
     const listProvidersParams = {
       accountId,

@@ -59,8 +59,6 @@ describe('NotificationsV1_integration', () => {
       }
     });
     console.log(`cleanup was successful\n`);
-
-    await new Promise(r => setTimeout(r, timeout));
   });
 
   test('listAllChannels()', async () => {
@@ -170,7 +168,7 @@ describe('NotificationsV1_integration', () => {
     
     const createChannelParams = {
       accountId,
-      name: testString,
+      name: `channel-${identifier}`,
       type: 'Webhook',
       endpoint: 'https://webhook.site/136fe1e2-3c3f-4bff-925f-391fbb202546',
       description: testString,
