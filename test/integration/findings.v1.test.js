@@ -56,6 +56,7 @@ describe('FindingsV1_integration', () => {
         providerId,
         noteId: note.id,
       };
+      console.log(`deleting ${note.id}`);
       await findingsService.deleteNote(deleteNoteParams);
     });
 
@@ -71,6 +72,7 @@ describe('FindingsV1_integration', () => {
         providerId,
         occurrenceId: occurrence.id,
       };
+      console.log(`deleting ${occurrence.id}`);
       await findingsService.deleteOccurrence(deleteOccurrenceParams);
     });
     console.log(`cleanup was successful\n`);
@@ -94,7 +96,7 @@ describe('FindingsV1_integration', () => {
       body: '{notes{id}}',
       contentType: 'application/graphql',
     };
-
+    console.log(`querying postGraph ${params.body}`);
     const res = await findingsService.postGraph(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -140,7 +142,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       finding: findingTypeModel,
     };
-
+    console.log(`creating ${params.id}`);
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -172,7 +174,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       kpi: kpiTypeModel,
     };
-
+    console.log(`creating ${params.id}`);
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -227,7 +229,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       card: cardModel,
     };
-
+    console.log(`creating ${params.id}`);
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -260,7 +262,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       section: sectionModel,
     };
-
+    console.log(`creating ${params.id}`);
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -270,7 +272,7 @@ describe('FindingsV1_integration', () => {
       accountId,
       providerId,
     };
-
+    console.log(`listing notes`);
     const res = await findingsService.listNotes(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -281,7 +283,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       noteId: `section-note-${identifier}`,
     };
-
+    console.log(`getting ${params.noteId}`);
     const res = await findingsService.getNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -328,7 +330,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       finding: findingTypeModel,
     };
-
+    console.log(`updating ${params.id}`);
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -361,7 +363,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       kpi: kpiTypeModel,
     };
-
+    console.log(`updating ${params.id}`);
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -417,7 +419,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       card: cardModel,
     };
-
+    console.log(`updating ${params.id}`);
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -451,7 +453,7 @@ describe('FindingsV1_integration', () => {
       shared: true,
       section: sectionModel,
     };
-
+    console.log(`updating ${params.id}`);
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -522,7 +524,7 @@ describe('FindingsV1_integration', () => {
       finding: findingModel,
       replaceIfExists: true,
     };
-
+    console.log(`creating ${params.id}`);
     const res = await findingsService.createOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -562,7 +564,7 @@ describe('FindingsV1_integration', () => {
       kpi: kpiModel,
       replaceIfExists: true,
     };
-
+    console.log(`creating ${params.id}`);
     const res = await findingsService.createOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -573,7 +575,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       occurrenceId: `finding-occurrence-${identifier}`,
     };
-
+    console.log(`getting occurrence note ${params.occurrenceId}`);
     const res = await findingsService.getOccurrenceNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -583,7 +585,7 @@ describe('FindingsV1_integration', () => {
       accountId,
       providerId,
     };
-
+    console.log(`listing occurrences`);
     const res = await findingsService.listOccurrences(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -594,7 +596,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       noteId: `finding-note-${identifier}`,
     };
-
+    console.log(`listing note occurrences ${params.noteId}`);
     const res = await findingsService.listNoteOccurrences(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -605,7 +607,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       occurrenceId: `finding-occurrence-${identifier}`,
     };
-
+    console.log(`getting occurrence ${params.occurrenceId}`);
     const res = await findingsService.getOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -676,7 +678,7 @@ describe('FindingsV1_integration', () => {
       context: contextModel,
       finding: findingModel,
     };
-
+    console.log(`updating ${params.id}`);
     const res = await findingsService.updateOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -716,7 +718,7 @@ describe('FindingsV1_integration', () => {
       context: contextModel,
       kpi: kpiModel,
     };
-
+    console.log(`updating ${params.id}`);
     const res = await findingsService.updateOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -725,7 +727,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
     };
-
+    console.log(`listing providers`);
     const res = await findingsService.listProviders(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -736,7 +738,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       occurrenceId: `finding-occurrence-${identifier}`,
     };
-
+    console.log(`deletin ${params.occurrenceId}`);
     const res = await findingsService.deleteOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -747,7 +749,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       noteId: `finding-note-${identifier}`,
     };
-
+    console.log(`deletin ${params.noteId}`);
     const res = await findingsService.deleteNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
