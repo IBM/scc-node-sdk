@@ -1,3 +1,11 @@
+## [0.0.3](https://github.com/ibm-cloud-security/scc-node-sdk/compare/v0.0.2...v0.0.3) (2021-05-28)
+
+
+### Bug Fixes
+
+* **TRI:** region based service URL feature added ([#6](https://github.com/ibm-cloud-security/scc-node-sdk/issues/6)) ([ee65073](https://github.com/ibm-cloud-security/scc-node-sdk/commit/ee65073d0e7bfd43ce5ac3e74d0f73e3fa65a887))
+* **TRI:** region based service URL feature added ([#7](https://github.com/ibm-cloud-security/scc-node-sdk/issues/7)) ([2a98020](https://github.com/ibm-cloud-security/scc-node-sdk/commit/2a980202f70cf54a9f6dafc8cd3c525d1f9a55be))
+
 ## [0.0.2](https://github.com/ibm-cloud-security/scc-node-sdk/compare/v0.0.1...v0.0.2) (2021-04-27)
 
 
