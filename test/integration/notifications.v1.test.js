@@ -59,6 +59,8 @@ describe('NotificationsV1_integration', () => {
       }
     });
     console.log(`cleanup was successful\n`);
+
+    await new Promise(r => setTimeout(r, timeout));
   });
 
   test('listAllChannels()', async () => {
