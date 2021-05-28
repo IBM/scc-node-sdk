@@ -77,9 +77,7 @@ describe('FindingsV1_integration', () => {
     });
     console.log(`cleanup was successful\n`);
 
-    setTimeout(() => {
-      console.log(`waiting`);
-    }, timeout);
+    await new Promise(r => setTimeout(r, timeout));
 
     const listProvidersParams = {
       accountId,
@@ -712,7 +710,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       occurrenceId: `kpi-occurrence-${identifier}`,
     };
-    console.log(`deletin ${params.occurrenceId}`);
+    console.log(`deleting ${params.occurrenceId}`);
     const res = await findingsService.deleteOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -723,7 +721,7 @@ describe('FindingsV1_integration', () => {
       providerId,
       noteId: `section-note-${identifier}`,
     };
-    console.log(`deletin ${params.noteId}`);
+    console.log(`deleting ${params.noteId}`);
     const res = await findingsService.deleteNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
