@@ -158,7 +158,7 @@ describe('NotificationsV1_integration', () => {
       provider_name: 'VA',
       finding_types: ['image_with_vulnerabilities'],
     };
-    
+
     const createChannelParams = {
       accountId,
       name: `channel-${identifier}`,

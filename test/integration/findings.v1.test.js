@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 
-const {
-  readExternalSources
-} = require('ibm-cloud-sdk-core');
+const { readExternalSources } = require('ibm-cloud-sdk-core');
 const FindingsV1 = require('../../dist/findings/v1');
 const authHelper = require('../resources/auth-helper.js');
 
@@ -53,7 +51,7 @@ describe('FindingsV1_integration', () => {
 
     const listNotesRes = await findingsService.listNotes(listNotesParams);
     listNotesRes.result.notes.forEach(async note => {
-      let parts = note.id.split("-");
+      const parts = note.id.split('-');
       if (parts[parts.length - 1] === identifier) {
         const deleteNoteParams = {
           accountId,
@@ -72,7 +70,7 @@ describe('FindingsV1_integration', () => {
 
     const listOccurrencesRes = await findingsService.listOccurrences(listOccurrencesParams);
     listOccurrencesRes.result.occurrences.forEach(async occurrence => {
-      let parts = occurrence.id.split("-");
+      const parts = occurrence.id.split('-');
       if (parts[parts.length - 1] === identifier) {
         const deleteOccurrenceParams = {
           accountId,
