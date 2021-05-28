@@ -21,13 +21,6 @@ script:
 after_success:
   - npm run report-coverage
 deploy:
-  - provider: pages
-    skip_cleanup: true
-    token: $GH_TOKEN
-    script: sh scripts/typedoc/generate_typedoc.sh
-    local_dir: doc
-    on:
-      branch: main
   - provider: script
     skip_cleanup: true
     script: npx semantic-release
