@@ -44,6 +44,7 @@ describe('NotificationsV1_integration', () => {
 
   afterAll(async () => {
     console.log(`cleaning up account: ${accountId}\n`);
+
     const params = {
       accountId,
     };
@@ -65,7 +66,7 @@ describe('NotificationsV1_integration', () => {
     const params = {
       accountId,
     };
-
+    console.log(`listing all channels`);
     const res = await notificationsService.listAllChannels(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -89,7 +90,6 @@ describe('NotificationsV1_integration', () => {
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
     };
-
     const res = await notificationsService.createNotificationChannel(params);
     channelId = res.result.channel_id;
     expect(res).toBeDefined();
@@ -100,7 +100,6 @@ describe('NotificationsV1_integration', () => {
       accountId,
       channelId,
     };
-
     const res = await notificationsService.getNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -125,7 +124,6 @@ describe('NotificationsV1_integration', () => {
       enabled: true,
       alertSource: [notificationChannelAlertSourceItemModel],
     };
-
     const res = await notificationsService.updateNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -135,7 +133,6 @@ describe('NotificationsV1_integration', () => {
       accountId,
       channelId,
     };
-
     const res = await notificationsService.testNotificationChannel(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -144,7 +141,6 @@ describe('NotificationsV1_integration', () => {
     const params = {
       accountId,
     };
-
     const res = await notificationsService.getPublicKey(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -167,7 +163,7 @@ describe('NotificationsV1_integration', () => {
 
     const createChannelParams = {
       accountId,
-      name: testString,
+      name: `channel-${identifier}`,
       type: 'Webhook',
       endpoint: 'https://webhook.site/136fe1e2-3c3f-4bff-925f-391fbb202546',
       description: testString,
@@ -180,7 +176,6 @@ describe('NotificationsV1_integration', () => {
       createChannelParams
     );
     const channelId = createChannelRes.result.channel_id;
-
     const deleteChannelsParams = {
       accountId,
       requestBody: [channelId],

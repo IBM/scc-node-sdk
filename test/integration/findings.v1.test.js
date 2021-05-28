@@ -51,12 +51,15 @@ describe('FindingsV1_integration', () => {
 
     const listNotesRes = await findingsService.listNotes(listNotesParams);
     listNotesRes.result.notes.forEach(async note => {
-      const deleteNoteParams = {
-        accountId,
-        providerId,
-        noteId: note.id,
-      };
-      await findingsService.deleteNote(deleteNoteParams);
+      const parts = note.id.split('-');
+      if (parts[parts.length - 1] === identifier) {
+        const deleteNoteParams = {
+          accountId,
+          providerId,
+          noteId: note.id,
+        };
+        await findingsService.deleteNote(deleteNoteParams);
+      }
     });
 
     const listOccurrencesParams = {
@@ -66,12 +69,15 @@ describe('FindingsV1_integration', () => {
 
     const listOccurrencesRes = await findingsService.listOccurrences(listOccurrencesParams);
     listOccurrencesRes.result.occurrences.forEach(async occurrence => {
-      const deleteOccurrenceParams = {
-        accountId,
-        providerId,
-        occurrenceId: occurrence.id,
-      };
-      await findingsService.deleteOccurrence(deleteOccurrenceParams);
+      const parts = occurrence.id.split('-');
+      if (parts[parts.length - 1] === identifier) {
+        const deleteOccurrenceParams = {
+          accountId,
+          providerId,
+          occurrenceId: occurrence.id,
+        };
+        await findingsService.deleteOccurrence(deleteOccurrenceParams);
+      }
     });
     console.log(`cleanup was successful\n`);
 
@@ -94,7 +100,6 @@ describe('FindingsV1_integration', () => {
       body: '{notes{id}}',
       contentType: 'application/graphql',
     };
-
     const res = await findingsService.postGraph(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -140,7 +145,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       finding: findingTypeModel,
     };
-
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -172,7 +176,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       kpi: kpiTypeModel,
     };
-
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -227,7 +230,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       card: cardModel,
     };
-
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -260,7 +262,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       section: sectionModel,
     };
-
     const res = await findingsService.createNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -270,7 +271,6 @@ describe('FindingsV1_integration', () => {
       accountId,
       providerId,
     };
-
     const res = await findingsService.listNotes(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -281,7 +281,6 @@ describe('FindingsV1_integration', () => {
       providerId,
       noteId: `section-note-${identifier}`,
     };
-
     const res = await findingsService.getNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -328,7 +327,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       finding: findingTypeModel,
     };
-
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -361,7 +359,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       kpi: kpiTypeModel,
     };
-
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -417,7 +414,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       card: cardModel,
     };
-
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -451,7 +447,6 @@ describe('FindingsV1_integration', () => {
       shared: true,
       section: sectionModel,
     };
-
     const res = await findingsService.updateNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -522,27 +517,12 @@ describe('FindingsV1_integration', () => {
       finding: findingModel,
       replaceIfExists: true,
     };
-
     const res = await findingsService.createOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
   test('createOccurrenceKpi()', async () => {
     // Request models needed by this operation.
-
-    // Context
-    const contextModel = {
-      region: testString,
-      resource_crn: testString,
-      resource_id: testString,
-      resource_name: testString,
-      resource_type: testString,
-      service_crn: testString,
-      service_name: testString,
-      environment_name: testString,
-      component_name: testString,
-      toolchain_id: testString,
-    };
 
     // Kpi
     const kpiModel = {
@@ -558,11 +538,9 @@ describe('FindingsV1_integration', () => {
       id: `kpi-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
-      context: contextModel,
       kpi: kpiModel,
       replaceIfExists: true,
     };
-
     const res = await findingsService.createOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -573,7 +551,6 @@ describe('FindingsV1_integration', () => {
       providerId,
       occurrenceId: `finding-occurrence-${identifier}`,
     };
-
     const res = await findingsService.getOccurrenceNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -583,7 +560,6 @@ describe('FindingsV1_integration', () => {
       accountId,
       providerId,
     };
-
     const res = await findingsService.listOccurrences(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -594,7 +570,6 @@ describe('FindingsV1_integration', () => {
       providerId,
       noteId: `finding-note-${identifier}`,
     };
-
     const res = await findingsService.listNoteOccurrences(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -605,7 +580,6 @@ describe('FindingsV1_integration', () => {
       providerId,
       occurrenceId: `finding-occurrence-${identifier}`,
     };
-
     const res = await findingsService.getOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -676,27 +650,12 @@ describe('FindingsV1_integration', () => {
       context: contextModel,
       finding: findingModel,
     };
-
     const res = await findingsService.updateOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
   test('updateOccurrenceKpi()', async () => {
     // Request models needed by this operation.
-
-    // Context
-    const contextModel = {
-      region: testString,
-      resource_crn: testString,
-      resource_id: testString,
-      resource_name: testString,
-      resource_type: testString,
-      service_crn: testString,
-      service_name: testString,
-      environment_name: testString,
-      component_name: testString,
-      toolchain_id: testString,
-    };
 
     // Kpi
     const kpiModel = {
@@ -713,10 +672,8 @@ describe('FindingsV1_integration', () => {
       id: `kpi-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
-      context: contextModel,
       kpi: kpiModel,
     };
-
     const res = await findingsService.updateOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -725,7 +682,6 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
     };
-
     const res = await findingsService.listProviders(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -734,9 +690,8 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      occurrenceId: `finding-occurrence-${identifier}`,
+      occurrenceId: `kpi-occurrence-${identifier}`,
     };
-
     const res = await findingsService.deleteOccurrence(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
@@ -745,9 +700,8 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: `finding-note-${identifier}`,
+      noteId: `section-note-${identifier}`,
     };
-
     const res = await findingsService.deleteNote(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
