@@ -77,6 +77,8 @@ describe('FindingsV1_integration', () => {
     });
     console.log(`cleanup was successful\n`);
 
+    jest.setTimeout(timeout);
+
     const listProvidersParams = {
       accountId,
     };
