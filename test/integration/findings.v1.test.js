@@ -532,20 +532,6 @@ describe('FindingsV1_integration', () => {
   test('createOccurrenceKpi()', async () => {
     // Request models needed by this operation.
 
-    // Context
-    const contextModel = {
-      region: testString,
-      resource_crn: testString,
-      resource_id: testString,
-      resource_name: testString,
-      resource_type: testString,
-      service_crn: testString,
-      service_name: testString,
-      environment_name: testString,
-      component_name: testString,
-      toolchain_id: testString,
-    };
-
     // Kpi
     const kpiModel = {
       value: 72.5,
@@ -560,7 +546,6 @@ describe('FindingsV1_integration', () => {
       id: `kpi-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
-      context: contextModel,
       kpi: kpiModel,
       replaceIfExists: true,
     };
@@ -686,20 +671,6 @@ describe('FindingsV1_integration', () => {
   test('updateOccurrenceKpi()', async () => {
     // Request models needed by this operation.
 
-    // Context
-    const contextModel = {
-      region: testString,
-      resource_crn: testString,
-      resource_id: testString,
-      resource_name: testString,
-      resource_type: testString,
-      service_crn: testString,
-      service_name: testString,
-      environment_name: testString,
-      component_name: testString,
-      toolchain_id: testString,
-    };
-
     // Kpi
     const kpiModel = {
       value: 72.5,
@@ -715,7 +686,6 @@ describe('FindingsV1_integration', () => {
       id: `kpi-occurrence-${identifier}`,
       resourceUrl: testString,
       remediation: testString,
-      context: contextModel,
       kpi: kpiModel,
     };
     console.log(`updating ${params.id}`);
@@ -736,7 +706,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      occurrenceId: `finding-occurrence-${identifier}`,
+      occurrenceId: `kpi-occurrence-${identifier}`,
     };
     console.log(`deletin ${params.occurrenceId}`);
     const res = await findingsService.deleteOccurrence(params);
@@ -747,7 +717,7 @@ describe('FindingsV1_integration', () => {
     const params = {
       accountId,
       providerId,
-      noteId: `finding-note-${identifier}`,
+      noteId: `section-note-${identifier}`,
     };
     console.log(`deletin ${params.noteId}`);
     const res = await findingsService.deleteNote(params);
