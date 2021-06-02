@@ -1,3 +1,11 @@
+## [0.0.4](https://github.com/ibm-cloud-security/scc-node-sdk/compare/v0.0.3...v0.0.4) (2021-06-02)
+
+
+### Bug Fixes
+
+* **README:** API doc links updated ([6f5a513](https://github.com/ibm-cloud-security/scc-node-sdk/commit/6f5a5138a267591fec0c00898a9f56b993c09700))
+* **Travis:** after_success has to be used with explicit failure mechanism ([584c06f](https://github.com/ibm-cloud-security/scc-node-sdk/commit/584c06f539e6463cb672f78bfc68cf0868dc77e8))
+
 ## [0.0.3](https://github.com/ibm-cloud-security/scc-node-sdk/compare/v0.0.2...v0.0.3) (2021-05-28)
 
 
