@@ -10,7 +10,7 @@
 # IBM Cloud Security & Compliance Center Node.js SDK
 
 Node.js client library to interact with various 
-[IBM Cloud Security & Compliance Center APIs](https://cloud.ibm.com/apidocs/security-and-compliance-center).
+[IBM Cloud Security & Compliance Center APIs](https://cloud.ibm.com/docs?tab=api-docs&category=platform_services%2Csecurity).
 
 ## Table of Contents
 
@@ -47,9 +47,9 @@ IBM Cloud services:
 
 Service Name | Import Path
 --- | ---
-[Findings](https://cloud.ibm.com/apidocs/security-and-compliance-center/findings) | ibm-scc/findings/v1
-[Notifications](https://cloud.ibm.com/apidocs/security-and-compliance-center/notifications) | ibm-scc/notifications/v1
-[Configuration Governance](https://cloud.ibm.com/apidocs/security-and-compliance-center/configuration-governance) | ibm-scc/configuration-governance/v1
+[Findings](https://cloud.ibm.com/apidocs/security-advisor/findings) | ibm-scc/findings/v1
+[Notifications](https://cloud.ibm.com/apidocs/security-advisor/notifications) | ibm-scc/notifications/v1
+[Configuration Governance](https://cloud.ibm.com/apidocs/security-compliance/config) | ibm-scc/configuration-governance/v1
 
 ## Prerequisites
 * You need an [IBM Cloud][ibm-cloud-onboarding] account.
