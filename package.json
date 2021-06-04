@@ -4,7 +4,7 @@
   "description": "IBM Cloud Security & Compliance Center Node SDK",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ibm-cloud-security/scc-node-sdk"
+    "url": "https://github.com/IBM/scc-node-sdk"
   },
   "keywords": [
     "ibm"

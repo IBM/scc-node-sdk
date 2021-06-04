@@ -23,4 +23,4 @@ deploy:
     on:
       branch: main
       node: 12
-      repo: ibm-cloud-security/scc-node-sdk
+      repo: IBM/scc-node-sdk
