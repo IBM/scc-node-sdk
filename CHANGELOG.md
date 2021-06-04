@@ -1,3 +1,11 @@
+## [0.0.5](https://github.com/IBM/scc-node-sdk/compare/v0.0.4...v0.0.5) (2021-06-04)
+
+
+### Bug Fixes
+
+* **SDK:** IBM Cloud SCC Node SDK ([6a08bf0](https://github.com/IBM/scc-node-sdk/commit/6a08bf06e1cec8e27b0cd35fbbfaec4886a4b6c4))
+* **SDK:** IBM Cloud SCC Node SDK ([125e0b5](https://github.com/IBM/scc-node-sdk/commit/125e0b5fc5b3f11ca55000d74e95403b1eb4ca29))
+
 ## [0.0.4](https://github.com/IBM/scc-node-sdk/compare/v0.0.3...v0.0.4) (2021-06-02)
 
 
