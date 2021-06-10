@@ -1,6 +1,6 @@
 /**
- * @jest-environment node
- */
+* @jest-environment node
+*/
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+'use strict';
 
 /* eslint-disable no-console */
 
@@ -50,9 +51,12 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('FindingsV1', () => {
+
   // begin-common
 
-  const findingsService = FindingsV1.newInstance({});
+  const findingsService = FindingsV1.newInstance({
+    accountId: 'testString',
+  });
 
   // end-common
 
@@ -60,6 +64,7 @@ describe('FindingsV1', () => {
   // const config = readExternalSources(FindingsV1.DEFAULT_SERVICE_NAME);
 
   test('postGraph request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -71,22 +76,21 @@ describe('FindingsV1', () => {
     // begin-postGraph
 
     const params = {
-      accountId: 'testString',
       body: 'testString',
     };
 
-    findingsService
-      .postGraph(params)
-      .then(() => {
+    findingsService.postGraph(params)
+      .then(res => {
         done();
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-postGraph
   });
   test('createNote request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -99,7 +103,6 @@ describe('FindingsV1', () => {
     // begin-createNote
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       shortDescription: 'testString',
       longDescription: 'testString',
@@ -108,18 +111,18 @@ describe('FindingsV1', () => {
       reportedBy: reporterModel,
     };
 
-    findingsService
-      .createNote(params)
+    findingsService.createNote(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-createNote
   });
   test('listNotes request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -132,22 +135,21 @@ describe('FindingsV1', () => {
     // begin-listNotes
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
     };
 
-    findingsService
-      .listNotes(params)
+    findingsService.listNotes(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-listNotes
   });
   test('getNote request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -160,23 +162,22 @@ describe('FindingsV1', () => {
     // begin-getNote
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       noteId: 'testString',
     };
 
-    findingsService
-      .getNote(params)
+    findingsService.getNote(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-getNote
   });
   test('updateNote request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -189,7 +190,6 @@ describe('FindingsV1', () => {
     // begin-updateNote
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       noteId: 'testString',
       shortDescription: 'testString',
@@ -199,18 +199,18 @@ describe('FindingsV1', () => {
       reportedBy: reporterModel,
     };
 
-    findingsService
-      .updateNote(params)
+    findingsService.updateNote(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-updateNote
   });
   test('getOccurrenceNote request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -223,23 +223,22 @@ describe('FindingsV1', () => {
     // begin-getOccurrenceNote
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       occurrenceId: 'testString',
     };
 
-    findingsService
-      .getOccurrenceNote(params)
+    findingsService.getOccurrenceNote(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-getOccurrenceNote
   });
   test('createOccurrence request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -252,25 +251,24 @@ describe('FindingsV1', () => {
     // begin-createOccurrence
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       noteName: 'testString',
       kind: 'FINDING',
       id: 'testString',
     };
 
-    findingsService
-      .createOccurrence(params)
+    findingsService.createOccurrence(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-createOccurrence
   });
   test('listOccurrences request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -283,22 +281,21 @@ describe('FindingsV1', () => {
     // begin-listOccurrences
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
     };
 
-    findingsService
-      .listOccurrences(params)
+    findingsService.listOccurrences(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-listOccurrences
   });
   test('listNoteOccurrences request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -311,23 +308,22 @@ describe('FindingsV1', () => {
     // begin-listNoteOccurrences
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       noteId: 'testString',
     };
 
-    findingsService
-      .listNoteOccurrences(params)
+    findingsService.listNoteOccurrences(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-listNoteOccurrences
   });
   test('getOccurrence request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -340,23 +336,22 @@ describe('FindingsV1', () => {
     // begin-getOccurrence
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       occurrenceId: 'testString',
     };
 
-    findingsService
-      .getOccurrence(params)
+    findingsService.getOccurrence(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-getOccurrence
   });
   test('updateOccurrence request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -369,7 +364,6 @@ describe('FindingsV1', () => {
     // begin-updateOccurrence
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       occurrenceId: 'testString',
       noteName: 'testString',
@@ -377,18 +371,18 @@ describe('FindingsV1', () => {
       id: 'testString',
     };
 
-    findingsService
-      .updateOccurrence(params)
+    findingsService.updateOccurrence(params)
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-updateOccurrence
   });
   test('listProviders request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -400,22 +394,18 @@ describe('FindingsV1', () => {
     originalLog('listProviders() result:');
     // begin-listProviders
 
-    const params = {
-      accountId: 'testString',
-    };
-
-    findingsService
-      .listProviders(params)
+    findingsService.listProviders({})
       .then(res => {
         console.log(JSON.stringify(res.result, null, 2));
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-listProviders
   });
   test('deleteOccurrence request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -427,23 +417,22 @@ describe('FindingsV1', () => {
     // begin-deleteOccurrence
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       occurrenceId: 'testString',
     };
 
-    findingsService
-      .deleteOccurrence(params)
-      .then(() => {
+    findingsService.deleteOccurrence(params)
+      .then(res => {
         done();
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-deleteOccurrence
   });
   test('deleteNote request example', done => {
+
     consoleLogMock.mockImplementation(output => {
       originalLog(output);
       done();
@@ -455,18 +444,16 @@ describe('FindingsV1', () => {
     // begin-deleteNote
 
     const params = {
-      accountId: 'testString',
       providerId: 'testString',
       noteId: 'testString',
     };
 
-    findingsService
-      .deleteNote(params)
-      .then(() => {
+    findingsService.deleteNote(params)
+      .then(res => {
         done();
       })
       .catch(err => {
-        console.warn(err);
+        console.warn(err)
       });
 
     // end-deleteNote
