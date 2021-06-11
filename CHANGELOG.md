@@ -1,3 +1,10 @@
+## [0.0.6](https://github.com/IBM/scc-node-sdk/compare/v0.0.5...v0.0.6) (2021-06-11)
+
+
+### Bug Fixes
+
+* **listProviders:** Addressed api definition review comments ([9d854df](https://github.com/IBM/scc-node-sdk/commit/9d854df82b26351dccaef5fc27ade2235ef53204))
+
 ## [0.0.5](https://github.com/IBM/scc-node-sdk/compare/v0.0.4...v0.0.5) (2021-06-04)
 
 
