@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
-
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const FindingsV1 = require('../../dist/findings/v1');
@@ -27,14 +27,16 @@ const {
   checkMediaHeaders,
   expectToBePromise,
   checkUserHeader,
+  checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const findingsServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://us-south.secadvisor.cloud.ibm.com/findings',
+  accountId: 'testString',
 };
 
-const findingsService = new FindingsV1(service);
+const findingsService = new FindingsV1(findingsServiceOptions);
 
 // dont actually create a request
 const createRequestMock = jest.spyOn(findingsService, 'createRequest');
@@ -49,10 +51,19 @@ afterEach(() => {
   getAuthenticatorMock.mockClear();
 });
 
+// used for the service construction tests
+let requiredGlobals;
+beforeEach(() => {
+  // these are changed when passed into the factory/constructor, so re-init
+  requiredGlobals = {
+    accountId: 'testString',
+  };
+});
+
 describe('FindingsV1', () => {
   describe('the newInstance method', () => {
     test('should use defaults when options not provided', () => {
-      const testInstance = FindingsV1.newInstance();
+      const testInstance = FindingsV1.newInstance(requiredGlobals);
 
       expect(getAuthenticatorMock).toHaveBeenCalled();
       expect(testInstance.baseOptions.authenticator).toBeInstanceOf(NoAuthAuthenticator);
@@ -62,11 +73,13 @@ describe('FindingsV1', () => {
     });
 
     test('should set serviceName, serviceUrl, and authenticator when provided', () => {
-      const options = {
+      let options = {
         authenticator: new NoAuthAuthenticator(),
         serviceUrl: 'custom.com',
         serviceName: 'my-service',
       };
+
+      options = Object.assign(options, requiredGlobals);
 
       const testInstance = FindingsV1.newInstance(options);
 
@@ -79,39 +92,72 @@ describe('FindingsV1', () => {
   });
   describe('the constructor', () => {
     test('use user-given service url', () => {
-      const options = {
+      let options = {
         authenticator: new NoAuthAuthenticator(),
         serviceUrl: 'custom.com',
       };
+
+      options = Object.assign(options, requiredGlobals);
 
       const testInstance = new FindingsV1(options);
 
       expect(testInstance.baseOptions.serviceUrl).toBe('custom.com');
     });
 
-    test('use default service url', () => {
-      const options = {
+    test('missing required param', () => {
+      let options = {
         authenticator: new NoAuthAuthenticator(),
       };
+
+      try{
+        new FindingsV1(options)
+        throw new Error("Test passed without required param.")
+      }catch(err){
+        expect(err.message).toEqual("Missing required parameters: accountId")
+      }
+    });
+
+    test('option not passed', () => {
+      try{
+        new FindingsV1()
+        throw new Error("Test passed without options.")
+      }catch(err){
+        expect(err.message).toEqual("Missing required parameters: accountId")
+      }
+    });
+
+    test('use default service url', () => {
+      let options = {
+        authenticator: new NoAuthAuthenticator(),
+      };
+
+      options = Object.assign(options, requiredGlobals);
 
       const testInstance = new FindingsV1(options);
 
       expect(testInstance.baseOptions.serviceUrl).toBe(FindingsV1.DEFAULT_SERVICE_URL);
     });
   });
+  describe('service-level tests', () => {
+    describe('positive tests', () => {
+      test('construct service with global params', () => {
+        const serviceObj = new FindingsV1(findingsServiceOptions);
+        expect(serviceObj).not.toBeNull();
+        expect(serviceObj.accountId).toEqual(findingsServiceOptions.accountId);
+      });
+    });
+  });
   describe('postGraph', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation postGraph
-        const accountId = 'testString';
         const body = 'testString';
         const contentType = 'application/json';
         const transactionId = 'testString';
         const params = {
-          accountId,
-          body,
-          contentType,
-          transactionId,
+          body: body,
+          contentType: contentType,
+          transactionId: transactionId,
         };
 
         const postGraphResult = findingsService.postGraph(params);
@@ -131,17 +177,15 @@ describe('FindingsV1', () => {
         checkUserHeader(createRequestMock, 'Content-Type', contentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         expect(options.body).toEqual(body);
-        expect(options.path.account_id).toEqual(accountId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const body = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           body,
           headers: {
             Accept: userAccept,
@@ -249,7 +293,6 @@ describe('FindingsV1', () => {
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createNote
-        const accountId = 'testString';
         const providerId = 'testString';
         const shortDescription = 'testString';
         const longDescription = 'testString';
@@ -265,21 +308,20 @@ describe('FindingsV1', () => {
         const section = sectionModel;
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          shortDescription,
-          longDescription,
-          kind,
-          id,
-          reportedBy,
-          relatedUrl,
-          expirationTime,
-          shared,
-          finding,
-          kpi,
-          card,
-          section,
-          transactionId,
+          providerId: providerId,
+          shortDescription: shortDescription,
+          longDescription: longDescription,
+          kind: kind,
+          id: id,
+          reportedBy: reportedBy,
+          relatedUrl: relatedUrl,
+          expirationTime: expirationTime,
+          shared: shared,
+          finding: finding,
+          kpi: kpi,
+          card: card,
+          section: section,
+          transactionId: transactionId,
         };
 
         const createNoteResult = findingsService.createNote(params);
@@ -297,25 +339,24 @@ describe('FindingsV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body.short_description).toEqual(shortDescription);
-        expect(options.body.long_description).toEqual(longDescription);
-        expect(options.body.kind).toEqual(kind);
-        expect(options.body.id).toEqual(id);
-        expect(options.body.reported_by).toEqual(reportedBy);
-        expect(options.body.related_url).toEqual(relatedUrl);
-        expect(options.body.expiration_time).toEqual(expirationTime);
-        expect(options.body.shared).toEqual(shared);
-        expect(options.body.finding).toEqual(finding);
-        expect(options.body.kpi).toEqual(kpi);
-        expect(options.body.card).toEqual(card);
-        expect(options.body.section).toEqual(section);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
+        expect(options.body['short_description']).toEqual(shortDescription);
+        expect(options.body['long_description']).toEqual(longDescription);
+        expect(options.body['kind']).toEqual(kind);
+        expect(options.body['id']).toEqual(id);
+        expect(options.body['reported_by']).toEqual(reportedBy);
+        expect(options.body['related_url']).toEqual(relatedUrl);
+        expect(options.body['expiration_time']).toEqual(expirationTime);
+        expect(options.body['shared']).toEqual(shared);
+        expect(options.body['finding']).toEqual(finding);
+        expect(options.body['kpi']).toEqual(kpi);
+        expect(options.body['card']).toEqual(card);
+        expect(options.body['section']).toEqual(section);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const shortDescription = 'testString';
         const longDescription = 'testString';
@@ -325,7 +366,6 @@ describe('FindingsV1', () => {
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           shortDescription,
           longDescription,
@@ -371,17 +411,15 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listNotes
-        const accountId = 'testString';
         const providerId = 'testString';
         const transactionId = 'testString';
         const pageSize = 2;
         const pageToken = 'testString';
         const params = {
-          accountId,
-          providerId,
-          transactionId,
-          pageSize,
-          pageToken,
+          providerId: providerId,
+          transactionId: transactionId,
+          pageSize: pageSize,
+          pageToken: pageToken,
         };
 
         const listNotesResult = findingsService.listNotes(params);
@@ -399,20 +437,18 @@ describe('FindingsV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs.page_size).toEqual(pageSize);
-        expect(options.qs.page_token).toEqual(pageToken);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
+        expect(options.qs['page_size']).toEqual(pageSize);
+        expect(options.qs['page_token']).toEqual(pageToken);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           headers: {
             Accept: userAccept,
@@ -453,15 +489,13 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation getNote
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          noteId,
-          transactionId,
+          providerId: providerId,
+          noteId: noteId,
+          transactionId: transactionId,
         };
 
         const getNoteResult = findingsService.getNote(params);
@@ -474,29 +508,23 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/notes/{note_id}',
-          'GET'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.note_id).toEqual(noteId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['note_id']).toEqual(noteId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           noteId,
           headers: {
@@ -605,7 +633,6 @@ describe('FindingsV1', () => {
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateNote
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const shortDescription = 'testString';
@@ -622,22 +649,21 @@ describe('FindingsV1', () => {
         const section = sectionModel;
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          noteId,
-          shortDescription,
-          longDescription,
-          kind,
-          id,
-          reportedBy,
-          relatedUrl,
-          expirationTime,
-          shared,
-          finding,
-          kpi,
-          card,
-          section,
-          transactionId,
+          providerId: providerId,
+          noteId: noteId,
+          shortDescription: shortDescription,
+          longDescription: longDescription,
+          kind: kind,
+          id: id,
+          reportedBy: reportedBy,
+          relatedUrl: relatedUrl,
+          expirationTime: expirationTime,
+          shared: shared,
+          finding: finding,
+          kpi: kpi,
+          card: card,
+          section: section,
+          transactionId: transactionId,
         };
 
         const updateNoteResult = findingsService.updateNote(params);
@@ -650,35 +676,30 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/notes/{note_id}',
-          'PUT'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body.short_description).toEqual(shortDescription);
-        expect(options.body.long_description).toEqual(longDescription);
-        expect(options.body.kind).toEqual(kind);
-        expect(options.body.id).toEqual(id);
-        expect(options.body.reported_by).toEqual(reportedBy);
-        expect(options.body.related_url).toEqual(relatedUrl);
-        expect(options.body.expiration_time).toEqual(expirationTime);
-        expect(options.body.shared).toEqual(shared);
-        expect(options.body.finding).toEqual(finding);
-        expect(options.body.kpi).toEqual(kpi);
-        expect(options.body.card).toEqual(card);
-        expect(options.body.section).toEqual(section);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.note_id).toEqual(noteId);
+        expect(options.body['short_description']).toEqual(shortDescription);
+        expect(options.body['long_description']).toEqual(longDescription);
+        expect(options.body['kind']).toEqual(kind);
+        expect(options.body['id']).toEqual(id);
+        expect(options.body['reported_by']).toEqual(reportedBy);
+        expect(options.body['related_url']).toEqual(relatedUrl);
+        expect(options.body['expiration_time']).toEqual(expirationTime);
+        expect(options.body['shared']).toEqual(shared);
+        expect(options.body['finding']).toEqual(finding);
+        expect(options.body['kpi']).toEqual(kpi);
+        expect(options.body['card']).toEqual(card);
+        expect(options.body['section']).toEqual(section);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['note_id']).toEqual(noteId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const shortDescription = 'testString';
@@ -689,7 +710,6 @@ describe('FindingsV1', () => {
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           noteId,
           shortDescription,
@@ -736,15 +756,13 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation deleteNote
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          noteId,
-          transactionId,
+          providerId: providerId,
+          noteId: noteId,
+          transactionId: transactionId,
         };
 
         const deleteNoteResult = findingsService.deleteNote(params);
@@ -757,29 +775,23 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/notes/{note_id}',
-          'DELETE'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.note_id).toEqual(noteId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['note_id']).toEqual(noteId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           noteId,
           headers: {
@@ -821,15 +833,13 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation getOccurrenceNote
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          occurrenceId,
-          transactionId,
+          providerId: providerId,
+          occurrenceId: occurrenceId,
+          transactionId: transactionId,
         };
 
         const getOccurrenceNoteResult = findingsService.getOccurrenceNote(params);
@@ -842,29 +852,23 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}/note',
-          'GET'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}/note', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.occurrence_id).toEqual(occurrenceId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['occurrence_id']).toEqual(occurrenceId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           occurrenceId,
           headers: {
@@ -965,7 +969,6 @@ describe('FindingsV1', () => {
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createOccurrence
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteName = 'testString';
         const kind = 'FINDING';
@@ -979,19 +982,18 @@ describe('FindingsV1', () => {
         const replaceIfExists = true;
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          noteName,
-          kind,
-          id,
-          resourceUrl,
-          remediation,
-          context,
-          finding,
-          kpi,
-          referenceData,
-          replaceIfExists,
-          transactionId,
+          providerId: providerId,
+          noteName: noteName,
+          kind: kind,
+          id: id,
+          resourceUrl: resourceUrl,
+          remediation: remediation,
+          context: context,
+          finding: finding,
+          kpi: kpi,
+          referenceData: referenceData,
+          replaceIfExists: replaceIfExists,
+          transactionId: transactionId,
         };
 
         const createOccurrenceResult = findingsService.createOccurrence(params);
@@ -1010,22 +1012,21 @@ describe('FindingsV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Replace-If-Exists', replaceIfExists);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body.note_name).toEqual(noteName);
-        expect(options.body.kind).toEqual(kind);
-        expect(options.body.id).toEqual(id);
-        expect(options.body.resource_url).toEqual(resourceUrl);
-        expect(options.body.remediation).toEqual(remediation);
-        expect(options.body.context).toEqual(context);
-        expect(options.body.finding).toEqual(finding);
-        expect(options.body.kpi).toEqual(kpi);
-        expect(options.body.reference_data).toEqual(referenceData);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
+        expect(options.body['note_name']).toEqual(noteName);
+        expect(options.body['kind']).toEqual(kind);
+        expect(options.body['id']).toEqual(id);
+        expect(options.body['resource_url']).toEqual(resourceUrl);
+        expect(options.body['remediation']).toEqual(remediation);
+        expect(options.body['context']).toEqual(context);
+        expect(options.body['finding']).toEqual(finding);
+        expect(options.body['kpi']).toEqual(kpi);
+        expect(options.body['reference_data']).toEqual(referenceData);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteName = 'testString';
         const kind = 'FINDING';
@@ -1033,7 +1034,6 @@ describe('FindingsV1', () => {
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           noteName,
           kind,
@@ -1077,17 +1077,15 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listOccurrences
-        const accountId = 'testString';
         const providerId = 'testString';
         const transactionId = 'testString';
         const pageSize = 2;
         const pageToken = 'testString';
         const params = {
-          accountId,
-          providerId,
-          transactionId,
-          pageSize,
-          pageToken,
+          providerId: providerId,
+          transactionId: transactionId,
+          pageSize: pageSize,
+          pageToken: pageToken,
         };
 
         const listOccurrencesResult = findingsService.listOccurrences(params);
@@ -1105,20 +1103,18 @@ describe('FindingsV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs.page_size).toEqual(pageSize);
-        expect(options.qs.page_token).toEqual(pageToken);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
+        expect(options.qs['page_size']).toEqual(pageSize);
+        expect(options.qs['page_token']).toEqual(pageToken);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           headers: {
             Accept: userAccept,
@@ -1159,19 +1155,17 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listNoteOccurrences
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const transactionId = 'testString';
         const pageSize = 2;
         const pageToken = 'testString';
         const params = {
-          accountId,
-          providerId,
-          noteId,
-          transactionId,
-          pageSize,
-          pageToken,
+          providerId: providerId,
+          noteId: noteId,
+          transactionId: transactionId,
+          pageSize: pageSize,
+          pageToken: pageToken,
         };
 
         const listNoteOccurrencesResult = findingsService.listNoteOccurrences(params);
@@ -1184,31 +1178,25 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/notes/{note_id}/occurrences',
-          'GET'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}/occurrences', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs.page_size).toEqual(pageSize);
-        expect(options.qs.page_token).toEqual(pageToken);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.note_id).toEqual(noteId);
+        expect(options.qs['page_size']).toEqual(pageSize);
+        expect(options.qs['page_token']).toEqual(pageToken);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['note_id']).toEqual(noteId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const noteId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           noteId,
           headers: {
@@ -1250,15 +1238,13 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation getOccurrence
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          occurrenceId,
-          transactionId,
+          providerId: providerId,
+          occurrenceId: occurrenceId,
+          transactionId: transactionId,
         };
 
         const getOccurrenceResult = findingsService.getOccurrence(params);
@@ -1271,29 +1257,23 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}',
-          'GET'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.occurrence_id).toEqual(occurrenceId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['occurrence_id']).toEqual(occurrenceId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           occurrenceId,
           headers: {
@@ -1394,7 +1374,6 @@ describe('FindingsV1', () => {
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateOccurrence
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const noteName = 'testString';
@@ -1408,19 +1387,18 @@ describe('FindingsV1', () => {
         const referenceData = { foo: 'bar' };
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          occurrenceId,
-          noteName,
-          kind,
-          id,
-          resourceUrl,
-          remediation,
-          context,
-          finding,
-          kpi,
-          referenceData,
-          transactionId,
+          providerId: providerId,
+          occurrenceId: occurrenceId,
+          noteName: noteName,
+          kind: kind,
+          id: id,
+          resourceUrl: resourceUrl,
+          remediation: remediation,
+          context: context,
+          finding: finding,
+          kpi: kpi,
+          referenceData: referenceData,
+          transactionId: transactionId,
         };
 
         const updateOccurrenceResult = findingsService.updateOccurrence(params);
@@ -1433,32 +1411,27 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}',
-          'PUT'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body.note_name).toEqual(noteName);
-        expect(options.body.kind).toEqual(kind);
-        expect(options.body.id).toEqual(id);
-        expect(options.body.resource_url).toEqual(resourceUrl);
-        expect(options.body.remediation).toEqual(remediation);
-        expect(options.body.context).toEqual(context);
-        expect(options.body.finding).toEqual(finding);
-        expect(options.body.kpi).toEqual(kpi);
-        expect(options.body.reference_data).toEqual(referenceData);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.occurrence_id).toEqual(occurrenceId);
+        expect(options.body['note_name']).toEqual(noteName);
+        expect(options.body['kind']).toEqual(kind);
+        expect(options.body['id']).toEqual(id);
+        expect(options.body['resource_url']).toEqual(resourceUrl);
+        expect(options.body['remediation']).toEqual(remediation);
+        expect(options.body['context']).toEqual(context);
+        expect(options.body['finding']).toEqual(finding);
+        expect(options.body['kpi']).toEqual(kpi);
+        expect(options.body['reference_data']).toEqual(referenceData);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['occurrence_id']).toEqual(occurrenceId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const noteName = 'testString';
@@ -1467,7 +1440,6 @@ describe('FindingsV1', () => {
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           occurrenceId,
           noteName,
@@ -1512,15 +1484,13 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation deleteOccurrence
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const transactionId = 'testString';
         const params = {
-          accountId,
-          providerId,
-          occurrenceId,
-          transactionId,
+          providerId: providerId,
+          occurrenceId: occurrenceId,
+          transactionId: transactionId,
         };
 
         const deleteOccurrenceResult = findingsService.deleteOccurrence(params);
@@ -1533,29 +1503,23 @@ describe('FindingsV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(
-          options,
-          '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}',
-          'DELETE'
-        );
+        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path.account_id).toEqual(accountId);
-        expect(options.path.provider_id).toEqual(providerId);
-        expect(options.path.occurrence_id).toEqual(occurrenceId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(options.path['provider_id']).toEqual(providerId);
+        expect(options.path['occurrence_id']).toEqual(occurrenceId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const providerId = 'testString';
         const occurrenceId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           providerId,
           occurrenceId,
           headers: {
@@ -1597,19 +1561,17 @@ describe('FindingsV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listProviders
-        const accountId = 'testString';
         const transactionId = 'testString';
         const limit = 2;
         const skip = 38;
         const startProviderId = 'testString';
         const endProviderId = 'testString';
         const params = {
-          accountId,
-          transactionId,
-          limit,
-          skip,
-          startProviderId,
-          endProviderId,
+          transactionId: transactionId,
+          limit: limit,
+          skip: skip,
+          startProviderId: startProviderId,
+          endProviderId: endProviderId,
         };
 
         const listProvidersResult = findingsService.listProviders(params);
@@ -1627,20 +1589,18 @@ describe('FindingsV1', () => {
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs.limit).toEqual(limit);
-        expect(options.qs.skip).toEqual(skip);
-        expect(options.qs.start_provider_id).toEqual(startProviderId);
-        expect(options.qs.end_provider_id).toEqual(endProviderId);
-        expect(options.path.account_id).toEqual(accountId);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['skip']).toEqual(skip);
+        expect(options.qs['start_provider_id']).toEqual(startProviderId);
+        expect(options.qs['end_provider_id']).toEqual(endProviderId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const accountId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          accountId,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -1650,29 +1610,11 @@ describe('FindingsV1', () => {
         findingsService.listProviders(params);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
-    });
 
-    describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
-        let err;
-        try {
-          await findingsService.listProviders({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-        done();
-      });
-
-      test('should reject promise when required params are not given', done => {
-        const listProvidersPromise = findingsService.listProviders();
-        expectToBePromise(listProvidersPromise);
-
-        listProvidersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        findingsService.listProviders({});
+        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
