@@ -1,3 +1,10 @@
+## [0.0.7](https://github.com/IBM/scc-node-sdk/compare/v0.0.6...v0.0.7) (2021-06-14)
+
+
+### Bug Fixes
+
+* **SDK:** release with common FID ([70ee72d](https://github.com/IBM/scc-node-sdk/commit/70ee72d457f85c98c1d3b4868fc35d4a87175471))
+
 ## [0.0.6](https://github.com/IBM/scc-node-sdk/compare/v0.0.5...v0.0.6) (2021-06-11)
 
 
