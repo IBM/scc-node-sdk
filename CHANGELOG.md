@@ -1,3 +1,10 @@
+## [0.0.8](https://github.com/IBM/scc-node-sdk/compare/v0.0.7...v0.0.8) (2021-06-14)
+
+
+### Bug Fixes
+
+* **ITs:** config-gov ITs fixed ([aa1de7d](https://github.com/IBM/scc-node-sdk/commit/aa1de7dc55988878543385f7bc60ce937002a8b8))
+
 ## [0.0.7](https://github.com/IBM/scc-node-sdk/compare/v0.0.6...v0.0.7) (2021-06-14)
 
 
