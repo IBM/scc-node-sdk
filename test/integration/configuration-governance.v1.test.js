@@ -2,22 +2,32 @@
 /**
  * (C) Copyright IBM Corp. 2021.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
-const { readExternalSources } = require('ibm-cloud-sdk-core');
+const {
+  readExternalSources
+} = require('ibm-cloud-sdk-core');
 const ConfigurationGovernanceV1 = require('../../dist/configuration-governance/v1');
 const authHelper = require('../resources/auth-helper.js');
+
+const accountID = process.env.ACCOUNT_ID;
+const ruleLabel = process.env.RULE_LABEL || 'sdk-it';
+const testString = 'testString';
+const resourceGroupID = process.env.RESOURCE_GROUP_ID;
+
+var ruleETag = '';
+var ruleAttachmentETag = '';
 
 // testcase timeout value (200s).
 const timeout = 200000;
@@ -37,6 +47,25 @@ describe('ConfigurationGovernanceV1_integration', () => {
 
   jest.setTimeout(timeout);
 
+  afterAll(async () => {
+    console.log(`cleaning up account: ${accountId} with rules labelled ${ruleLabel}\n`);
+    const listRulesOpts = {
+      accountID,
+    };
+
+    const listRulesRes = await configurationGovernanceService.listRules(listRulesOpts);
+    listRulesRes.result.rules.forEach(async rule => {
+      if (rule.labels[0]===ruleLabel) {
+        const deleteRuleOpts = {
+          ruleId: rule.ruleId
+        };
+        await configurationGovernanceService.deleteRule(deleteRuleOpts);
+      }
+    });
+
+    console.log(`cleanup was successful\n`);
+  });
+
   // Globlal variables to hold link values
   let ruleAttachmentIdLink;
   let ruleIdLink;
@@ -53,17 +82,17 @@ describe('ConfigurationGovernanceV1_integration', () => {
 
     // TargetResource
     const targetResourceModel = {
-      service_name: 'iam-groups',
-      resource_kind: 'service',
+      service_name: 'cloud-object-storage',
+      resource_kind: 'bucket',
       additional_target_attributes: [targetResourceAdditionalTargetAttributesItemModel],
     };
 
     // RuleRequiredConfigSingleProperty
     const ruleRequiredConfigModel = {
-      description: 'Public access check',
-      property: 'public_access_enabled',
-      operator: 'is_true',
-      value: 'testString',
+      description: testString,
+      property: 'location',
+      operator: 'string_equals',
+      value: 'us-south',
     };
 
     // EnforcementAction
@@ -73,14 +102,14 @@ describe('ConfigurationGovernanceV1_integration', () => {
 
     // RuleRequest
     const ruleRequestModel = {
-      account_id: '531fc3e28bfc43c5a2cea07786d93f5c',
+      account_id: accountID,
       name: 'Disable public access',
       description: 'Ensure that public access to account resources is disabled.',
       rule_type: 'user_defined',
       target: targetResourceModel,
       required_config: ruleRequiredConfigModel,
       enforcement_actions: [enforcementActionModel],
-      labels: ['Access', 'IAM'],
+      labels: [ruleLabel],
     };
 
     // CreateRuleRequest
@@ -91,7 +120,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
 
     const params = {
       rules: [createRuleRequestModel],
-      transactionId: 'testString',
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.createRules(params);
@@ -104,22 +133,28 @@ describe('ConfigurationGovernanceV1_integration', () => {
 
     // RuleScope
     const ruleScopeModel = {
-      note: 'My enterprise',
-      scope_id: '282cf433ac91493ba860480d92519990',
-      scope_type: 'enterprise',
+      note: 'My account',
+      scope_id: accountID,
+      scope_type: 'account',
     };
+
+    const excludeScopeModel = {
+      note: 'My account resource group',
+      scope_id: resourceGroupID,
+      scope_type: 'account.resource_group',
+    }
 
     // RuleAttachmentRequest
     const ruleAttachmentRequestModel = {
-      account_id: '531fc3e28bfc43c5a2cea07786d93f5c',
+      account_id: accountID,
       included_scope: ruleScopeModel,
-      excluded_scopes: [ruleScopeModel],
+      excluded_scopes: [excludeScopeModel],
     };
 
     const params = {
       ruleId: ruleIdLink,
       attachments: [ruleAttachmentRequestModel],
-      transactionId: 'testString',
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.createRuleAttachments(params);
@@ -129,10 +164,10 @@ describe('ConfigurationGovernanceV1_integration', () => {
   });
   test('listRules()', async () => {
     const params = {
-      accountId: '531fc3e28bfc43c5a2cea07786d93f5c',
-      transactionId: 'testString',
+      accountId: accountID,
+      transactionId: testString,
       attached: true,
-      labels: 'SOC2,ITCS300',
+      labels: ruleLabel,
       scopes: 'scope_id',
       limit: 1000,
       offset: 38,
@@ -145,36 +180,30 @@ describe('ConfigurationGovernanceV1_integration', () => {
   test('getRule()', async () => {
     const params = {
       ruleId: ruleIdLink,
-      transactionId: 'testString',
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.getRule(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+
+    ruleETag = res.headers.etag;
   });
   test('updateRule()', async () => {
     // Request models needed by this operation.
 
-    // TargetResourceAdditionalTargetAttributesItem
-    const targetResourceAdditionalTargetAttributesItemModel = {
-      name: 'testString',
-      value: 'testString',
-      operator: 'string_equals',
-    };
-
     // TargetResource
     const targetResourceModel = {
-      service_name: 'iam-groups',
-      resource_kind: 'service',
-      additional_target_attributes: [targetResourceAdditionalTargetAttributesItemModel],
+      service_name: 'cloud-object-storage',
+      resource_kind: 'bucket',
     };
 
     // RuleRequiredConfigSingleProperty
     const ruleRequiredConfigModel = {
-      description: 'testString',
-      property: 'public_access_enabled',
-      operator: 'is_false',
-      value: 'testString',
+      description: testString,
+      property: 'location',
+      operator: 'string_equals',
+      value: 'eu-gb',
     };
 
     // EnforcementAction
@@ -184,16 +213,16 @@ describe('ConfigurationGovernanceV1_integration', () => {
 
     const params = {
       ruleId: ruleIdLink,
-      ifMatch: 'testString',
+      ifMatch: ruleETag,
       name: 'Disable public access',
       description: 'Ensure that public access to account resources is disabled.',
       target: targetResourceModel,
       requiredConfig: ruleRequiredConfigModel,
       enforcementActions: [enforcementActionModel],
-      accountId: '531fc3e28bfc43c5a2cea07786d93f5c',
+      accountId: accountID,
       ruleType: 'user_defined',
-      labels: ['SOC2', 'ITCS300'],
-      transactionId: 'testString',
+      labels: [ruleLabel],
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.updateRule(params);
@@ -203,7 +232,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
   test('listRuleAttachments()', async () => {
     const params = {
       ruleId: ruleIdLink,
-      transactionId: 'testString',
+      transactionId: testString,
       limit: 1000,
       offset: 38,
     };
@@ -216,31 +245,39 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       ruleId: ruleIdLink,
       attachmentId: ruleAttachmentIdLink,
-      transactionId: 'testString',
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.getRuleAttachment(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+
+    ruleAttachmentETag = res.headers.etag;
   });
   test('updateRuleAttachment()', async () => {
     // Request models needed by this operation.
 
     // RuleScope
     const ruleScopeModel = {
-      note: 'My enterprise',
-      scope_id: '282cf433ac91493ba860480d92519990',
-      scope_type: 'enterprise',
+      note: 'My account',
+      scope_id: accountID,
+      scope_type: 'account',
     };
+
+    const excludedScopeModel = {
+      note: 'My account resource group',
+      scope_id: resourceGroupID,
+      scope_type: 'account.resource_group',
+    }
 
     const params = {
       ruleId: ruleIdLink,
       attachmentId: ruleAttachmentIdLink,
-      ifMatch: 'testString',
-      accountId: '531fc3e28bfc43c5a2cea07786d93f5c',
+      ifMatch: ruleAttachmentETag,
+      accountId: accountID,
       includedScope: ruleScopeModel,
-      excludedScopes: [ruleScopeModel],
-      transactionId: 'testString',
+      excludedScopes: [excludedScopeModel],
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.updateRuleAttachment(params);
@@ -251,7 +288,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
     const params = {
       ruleId: ruleIdLink,
       attachmentId: ruleAttachmentIdLink,
-      transactionId: 'testString',
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.deleteRuleAttachment(params);
@@ -261,7 +298,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
   test('deleteRule()', async () => {
     const params = {
       ruleId: ruleIdLink,
-      transactionId: 'testString',
+      transactionId: testString,
     };
 
     const res = await configurationGovernanceService.deleteRule(params);
