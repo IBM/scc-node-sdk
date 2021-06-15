@@ -23,7 +23,7 @@
  const accountId = process.env.ACCOUNT_ID;
  const providerId = process.env.PROVIDER_ID || 'sdk-it';
  const testString = "testString";
- const identifier = process.env.TRAVIS_JOB_ID || Date.now();
+ const identifier = `js-${Date.now().toString().substring(0,10)}`;
  
  // testcase timeout value (200s).
  const timeout = 200000;
@@ -53,7 +53,7 @@
      const listNotesRes = await findingsService.listNotes(listNotesParams);
      listNotesRes.result.notes.forEach(async note => {
        const parts = note.id.split('-');
-       if (parts[parts.length - 1] === identifier) {
+       if (`${parts[parts.length-2]}-${parts[parts.length-1]}` === identifier) {
          const deleteNoteParams = {
            providerId,
            noteId: note.id,
@@ -69,7 +69,7 @@
      const listOccurrencesRes = await findingsService.listOccurrences(listOccurrencesParams);
      listOccurrencesRes.result.occurrences.forEach(async occurrence => {
        const parts = occurrence.id.split('-');
-       if (parts[parts.length - 1] === identifier) {
+       if (`${parts[parts.length-2]}-${parts[parts.length-1]}` === identifier) {
          const deleteOccurrenceParams = {
            providerId,
            occurrenceId: occurrence.id,

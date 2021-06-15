@@ -1,0 +1,101 @@
+name: CI/CD Pipeline
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: installing dependencies
+        run: npm install
+
+      - name: verifying packages
+        run: npm run check-packages
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        node-version: [10.x, 12.x]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: installing dependencies
+        run: npm install
+
+      - name: building project
+        run: npm run build
+
+      - name: running unit tests
+        run: npm run test-unit-travis
+
+      - name: publishing code coverage report
+        run: npm run report-coverage
+
+      - name: running integration tests
+        env:
+          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+          FINDINGS_ENV: ${{ secrets.FINDINGS_ENV }}
+          NOTIFICATIONS_ENV: ${{ secrets.NOTIFICATIONS_ENV }}
+          CONFIGURATION_GOVERNANCE_ENV: ${{ secrets.CONFIGURATION_GOVERNANCE_ENV }}
+          RESOURCE_GROUP_ID: ${{ secrets.RESOURCE_GROUP_ID }}
+        run: scripts/testScript.sh
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [verify, test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: setup extensions
+        uses: actions/checkout@v1
+
+      - name: setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+
+      - name: release using semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: scccomm
+          GIT_AUTHOR_EMAIL: scccomm@in.ibm.com
+          GIT_COMMITTER_NAME: scccomm
+          GIT_COMMITTER_EMAIL: scccomm@in.ibm.com
+        run: |
+          sudo apt-get update
+          sudo apt-get install python
+          pip install --user bumpversion
+          npm install @semantic-release/changelog
+          npm install @semantic-release/exec
+          npm install @semantic-release/git
+          npm install @semantic-release/github
+          npx semantic-release
+
+  documentation:
+    runs-on: ubuntu-latest
+    needs: [release]
+    if: github.event_name == 'release' && github.event.action == 'created'
+    steps:
+      - name: setup extensions
+        uses: actions/checkout@v1
+
+      - name: setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+
+      - name: generate typedoc
+        run: scripts/typedoc/generate_typedoc.sh
+      
+      - name: deploy gopages to gh-pages
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          target_branch: gh-pages
+          build_dir: doc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
