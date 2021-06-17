@@ -1,3 +1,10 @@
+## [0.0.10](https://github.com/IBM/scc-node-sdk/compare/v0.0.9...v0.0.10) (2021-06-17)
+
+
+### Bug Fixes
+
+* **GitHubActions:** migrated from TravisCI ([191f4c2](https://github.com/IBM/scc-node-sdk/commit/191f4c289b5c50459cdaca51970bb73ebb8ab6fa))
+
 ## [0.0.9](https://github.com/IBM/scc-node-sdk/compare/v0.0.8...v0.0.9) (2021-06-17)
 
 
