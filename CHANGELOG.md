@@ -1,3 +1,10 @@
+## [0.0.11](https://github.com/IBM/scc-node-sdk/compare/v0.0.10...v0.0.11) (2021-06-17)
+
+
+### Bug Fixes
+
+* **GHActions:** install typedoc before using in documentation job ([c6782d6](https://github.com/IBM/scc-node-sdk/commit/c6782d6a57182d660de096ba409b488ad03acecf))
+
 ## [0.0.10](https://github.com/IBM/scc-node-sdk/compare/v0.0.9...v0.0.10) (2021-06-17)
 
 
