@@ -89,6 +89,9 @@ jobs:
         with:
           node-version: '12'
 
+      - name: installing dependencies
+        run: npm install
+
       - name: generate typedoc
         run: scripts/typedoc/generate_typedoc.sh
       
