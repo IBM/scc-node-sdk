@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/IBM/scc-node-sdk.svg?branch=main)](https://travis-ci.com/github/IBM/scc-node-sdk)
+[![CI/CD Pipeline](https://github.com/IBM/scc-node-sdk/actions/workflows/main.yaml/badge.svg)](https://github.com/IBM/scc-node-sdk/actions/workflows/main.yaml)
+[![Typedoc](https://img.shields.io/static/v1?label=typedoc&message=latest&color=blue)](http://IBM.github.io/scc-node-sdk)
 [![Release](https://img.shields.io/github/v/release/IBM/scc-node-sdk)](https://img.shields.io/github/v/release/IBM/scc-node-sdk)
 [![npm](https://img.shields.io/npm/v/ibm-scc)](https://www.npmjs.com/package/ibm-scc)
 ![npm](https://img.shields.io/npm/dm/ibm-scc)
