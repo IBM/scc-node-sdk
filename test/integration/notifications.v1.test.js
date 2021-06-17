@@ -21,7 +21,7 @@ const authHelper = require('../resources/auth-helper.js');
 
 const accountId = process.env.ACCOUNT_ID;
 const testString = 'testString';
-const identifier = process.env.TRAVIS_JOB_ID || Date.now();
+const identifier = `js-${Date.now().toString().substring(0,10)}`;
 let channelId = '';
 
 // testcase timeout value (200s).
@@ -66,7 +66,6 @@ describe('NotificationsV1_integration', () => {
     const params = {
       accountId,
     };
-    console.log(`listing all channels`);
     const res = await notificationsService.listAllChannels(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();

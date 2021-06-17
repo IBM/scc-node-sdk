@@ -25,6 +25,7 @@ const accountID = process.env.ACCOUNT_ID;
 const ruleLabel = process.env.RULE_LABEL || 'sdk-it';
 const testString = 'testString';
 const resourceGroupID = process.env.RESOURCE_GROUP_ID;
+const identifier = `js-${Date.now().toString().substring(0,10)}`;
 
 var ruleETag = '';
 var ruleAttachmentETag = '';
@@ -51,16 +52,15 @@ describe('ConfigurationGovernanceV1_integration', () => {
     console.log(`cleaning up account: ${accountId} with rules labelled ${ruleLabel}\n`);
     const listRulesOpts = {
       accountID,
+      labels: `${ruleLabel}-${identifier}`
     };
 
     const listRulesRes = await configurationGovernanceService.listRules(listRulesOpts);
     listRulesRes.result.rules.forEach(async rule => {
-      if (rule.labels[0]===ruleLabel) {
-        const deleteRuleOpts = {
-          ruleId: rule.ruleId
-        };
-        await configurationGovernanceService.deleteRule(deleteRuleOpts);
-      }
+      const deleteRuleOpts = {
+        ruleId: rule.ruleId
+      };
+      await configurationGovernanceService.deleteRule(deleteRuleOpts);
     });
 
     console.log(`cleanup was successful\n`);
@@ -109,7 +109,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       target: targetResourceModel,
       required_config: ruleRequiredConfigModel,
       enforcement_actions: [enforcementActionModel],
-      labels: [ruleLabel],
+      labels: [`${ruleLabel}-${identifier}`],
     };
 
     // CreateRuleRequest
@@ -167,7 +167,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       accountId: accountID,
       transactionId: testString,
       attached: true,
-      labels: ruleLabel,
+      labels: `${ruleLabel}-${identifier}`,
       scopes: 'scope_id',
       limit: 1000,
       offset: 38,
@@ -221,7 +221,7 @@ describe('ConfigurationGovernanceV1_integration', () => {
       enforcementActions: [enforcementActionModel],
       accountId: accountID,
       ruleType: 'user_defined',
-      labels: [ruleLabel],
+      labels: [`${ruleLabel}-${identifier}`],
       transactionId: testString,
     };
 
