@@ -1,3 +1,10 @@
+## [0.0.12](https://github.com/IBM/scc-node-sdk/compare/v0.0.11...v0.0.12) (2021-06-18)
+
+
+### Bug Fixes
+
+* **GithubAction:** workflow altered ([c1520f3](https://github.com/IBM/scc-node-sdk/commit/c1520f3afdbcc681fb3438fed518ac224b81c6e0))
+
 ## [0.0.11](https://github.com/IBM/scc-node-sdk/compare/v0.0.10...v0.0.11) (2021-06-17)
 
 
