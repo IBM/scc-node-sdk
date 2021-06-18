@@ -1,3 +1,10 @@
+## [0.0.13](https://github.com/IBM/scc-node-sdk/compare/v0.0.12...v0.0.13) (2021-06-18)
+
+
+### Bug Fixes
+
+* **CI:** CI shouldn't skip any commit ([554cb87](https://github.com/IBM/scc-node-sdk/commit/554cb873986895ea8639d933a4d3559d63be09d1))
+
 ## [0.0.12](https://github.com/IBM/scc-node-sdk/compare/v0.0.11...v0.0.12) (2021-06-18)
 
 
