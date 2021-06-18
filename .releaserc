@@ -2,7 +2,16 @@
   "debug": true,
   "branches": [ "main" ],
   "verifyConditions": ["@semantic-release/changelog", "@semantic-release/npm", "@semantic-release/git"],
-  "prepare": ["@semantic-release/changelog", "@semantic-release/npm", "@semantic-release/git"],
+  "prepare": [
+    "@semantic-release/changelog", 
+    "@semantic-release/npm",
+    [
+      "@semantic-release/git", 
+      {
+        "message": "chore(release): ${nextRelease.version} release notes\n\n${nextRelease.notes}"
+      },
+    ],
+  ],
   "publish": [
     ["@semantic-release/npm", {
       "pkgRoot": "dist"
