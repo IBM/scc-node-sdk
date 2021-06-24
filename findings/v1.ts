@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.33.0-caf29bd0-20210603-225214
+ * IBM OpenAPI SDK Code Generator Version: 3.34.1-ad041667-20210617-195430
  */
 
 
@@ -25,7 +25,9 @@ import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissing
 import { getSdkHeaders } from '../lib/common';
 
 /**
- * API specification for the Findings service.
+ * The Findings API is used to find and display occurrences of security issues in your IBM Cloud account by using the
+ * artifact metadata specification. Findings are summarized in cards in the Security and Compliance Center that allow
+ * you to see the security status of your account at a glance and start an investigation into any potential issues.
  */
 
 class FindingsV1 extends BaseService {
@@ -97,18 +99,19 @@ class FindingsV1 extends BaseService {
   }
 
   /*************************
-   * findingsGraph
+   * graph
    ************************/
 
   /**
-   * query findings.
+   * Query findings.
    *
-   * query findings.
+   * Query findings by using the GraphQL query language. For more information about using GraphQL, see the [GraphQL
+   * documentation](https://graphql.org/learn/).
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string|NodeJS.ReadableStream|Buffer} params.body - Body for query findings.
    * @param {string} [params.contentType] - The type of the input.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.Empty>>}
    */
@@ -139,7 +142,7 @@ class FindingsV1 extends BaseService {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
           'Content-Type': _params.contentType,
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -148,34 +151,90 @@ class FindingsV1 extends BaseService {
   };
 
   /*************************
-   * findingsNotes
+   * notes
    ************************/
 
   /**
-   * Creates a new `Note`.
+   * List providers.
+   *
+   * List all of the providers for a specified account.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
+   * @param {number} [params.limit] - The number of documents that you want to return.
+   * @param {number} [params.skip] - The offset is the index of the item from which you want to start returning data
+   * from. Default is 0.
+   * @param {string} [params.startProviderId] - The first provider ID included in the result, sorted in ascending order.
+   * If not provided, this parameter is ignored.
+   * @param {string} [params.endProviderId] - The last provider ID included in the result, sorted in ascending order. If
+   * not provided, this parameter is ignored.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListProvidersResponse>>}
+   */
+  public listProviders(params?: FindingsV1.ListProvidersParams): Promise<FindingsV1.Response<FindingsV1.ApiListProvidersResponse>> {
+    const _params = Object.assign({}, params);
+
+    const query = {
+      'limit': _params.limit,
+      'skip': _params.skip,
+      'start_provider_id': _params.startProviderId,
+      'end_provider_id': _params.endProviderId
+    };
+
+    const path = {
+      'account_id': this.accountId
+    };
+
+    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'listProviders');
+
+    const parameters = {
+      options: {
+        url: '/v1/{account_id}/providers',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'transaction_id': _params.transactionId
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Create a note.
+   *
+   * Register a new finding type with the Security and Compliance Center.
+   *
+   * A successful request creates a note with a high-level description of a particular type of finding. To learn more
+   * about creating notes to register findings, see [Custom
+   * findings](/docs/security-advisor?topic=security-advisor-setup_custom).
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - Part of `parent`. This field contains the provider_id for example:
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
    * providers/{provider_id}.
-   * @param {string} params.shortDescription - A one sentence description of this `Note`.
-   * @param {string} params.longDescription - A detailed description of this `Note`.
-   * @param {string} params.kind - This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note
-   * and Occurrence on their kind.
+   * @param {string} params.shortDescription - A one sentence description of your note.
+   * @param {string} params.longDescription - A more detailed description of your note.
+   * @param {string} params.kind - The type of note. Use this field to filter notes and occurences by kind.
    *  - FINDING&#58; The note and occurrence represent a finding.
    *  - KPI&#58; The note and occurrence represent a KPI value.
    *  - CARD&#58; The note represents a card showing findings and related metric values.
    *  - CARD_CONFIGURED&#58; The note represents a card configured for a user account.
    *  - SECTION&#58; The note represents a section in a dashboard.
-   * @param {string} params.id - The id of the note.
+   * @param {string} params.id - The ID of the note.
    * @param {Reporter} params.reportedBy - The entity reporting a note.
-   * @param {ApiNoteRelatedUrl[]} [params.relatedUrl] - URLs associated with this note.
+   * @param {ApiNoteRelatedUrl[]} [params.relatedUrl] -
    * @param {string} [params.expirationTime] - Time of expiration for this note, null if note does not expire.
-   * @param {boolean} [params.shared] - True if this `Note` can be shared by multiple accounts.
+   * @param {boolean} [params.shared] - True if this note can be shared by multiple accounts.
    * @param {FindingType} [params.finding] - FindingType provides details about a finding note.
    * @param {KpiType} [params.kpi] - KpiType provides details about a KPI note.
    * @param {Card} [params.card] - Card provides details about a card kind of note.
    * @param {Section} [params.section] - Card provides details about a card kind of note.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
@@ -221,7 +280,7 @@ class FindingsV1 extends BaseService {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -230,12 +289,14 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Lists all `Notes` for a given provider.
+   * List notes.
+   *
+   * List all of the available notes for a specific provider.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - Part of `parent`. This field contains the provider_id for example:
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
    * providers/{provider_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {number} [params.pageSize] - Number of notes to return in the list.
    * @param {string} [params.pageToken] - Token to provide to skip to a particular spot in the list.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -272,7 +333,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -281,12 +342,15 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Returns the requested `Note`.
+   * Get a note by provider.
+   *
+   * Get the details of the note that is associated with a specified note ID and provider ID.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of note `name`: providers/{provider_id}/notes/{note_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.noteId - Second part of note `name`: providers/{provider_id}/notes/{note_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
@@ -316,7 +380,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -325,30 +389,32 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Updates an existing `Note`.
+   * Update a note.
+   *
+   * Update a note that already exists in your account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of note `name`: providers/{provider_id}/notes/{note_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.noteId - Second part of note `name`: providers/{provider_id}/notes/{note_id}.
-   * @param {string} params.shortDescription - A one sentence description of this `Note`.
-   * @param {string} params.longDescription - A detailed description of this `Note`.
-   * @param {string} params.kind - This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note
-   * and Occurrence on their kind.
+   * @param {string} params.shortDescription - A one sentence description of your note.
+   * @param {string} params.longDescription - A more detailed description of your note.
+   * @param {string} params.kind - The type of note. Use this field to filter notes and occurences by kind.
    *  - FINDING&#58; The note and occurrence represent a finding.
    *  - KPI&#58; The note and occurrence represent a KPI value.
    *  - CARD&#58; The note represents a card showing findings and related metric values.
    *  - CARD_CONFIGURED&#58; The note represents a card configured for a user account.
    *  - SECTION&#58; The note represents a section in a dashboard.
-   * @param {string} params.id - The id of the note.
+   * @param {string} params.id - The ID of the note.
    * @param {Reporter} params.reportedBy - The entity reporting a note.
-   * @param {ApiNoteRelatedUrl[]} [params.relatedUrl] - URLs associated with this note.
+   * @param {ApiNoteRelatedUrl[]} [params.relatedUrl] -
    * @param {string} [params.expirationTime] - Time of expiration for this note, null if note does not expire.
-   * @param {boolean} [params.shared] - True if this `Note` can be shared by multiple accounts.
+   * @param {boolean} [params.shared] - True if this note can be shared by multiple accounts.
    * @param {FindingType} [params.finding] - FindingType provides details about a finding note.
    * @param {KpiType} [params.kpi] - KpiType provides details about a KPI note.
    * @param {Card} [params.card] - Card provides details about a card kind of note.
    * @param {Section} [params.section] - Card provides details about a card kind of note.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
@@ -395,7 +461,7 @@ class FindingsV1 extends BaseService {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -404,12 +470,15 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Deletes the given `Note` from the system.
+   * Delete a note.
+   *
+   * Delete a note with the ID and provider ID that you specify.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of note `name`: providers/{provider_id}/notes/{note_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.noteId - Second part of note `name`: providers/{provider_id}/notes/{note_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.Empty>>}
    */
@@ -439,7 +508,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -448,14 +517,16 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Gets the `Note` attached to the given `Occurrence`.
+   * Get a note by occurrence.
+   *
+   * Get a note that is associated with the occurrence ID that you specify.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of occurrence `name`:
-   * providers/{provider_id}/occurrences/{occurrence_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.occurrenceId - Second part of occurrence `name`:
    * providers/{provider_id}/occurrences/{occurrence_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
@@ -485,7 +556,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -494,19 +565,23 @@ class FindingsV1 extends BaseService {
   };
 
   /*************************
-   * findingsOccurrences
+   * occurrences
    ************************/
 
   /**
-   * Creates a new `Occurrence`. Use this method to create `Occurrences` for a resource.
+   * Create an occurrence.
+   *
+   * Create an occurrence to denote the existence of a particular type of finding.
+   *
+   * An occurrence describes provider-specific details of a note and contains vulnerability details, remediation steps,
+   * and other general information.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - Part of `parent`. This contains the provider_id for example:
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
    * providers/{provider_id}.
    * @param {string} params.noteName - An analysis note associated with this image, in the form
    * "{account_id}/providers/{provider_id}/notes/{note_id}" This field can be used as a filter in list requests.
-   * @param {string} params.kind - This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note
-   * and Occurrence on their kind.
+   * @param {string} params.kind - The type of note. Use this field to filter notes and occurences by kind.
    *  - FINDING&#58; The note and occurrence represent a finding.
    *  - KPI&#58; The note and occurrence represent a KPI value.
    *  - CARD&#58; The note represents a card showing findings and related metric values.
@@ -521,8 +596,9 @@ class FindingsV1 extends BaseService {
    * @param {Finding} [params.finding] - Finding provides details about a finding occurrence.
    * @param {Kpi} [params.kpi] - Kpi provides details about a KPI occurrence.
    * @param {JsonObject} [params.referenceData] - Additional data for the finding, like AT event etc.
-   * @param {boolean} [params.replaceIfExists] - It allows replacing an existing occurrence when set to true.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
+   * @param {boolean} [params.replaceIfExists] - When set to true, an existing occurrence is replaced rather than
+   * duplicated.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>>}
    */
@@ -565,8 +641,8 @@ class FindingsV1 extends BaseService {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Replace-If-Exists': _params.replaceIfExists,
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId,
+          'Replace-If-Exists': _params.replaceIfExists
         }, _params.headers),
       }),
     };
@@ -575,13 +651,15 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Lists active `Occurrences` for a given provider matching the filters.
+   * List occurrences.
+   *
+   * List all of the occurrences that are associated with the provider ID that you specify.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - Part of `parent`. This contains the provider_id for example:
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
    * providers/{provider_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
-   * @param {number} [params.pageSize] - Number of occurrences to return in the list.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
+   * @param {number} [params.pageSize] - Number of notes to return in the list.
    * @param {string} [params.pageToken] - Token to provide to skip to a particular spot in the list.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>>}
@@ -617,7 +695,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -626,12 +704,15 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Lists `Occurrences` referencing the specified `Note`. Use this method to get all occurrences referencing your `Note` across all your customer providers.
+   * List occurrences by note.
+   *
+   * Get a list of occurrences that are associated with a specific note.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of note `name`: providers/{provider_id}/notes/{note_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.noteId - Second part of note `name`: providers/{provider_id}/notes/{note_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {number} [params.pageSize] - Number of notes to return in the list.
    * @param {string} [params.pageToken] - Token to provide to skip to a particular spot in the list.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -669,7 +750,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -678,14 +759,16 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Returns the requested `Occurrence`.
+   * Get a specific occurrence.
+   *
+   * Get the details of a specific occurrence by specifying the ID and provider ID.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of occurrence `name`:
-   * providers/{provider_id}/occurrences/{occurrence_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.occurrenceId - Second part of occurrence `name`:
    * providers/{provider_id}/occurrences/{occurrence_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>>}
    */
@@ -715,7 +798,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -724,17 +807,18 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Updates an existing `Occurrence`.
+   * Update an occurrence.
+   *
+   * Update an occurrence that already exists in your account.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of occurrence `name`:
-   * providers/{provider_id}/occurrences/{occurrence_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.occurrenceId - Second part of occurrence `name`:
    * providers/{provider_id}/occurrences/{occurrence_id}.
    * @param {string} params.noteName - An analysis note associated with this image, in the form
    * "{account_id}/providers/{provider_id}/notes/{note_id}" This field can be used as a filter in list requests.
-   * @param {string} params.kind - This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note
-   * and Occurrence on their kind.
+   * @param {string} params.kind - The type of note. Use this field to filter notes and occurences by kind.
    *  - FINDING&#58; The note and occurrence represent a finding.
    *  - KPI&#58; The note and occurrence represent a KPI value.
    *  - CARD&#58; The note represents a card showing findings and related metric values.
@@ -749,7 +833,7 @@ class FindingsV1 extends BaseService {
    * @param {Finding} [params.finding] - Finding provides details about a finding occurrence.
    * @param {Kpi} [params.kpi] - Kpi provides details about a KPI occurrence.
    * @param {JsonObject} [params.referenceData] - Additional data for the finding, like AT event etc.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>>}
    */
@@ -793,7 +877,7 @@ class FindingsV1 extends BaseService {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -802,13 +886,16 @@ class FindingsV1 extends BaseService {
   };
 
   /**
-   * Deletes the given `Occurrence` from the system.
+   * Delete an occurrence.
+   *
+   * Delete an occurrence by specifying the occurrence ID and provider ID.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.providerId - First part of occurrence `name`: providers/{provider_id}/notes/{occurrence_id}.
+   * @param {string} params.providerId - Part of the parent. This field contains the provider ID. For example:
+   * providers/{provider_id}.
    * @param {string} params.occurrenceId - Second part of occurrence `name`:
-   * providers/{provider_id}/notes/{occurrence_id}.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
+   * providers/{provider_id}/occurrences/{occurrence_id}.
+   * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.Empty>>}
    */
@@ -838,60 +925,7 @@ class FindingsV1 extends BaseService {
       defaultOptions: extend(true, {}, this.baseOptions, {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  };
-
-  /*************************
-   * findingsProviders
-   ************************/
-
-  /**
-   * Lists all `Providers` for a given account id.
-   *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.transactionId] - The transaction id for the request in uuid v4 format.
-   * @param {number} [params.limit] - Limit the number of the returned documents to the specified number.
-   * @param {number} [params.skip] - The offset is the index of the item from which you want to start returning data
-   * from. Default is 0.
-   * @param {string} [params.startProviderId] - The first provider_id to include in the result (sorted in ascending
-   * order). Ignored if not provided.
-   * @param {string} [params.endProviderId] - The last provider_id to include in the result (sorted in ascending order).
-   * Ignored if not provided.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListProvidersResponse>>}
-   */
-  public listProviders(params?: FindingsV1.ListProvidersParams): Promise<FindingsV1.Response<FindingsV1.ApiListProvidersResponse>> {
-    const _params = Object.assign({}, params);
-
-    const query = {
-      'limit': _params.limit,
-      'skip': _params.skip,
-      'start_provider_id': _params.startProviderId,
-      'end_provider_id': _params.endProviderId
-    };
-
-    const path = {
-      'account_id': this.accountId
-    };
-
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'listProviders');
-
-    const parameters = {
-      options: {
-        url: '/v1/{account_id}/providers',
-        method: 'GET',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
+          'transaction_id': _params.transactionId
         }, _params.headers),
       }),
     };
@@ -943,7 +977,7 @@ namespace FindingsV1 {
     body: string|NodeJS.ReadableStream|Buffer;
     /** The type of the input. */
     contentType?: PostGraphConstants.ContentType | string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -957,16 +991,34 @@ namespace FindingsV1 {
     }
   }
 
+  /** Parameters for the `listProviders` operation. */
+  export interface ListProvidersParams {
+    /** The transaction ID for the request in UUID v4 format. */
+    transactionId?: string;
+    /** The number of documents that you want to return. */
+    limit?: number;
+    /** The offset is the index of the item from which you want to start returning data from. Default is 0. */
+    skip?: number;
+    /** The first provider ID included in the result, sorted in ascending order. If not provided, this parameter is
+     *  ignored.
+     */
+    startProviderId?: string;
+    /** The last provider ID included in the result, sorted in ascending order. If not provided, this parameter is
+     *  ignored.
+     */
+    endProviderId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `createNote` operation. */
   export interface CreateNoteParams {
-    /** Part of `parent`. This field contains the provider_id for example: providers/{provider_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
-    /** A one sentence description of this `Note`. */
+    /** A one sentence description of your note. */
     shortDescription: string;
-    /** A detailed description of this `Note`. */
+    /** A more detailed description of your note. */
     longDescription: string;
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their
-     *  kind.
+    /** The type of note. Use this field to filter notes and occurences by kind.
      *   - FINDING&#58; The note and occurrence represent a finding.
      *   - KPI&#58; The note and occurrence represent a KPI value.
      *   - CARD&#58; The note represents a card showing findings and related metric values.
@@ -974,15 +1026,14 @@ namespace FindingsV1 {
      *   - SECTION&#58; The note represents a section in a dashboard.
      */
     kind: CreateNoteConstants.Kind | string;
-    /** The id of the note. */
+    /** The ID of the note. */
     id: string;
     /** The entity reporting a note. */
     reportedBy: Reporter;
-    /** URLs associated with this note. */
     relatedUrl?: ApiNoteRelatedUrl[];
     /** Time of expiration for this note, null if note does not expire. */
     expirationTime?: string;
-    /** True if this `Note` can be shared by multiple accounts. */
+    /** True if this note can be shared by multiple accounts. */
     shared?: boolean;
     /** FindingType provides details about a finding note. */
     finding?: FindingType;
@@ -992,14 +1043,14 @@ namespace FindingsV1 {
     card?: Card;
     /** Card provides details about a card kind of note. */
     section?: Section;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createNote` operation. */
   export namespace CreateNoteConstants {
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
+    /** The type of note. Use this field to filter notes and occurences by kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
     export enum Kind {
       FINDING = 'FINDING',
       KPI = 'KPI',
@@ -1011,9 +1062,9 @@ namespace FindingsV1 {
 
   /** Parameters for the `listNotes` operation. */
   export interface ListNotesParams {
-    /** Part of `parent`. This field contains the provider_id for example: providers/{provider_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     /** Number of notes to return in the list. */
     pageSize?: number;
@@ -1024,27 +1075,26 @@ namespace FindingsV1 {
 
   /** Parameters for the `getNote` operation. */
   export interface GetNoteParams {
-    /** First part of note `name`: providers/{provider_id}/notes/{note_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** Second part of note `name`: providers/{provider_id}/notes/{note_id}. */
     noteId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateNote` operation. */
   export interface UpdateNoteParams {
-    /** First part of note `name`: providers/{provider_id}/notes/{note_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** Second part of note `name`: providers/{provider_id}/notes/{note_id}. */
     noteId: string;
-    /** A one sentence description of this `Note`. */
+    /** A one sentence description of your note. */
     shortDescription: string;
-    /** A detailed description of this `Note`. */
+    /** A more detailed description of your note. */
     longDescription: string;
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their
-     *  kind.
+    /** The type of note. Use this field to filter notes and occurences by kind.
      *   - FINDING&#58; The note and occurrence represent a finding.
      *   - KPI&#58; The note and occurrence represent a KPI value.
      *   - CARD&#58; The note represents a card showing findings and related metric values.
@@ -1052,15 +1102,14 @@ namespace FindingsV1 {
      *   - SECTION&#58; The note represents a section in a dashboard.
      */
     kind: UpdateNoteConstants.Kind | string;
-    /** The id of the note. */
+    /** The ID of the note. */
     id: string;
     /** The entity reporting a note. */
     reportedBy: Reporter;
-    /** URLs associated with this note. */
     relatedUrl?: ApiNoteRelatedUrl[];
     /** Time of expiration for this note, null if note does not expire. */
     expirationTime?: string;
-    /** True if this `Note` can be shared by multiple accounts. */
+    /** True if this note can be shared by multiple accounts. */
     shared?: boolean;
     /** FindingType provides details about a finding note. */
     finding?: FindingType;
@@ -1070,14 +1119,14 @@ namespace FindingsV1 {
     card?: Card;
     /** Card provides details about a card kind of note. */
     section?: Section;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateNote` operation. */
   export namespace UpdateNoteConstants {
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
+    /** The type of note. Use this field to filter notes and occurences by kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
     export enum Kind {
       FINDING = 'FINDING',
       KPI = 'KPI',
@@ -1089,36 +1138,35 @@ namespace FindingsV1 {
 
   /** Parameters for the `deleteNote` operation. */
   export interface DeleteNoteParams {
-    /** First part of note `name`: providers/{provider_id}/notes/{note_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** Second part of note `name`: providers/{provider_id}/notes/{note_id}. */
     noteId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOccurrenceNote` operation. */
   export interface GetOccurrenceNoteParams {
-    /** First part of occurrence `name`: providers/{provider_id}/occurrences/{occurrence_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** Second part of occurrence `name`: providers/{provider_id}/occurrences/{occurrence_id}. */
     occurrenceId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createOccurrence` operation. */
   export interface CreateOccurrenceParams {
-    /** Part of `parent`. This contains the provider_id for example: providers/{provider_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** An analysis note associated with this image, in the form
      *  "{account_id}/providers/{provider_id}/notes/{note_id}" This field can be used as a filter in list requests.
      */
     noteName: string;
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their
-     *  kind.
+    /** The type of note. Use this field to filter notes and occurences by kind.
      *   - FINDING&#58; The note and occurrence represent a finding.
      *   - KPI&#58; The note and occurrence represent a KPI value.
      *   - CARD&#58; The note represents a card showing findings and related metric values.
@@ -1141,16 +1189,16 @@ namespace FindingsV1 {
     kpi?: Kpi;
     /** Additional data for the finding, like AT event etc. */
     referenceData?: JsonObject;
-    /** It allows replacing an existing occurrence when set to true. */
-    replaceIfExists?: boolean;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
+    /** When set to true, an existing occurrence is replaced rather than duplicated. */
+    replaceIfExists?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createOccurrence` operation. */
   export namespace CreateOccurrenceConstants {
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
+    /** The type of note. Use this field to filter notes and occurences by kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
     export enum Kind {
       FINDING = 'FINDING',
       KPI = 'KPI',
@@ -1162,11 +1210,11 @@ namespace FindingsV1 {
 
   /** Parameters for the `listOccurrences` operation. */
   export interface ListOccurrencesParams {
-    /** Part of `parent`. This contains the provider_id for example: providers/{provider_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
-    /** Number of occurrences to return in the list. */
+    /** Number of notes to return in the list. */
     pageSize?: number;
     /** Token to provide to skip to a particular spot in the list. */
     pageToken?: string;
@@ -1175,11 +1223,11 @@ namespace FindingsV1 {
 
   /** Parameters for the `listNoteOccurrences` operation. */
   export interface ListNoteOccurrencesParams {
-    /** First part of note `name`: providers/{provider_id}/notes/{note_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** Second part of note `name`: providers/{provider_id}/notes/{note_id}. */
     noteId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     /** Number of notes to return in the list. */
     pageSize?: number;
@@ -1190,18 +1238,18 @@ namespace FindingsV1 {
 
   /** Parameters for the `getOccurrence` operation. */
   export interface GetOccurrenceParams {
-    /** First part of occurrence `name`: providers/{provider_id}/occurrences/{occurrence_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** Second part of occurrence `name`: providers/{provider_id}/occurrences/{occurrence_id}. */
     occurrenceId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateOccurrence` operation. */
   export interface UpdateOccurrenceParams {
-    /** First part of occurrence `name`: providers/{provider_id}/occurrences/{occurrence_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
     /** Second part of occurrence `name`: providers/{provider_id}/occurrences/{occurrence_id}. */
     occurrenceId: string;
@@ -1209,8 +1257,7 @@ namespace FindingsV1 {
      *  "{account_id}/providers/{provider_id}/notes/{note_id}" This field can be used as a filter in list requests.
      */
     noteName: string;
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their
-     *  kind.
+    /** The type of note. Use this field to filter notes and occurences by kind.
      *   - FINDING&#58; The note and occurrence represent a finding.
      *   - KPI&#58; The note and occurrence represent a KPI value.
      *   - CARD&#58; The note represents a card showing findings and related metric values.
@@ -1233,14 +1280,14 @@ namespace FindingsV1 {
     kpi?: Kpi;
     /** Additional data for the finding, like AT event etc. */
     referenceData?: JsonObject;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateOccurrence` operation. */
   export namespace UpdateOccurrenceConstants {
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
+    /** The type of note. Use this field to filter notes and occurences by kind. - FINDING&#58; The note and occurrence represent a finding. - KPI&#58; The note and occurrence represent a KPI value. - CARD&#58; The note represents a card showing findings and related metric values. - CARD_CONFIGURED&#58; The note represents a card configured for a user account. - SECTION&#58; The note represents a section in a dashboard. */
     export enum Kind {
       FINDING = 'FINDING',
       KPI = 'KPI',
@@ -1252,27 +1299,12 @@ namespace FindingsV1 {
 
   /** Parameters for the `deleteOccurrence` operation. */
   export interface DeleteOccurrenceParams {
-    /** First part of occurrence `name`: providers/{provider_id}/notes/{occurrence_id}. */
+    /** Part of the parent. This field contains the provider ID. For example: providers/{provider_id}. */
     providerId: string;
-    /** Second part of occurrence `name`: providers/{provider_id}/notes/{occurrence_id}. */
+    /** Second part of occurrence `name`: providers/{provider_id}/occurrences/{occurrence_id}. */
     occurrenceId: string;
-    /** The transaction id for the request in uuid v4 format. */
+    /** The transaction ID for the request in UUID v4 format. */
     transactionId?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `listProviders` operation. */
-  export interface ListProvidersParams {
-    /** The transaction id for the request in uuid v4 format. */
-    transactionId?: string;
-    /** Limit the number of the returned documents to the specified number. */
-    limit?: number;
-    /** The offset is the index of the item from which you want to start returning data from. Default is 0. */
-    skip?: number;
-    /** The first provider_id to include in the result (sorted in ascending order). Ignored if not provided. */
-    startProviderId?: string;
-    /** The last provider_id to include in the result (sorted in ascending order). Ignored if not provided. */
-    endProviderId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -1472,26 +1504,25 @@ namespace FindingsV1 {
     next_page_token?: string;
   }
 
-  /** Response including listed providers. */
+  /** A list of providers is returned. */
   export interface ApiListProvidersResponse {
     /** The providers requested. */
     providers?: ApiProvider[];
-    /** The number of elements returned in the current instance. Default is 200. */
+    /** The number of elements returned in the current instance. The default is 200. */
     limit?: number;
-    /** The offset is the index of the item from which you want to start returning data from. Default is 0. */
+    /** The offset is the index of the item from which you want to start returning data from. The default is 0. */
     skip?: number;
     /** The total number of providers available. */
     total_count?: number;
   }
 
-  /** Provides a detailed description of a `Note`. */
+  /** Provides a detailed description of a note. */
   export interface ApiNote {
-    /** A one sentence description of this `Note`. */
+    /** A one sentence description of your note. */
     short_description: string;
-    /** A detailed description of this `Note`. */
+    /** A more detailed description of your note. */
     long_description: string;
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their
-     *  kind.
+    /** The type of note. Use this field to filter notes and occurences by kind.
      *   - FINDING&#58; The note and occurrence represent a finding.
      *   - KPI&#58; The note and occurrence represent a KPI value.
      *   - CARD&#58; The note represents a card showing findings and related metric values.
@@ -1499,7 +1530,6 @@ namespace FindingsV1 {
      *   - SECTION&#58; The note represents a section in a dashboard.
      */
     kind: string;
-    /** URLs associated with this note. */
     related_url?: ApiNoteRelatedUrl[];
     /** Time of expiration for this note, null if note does not expire. */
     expiration_time?: string;
@@ -1507,9 +1537,9 @@ namespace FindingsV1 {
     create_time?: string;
     /** Output only. The time this note was last updated. This field can be used as a filter in list requests. */
     update_time?: string;
-    /** The id of the note. */
+    /** The ID of the note. */
     id: string;
-    /** True if this `Note` can be shared by multiple accounts. */
+    /** True if this note can be shared by multiple accounts. */
     shared?: boolean;
     /** The entity reporting a note. */
     reported_by: Reporter;
@@ -1527,7 +1557,7 @@ namespace FindingsV1 {
   export interface ApiNoteRelatedUrl {
     /** Label to describe usage of the URL. */
     label: string;
-    /** Specific URL to associate with the note. */
+    /** The URL that you want to associate with the note. */
     url: string;
   }
 
@@ -1541,8 +1571,7 @@ namespace FindingsV1 {
      *  "{account_id}/providers/{provider_id}/notes/{note_id}" This field can be used as a filter in list requests.
      */
     note_name: string;
-    /** This must be 1&#58;1 with members of our oneofs, it can be used for filtering Note and Occurrence on their
-     *  kind.
+    /** The type of note. Use this field to filter notes and occurences by kind.
      *   - FINDING&#58; The note and occurrence represent a finding.
      *   - KPI&#58; The note and occurrence represent a KPI value.
      *   - CARD&#58; The note represents a card showing findings and related metric values.
@@ -1567,11 +1596,11 @@ namespace FindingsV1 {
     reference_data?: JsonObject;
   }
 
-  /** Provides a detailed description of a `Provider`. */
+  /** Provides a detailed description of a provider. */
   export interface ApiProvider {
-    /** The name of the provider in the form "{account_id}/providers/{provider_id}". */
+    /** The name of the provider in the form '{account_id}/providers/{provider_id}'. */
     name: string;
-    /** The id of the provider. */
+    /** The ID of the provider. */
     id: string;
   }
 
