@@ -104,28 +104,6 @@ describe('FindingsV1', () => {
       expect(testInstance.baseOptions.serviceUrl).toBe('custom.com');
     });
 
-    test('missing required param', () => {
-      let options = {
-        authenticator: new NoAuthAuthenticator(),
-      };
-
-      try{
-        new FindingsV1(options)
-        throw new Error("Test passed without required param.")
-      }catch(err){
-        expect(err.message).toEqual("Missing required parameters: accountId")
-      }
-    });
-
-    test('option not passed', () => {
-      try{
-        new FindingsV1()
-        throw new Error("Test passed without options.")
-      }catch(err){
-        expect(err.message).toEqual("Missing required parameters: accountId")
-      }
-    });
-
     test('use default service url', () => {
       let options = {
         authenticator: new NoAuthAuthenticator(),
@@ -219,6 +197,67 @@ describe('FindingsV1', () => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
+      });
+    });
+  });
+  describe('listProviders', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listProviders
+        const transactionId = 'testString';
+        const limit = 2;
+        const skip = 38;
+        const startProviderId = 'testString';
+        const endProviderId = 'testString';
+        const params = {
+          transactionId: transactionId,
+          limit: limit,
+          skip: skip,
+          startProviderId: startProviderId,
+          endProviderId: endProviderId,
+        };
+
+        const listProvidersResult = findingsService.listProviders(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listProvidersResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/v1/{account_id}/providers', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['skip']).toEqual(skip);
+        expect(options.qs['start_provider_id']).toEqual(startProviderId);
+        expect(options.qs['end_provider_id']).toEqual(endProviderId);
+        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        findingsService.listProviders(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        findingsService.listProviders({});
+        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
@@ -979,8 +1018,8 @@ describe('FindingsV1', () => {
         const finding = findingModel;
         const kpi = kpiModel;
         const referenceData = { foo: 'bar' };
-        const replaceIfExists = true;
         const transactionId = 'testString';
+        const replaceIfExists = true;
         const params = {
           providerId: providerId,
           noteName: noteName,
@@ -992,8 +1031,8 @@ describe('FindingsV1', () => {
           finding: finding,
           kpi: kpi,
           referenceData: referenceData,
-          replaceIfExists: replaceIfExists,
           transactionId: transactionId,
+          replaceIfExists: replaceIfExists,
         };
 
         const createOccurrenceResult = findingsService.createOccurrence(params);
@@ -1010,8 +1049,8 @@ describe('FindingsV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        checkUserHeader(createRequestMock, 'Replace-If-Exists', replaceIfExists);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
+        checkUserHeader(createRequestMock, 'Replace-If-Exists', replaceIfExists);
         expect(options.body['note_name']).toEqual(noteName);
         expect(options.body['kind']).toEqual(kind);
         expect(options.body['id']).toEqual(id);
@@ -1554,67 +1593,6 @@ describe('FindingsV1', () => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
-      });
-    });
-  });
-  describe('listProviders', () => {
-    describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
-        // Construct the params object for operation listProviders
-        const transactionId = 'testString';
-        const limit = 2;
-        const skip = 38;
-        const startProviderId = 'testString';
-        const endProviderId = 'testString';
-        const params = {
-          transactionId: transactionId,
-          limit: limit,
-          skip: skip,
-          startProviderId: startProviderId,
-          endProviderId: endProviderId,
-        };
-
-        const listProvidersResult = findingsService.listProviders(params);
-
-        // all methods should return a Promise
-        expectToBePromise(listProvidersResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const options = getOptions(createRequestMock);
-
-        checkUrlAndMethod(options, '/v1/{account_id}/providers', 'GET');
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['skip']).toEqual(skip);
-        expect(options.qs['start_provider_id']).toEqual(startProviderId);
-        expect(options.qs['end_provider_id']).toEqual(endProviderId);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const params = {
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        findingsService.listProviders(params);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-
-      test('should not have any problems when no parameters are passed in', () => {
-        // invoke the method with no parameters
-        findingsService.listProviders({});
-        checkForSuccessfulExecution(createRequestMock);
       });
     });
   });
