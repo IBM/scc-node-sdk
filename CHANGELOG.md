@@ -1,3 +1,10 @@
+## [0.0.14](https://github.com/IBM/scc-node-sdk/compare/v0.0.13...v0.0.14) (2021-06-25)
+
+
+### Bug Fixes
+
+* **SDK:** TransactionID parameter to comply with findingsapi ([668837c](https://github.com/IBM/scc-node-sdk/commit/668837cfe3e9796dadb4f27b3e19000c733a354e))
+
 ## [0.0.13](https://github.com/IBM/scc-node-sdk/compare/v0.0.12...v0.0.13) (2021-06-18)
 
 
