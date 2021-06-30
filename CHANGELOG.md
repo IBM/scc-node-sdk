@@ -1,3 +1,13 @@
+# [1.0.0](https://github.com/IBM/scc-node-sdk/compare/v0.0.14...v1.0.0) (2021-06-30)
+
+
+* Merge pull request #23 from IBM/major ([040c834](https://github.com/IBM/scc-node-sdk/commit/040c834b39284d4cdbbe7ca9f0b3bc0fdca780f0)), closes [#23](https://github.com/IBM/scc-node-sdk/issues/23)
+
+
+### BREAKING CHANGES
+
+* Major release for GA
+
 ## [0.0.14](https://github.com/IBM/scc-node-sdk/compare/v0.0.13...v0.0.14) (2021-06-25)
 
 
