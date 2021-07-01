@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/IBM/scc-node-sdk/compare/v1.0.0...v1.0.1) (2021-07-01)
+
+
+### Bug Fixes
+
+* **SDK:** minor release for GA ([f5212ec](https://github.com/IBM/scc-node-sdk/commit/f5212ec65132a65090f6ff1f8eda93036b7c6fa1))
+
 # [1.0.0](https://github.com/IBM/scc-node-sdk/compare/v0.0.14...v1.0.0) (2021-06-30)
 
 
