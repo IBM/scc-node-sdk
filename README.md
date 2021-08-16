@@ -48,7 +48,7 @@ IBM Cloud services:
 
 Service Name | Import Path
 --- | ---
-[Findings](https://cloud.ibm.com/apidocs/security-advisor/findings) | ibm-scc/findings/v1
+[Findings](https://cloud.ibm.com/apidocs/security-compliance/findings) | ibm-scc/findings/v1
 [Notifications](https://cloud.ibm.com/apidocs/security-advisor/notifications) | ibm-scc/notifications/v1
 [Configuration Governance](https://cloud.ibm.com/apidocs/security-compliance/config) | ibm-scc/configuration-governance/v1
 
