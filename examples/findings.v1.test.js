@@ -1,6 +1,6 @@
 /**
-* @jest-environment node
-*/
+ * @jest-environment node
+ */
 /**
  * (C) Copyright IBM Corp. 2021.
  *
@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 /* eslint-disable no-console */
 
@@ -51,7 +50,6 @@ const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
 
 describe('FindingsV1', () => {
-
   // begin-common
 
   const findingsService = FindingsV1.newInstance({
@@ -63,13 +61,12 @@ describe('FindingsV1', () => {
   // To access additional configuration values, uncomment this line and extract the values from config
   // const config = readExternalSources(FindingsV1.DEFAULT_SERVICE_NAME);
 
-  test('postGraph request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('postGraph request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -79,28 +76,59 @@ describe('FindingsV1', () => {
       body: 'testString',
     };
 
-    findingsService.postGraph(params)
-      .then(res => {
+    findingsService
+      .postGraph(params)
+      .then((res) => {
         done();
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-postGraph
   });
-  test('createNote request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('listProviders request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
+      done(output);
+    });
+
+    originalLog('listProviders() result:');
+    // begin-listProviders
+
+    findingsService
+      .listProviders({})
+      .then((res) => {
+        console.log(JSON.stringify(res.result, null, 2));
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+
+    // end-listProviders
+  });
+  test('createNote request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+      done();
+    });
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
     originalLog('createNote() result:');
     // begin-createNote
+
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: 'testString',
+      title: 'testString',
+    };
 
     const params = {
       providerId: 'testString',
@@ -111,23 +139,23 @@ describe('FindingsV1', () => {
       reportedBy: reporterModel,
     };
 
-    findingsService.createNote(params)
-      .then(res => {
+    findingsService
+      .createNote(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-createNote
   });
-  test('listNotes request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('listNotes request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -138,23 +166,23 @@ describe('FindingsV1', () => {
       providerId: 'testString',
     };
 
-    findingsService.listNotes(params)
-      .then(res => {
+    findingsService
+      .listNotes(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-listNotes
   });
-  test('getNote request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('getNote request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -166,28 +194,36 @@ describe('FindingsV1', () => {
       noteId: 'testString',
     };
 
-    findingsService.getNote(params)
-      .then(res => {
+    findingsService
+      .getNote(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-getNote
   });
-  test('updateNote request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('updateNote request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
     originalLog('updateNote() result:');
     // begin-updateNote
+
+    // Request models needed by this operation.
+
+    // Reporter
+    const reporterModel = {
+      id: 'testString',
+      title: 'testString',
+    };
 
     const params = {
       providerId: 'testString',
@@ -199,23 +235,23 @@ describe('FindingsV1', () => {
       reportedBy: reporterModel,
     };
 
-    findingsService.updateNote(params)
-      .then(res => {
+    findingsService
+      .updateNote(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-updateNote
   });
-  test('getOccurrenceNote request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('getOccurrenceNote request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -227,23 +263,23 @@ describe('FindingsV1', () => {
       occurrenceId: 'testString',
     };
 
-    findingsService.getOccurrenceNote(params)
-      .then(res => {
+    findingsService
+      .getOccurrenceNote(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-getOccurrenceNote
   });
-  test('createOccurrence request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('createOccurrence request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -257,23 +293,23 @@ describe('FindingsV1', () => {
       id: 'testString',
     };
 
-    findingsService.createOccurrence(params)
-      .then(res => {
+    findingsService
+      .createOccurrence(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-createOccurrence
   });
-  test('listOccurrences request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('listOccurrences request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -284,23 +320,23 @@ describe('FindingsV1', () => {
       providerId: 'testString',
     };
 
-    findingsService.listOccurrences(params)
-      .then(res => {
+    findingsService
+      .listOccurrences(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-listOccurrences
   });
-  test('listNoteOccurrences request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('listNoteOccurrences request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -312,23 +348,23 @@ describe('FindingsV1', () => {
       noteId: 'testString',
     };
 
-    findingsService.listNoteOccurrences(params)
-      .then(res => {
+    findingsService
+      .listNoteOccurrences(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-listNoteOccurrences
   });
-  test('getOccurrence request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('getOccurrence request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -340,23 +376,23 @@ describe('FindingsV1', () => {
       occurrenceId: 'testString',
     };
 
-    findingsService.getOccurrence(params)
-      .then(res => {
+    findingsService
+      .getOccurrence(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-getOccurrence
   });
-  test('updateOccurrence request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('updateOccurrence request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -371,46 +407,23 @@ describe('FindingsV1', () => {
       id: 'testString',
     };
 
-    findingsService.updateOccurrence(params)
-      .then(res => {
+    findingsService
+      .updateOccurrence(params)
+      .then((res) => {
         console.log(JSON.stringify(res.result, null, 2));
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-updateOccurrence
   });
-  test('listProviders request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('deleteOccurrence request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
-      done(output);
-    });
-
-    originalLog('listProviders() result:');
-    // begin-listProviders
-
-    findingsService.listProviders({})
-      .then(res => {
-        console.log(JSON.stringify(res.result, null, 2));
-      })
-      .catch(err => {
-        console.warn(err)
-      });
-
-    // end-listProviders
-  });
-  test('deleteOccurrence request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
-      originalLog(output);
-      done();
-    });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -421,23 +434,23 @@ describe('FindingsV1', () => {
       occurrenceId: 'testString',
     };
 
-    findingsService.deleteOccurrence(params)
-      .then(res => {
+    findingsService
+      .deleteOccurrence(params)
+      .then((res) => {
         done();
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-deleteOccurrence
   });
-  test('deleteNote request example', done => {
-
-    consoleLogMock.mockImplementation(output => {
+  test('deleteNote request example', (done) => {
+    consoleLogMock.mockImplementation((output) => {
       originalLog(output);
       done();
     });
-    consoleWarnMock.mockImplementation(output => {
+    consoleWarnMock.mockImplementation((output) => {
       done(output);
     });
 
@@ -448,12 +461,13 @@ describe('FindingsV1', () => {
       noteId: 'testString',
     };
 
-    findingsService.deleteNote(params)
-      .then(res => {
+    findingsService
+      .deleteNote(params)
+      .then((res) => {
         done();
       })
-      .catch(err => {
-        console.warn(err)
+      .catch((err) => {
+        console.warn(err);
       });
 
     // end-deleteNote

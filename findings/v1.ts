@@ -15,24 +15,31 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.34.1-ad041667-20210617-195430
+ * IBM OpenAPI SDK Code Generator Version: 3.40.0-910cf8c2-20211006-154754
  */
-
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
  * The Findings API is used to find and display occurrences of security issues in your IBM Cloud account by using the
  * artifact metadata specification. Findings are summarized in cards in the Security and Compliance Center that allow
  * you to see the security status of your account at a glance and start an investigation into any potential issues.
+ *
+ * API Version: 1.0.0
  */
 
 class FindingsV1 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://us-south.secadvisor.cloud.ibm.com/findings';
+
   static DEFAULT_SERVICE_NAME: string = 'findings';
 
   /*************************
@@ -65,7 +72,6 @@ class FindingsV1 extends BaseService {
     }
     return service;
   }
-
 
   /** Account ID. */
   accountId: string;
@@ -109,14 +115,16 @@ class FindingsV1 extends BaseService {
    * documentation](https://graphql.org/learn/).
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string|NodeJS.ReadableStream|Buffer} params.body - Body for query findings.
+   * @param {string | NodeJS.ReadableStream | Buffer} params.body - Body for query findings.
    * @param {string} [params.contentType] - The type of the input.
    * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.Empty>>}
    */
-  public postGraph(params: FindingsV1.PostGraphParams): Promise<FindingsV1.Response<FindingsV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public postGraph(
+    params: FindingsV1.PostGraphParams
+  ): Promise<FindingsV1.Response<FindingsV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['body'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -126,10 +134,14 @@ class FindingsV1 extends BaseService {
 
     const body = _params.body;
     const path = {
-      'account_id': this.accountId
+      'account_id': this.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'postGraph');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'postGraph'
+    );
 
     const parameters = {
       options: {
@@ -139,17 +151,21 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': _params.contentType,
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': _params.contentType,
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * notes
    ************************/
@@ -171,21 +187,27 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListProvidersResponse>>}
    */
-  public listProviders(params?: FindingsV1.ListProvidersParams): Promise<FindingsV1.Response<FindingsV1.ApiListProvidersResponse>> {
-    const _params = Object.assign({}, params);
+  public listProviders(
+    params?: FindingsV1.ListProvidersParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiListProvidersResponse>> {
+    const _params = { ...params };
 
     const query = {
       'limit': _params.limit,
       'skip': _params.skip,
       'start_provider_id': _params.startProviderId,
-      'end_provider_id': _params.endProviderId
+      'end_provider_id': _params.endProviderId,
     };
 
     const path = {
-      'account_id': this.accountId
+      'account_id': this.accountId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'listProviders');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listProviders'
+    );
 
     const parameters = {
       options: {
@@ -195,15 +217,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a note.
@@ -228,7 +255,6 @@ class FindingsV1 extends BaseService {
    * @param {string} params.id - The ID of the note.
    * @param {Reporter} params.reportedBy - The entity reporting a note.
    * @param {ApiNoteRelatedUrl[]} [params.relatedUrl] -
-   * @param {string} [params.expirationTime] - Time of expiration for this note, null if note does not expire.
    * @param {boolean} [params.shared] - True if this note can be shared by multiple accounts.
    * @param {FindingType} [params.finding] - FindingType provides details about a finding note.
    * @param {KpiType} [params.kpi] - KpiType provides details about a KPI note.
@@ -238,8 +264,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
-  public createNote(params: FindingsV1.CreateNoteParams): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
-    const _params = Object.assign({}, params);
+  public createNote(
+    params: FindingsV1.CreateNoteParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'shortDescription', 'longDescription', 'kind', 'id', 'reportedBy'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -254,20 +282,23 @@ class FindingsV1 extends BaseService {
       'id': _params.id,
       'reported_by': _params.reportedBy,
       'related_url': _params.relatedUrl,
-      'expiration_time': _params.expirationTime,
       'shared': _params.shared,
       'finding': _params.finding,
       'kpi': _params.kpi,
       'card': _params.card,
-      'section': _params.section
+      'section': _params.section,
     };
 
     const path = {
       'account_id': this.accountId,
-      'provider_id': _params.providerId
+      'provider_id': _params.providerId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'createNote');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createNote'
+    );
 
     const parameters = {
       options: {
@@ -277,16 +308,21 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List notes.
@@ -302,8 +338,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListNotesResponse>>}
    */
-  public listNotes(params: FindingsV1.ListNotesParams): Promise<FindingsV1.Response<FindingsV1.ApiListNotesResponse>> {
-    const _params = Object.assign({}, params);
+  public listNotes(
+    params: FindingsV1.ListNotesParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiListNotesResponse>> {
+    const _params = { ...params };
     const requiredParams = ['providerId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -313,15 +351,19 @@ class FindingsV1 extends BaseService {
 
     const query = {
       'page_size': _params.pageSize,
-      'page_token': _params.pageToken
+      'page_token': _params.pageToken,
     };
 
     const path = {
       'account_id': this.accountId,
-      'provider_id': _params.providerId
+      'provider_id': _params.providerId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'listNotes');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listNotes'
+    );
 
     const parameters = {
       options: {
@@ -331,15 +373,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get a note by provider.
@@ -354,8 +401,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
-  public getNote(params: FindingsV1.GetNoteParams): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
-    const _params = Object.assign({}, params);
+  public getNote(
+    params: FindingsV1.GetNoteParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'noteId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -366,10 +415,14 @@ class FindingsV1 extends BaseService {
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'note_id': _params.noteId
+      'note_id': _params.noteId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'getNote');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getNote'
+    );
 
     const parameters = {
       options: {
@@ -378,15 +431,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a note.
@@ -408,7 +466,6 @@ class FindingsV1 extends BaseService {
    * @param {string} params.id - The ID of the note.
    * @param {Reporter} params.reportedBy - The entity reporting a note.
    * @param {ApiNoteRelatedUrl[]} [params.relatedUrl] -
-   * @param {string} [params.expirationTime] - Time of expiration for this note, null if note does not expire.
    * @param {boolean} [params.shared] - True if this note can be shared by multiple accounts.
    * @param {FindingType} [params.finding] - FindingType provides details about a finding note.
    * @param {KpiType} [params.kpi] - KpiType provides details about a KPI note.
@@ -418,8 +475,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
-  public updateNote(params: FindingsV1.UpdateNoteParams): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
-    const _params = Object.assign({}, params);
+  public updateNote(
+    params: FindingsV1.UpdateNoteParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'noteId', 'shortDescription', 'longDescription', 'kind', 'id', 'reportedBy'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -434,21 +493,24 @@ class FindingsV1 extends BaseService {
       'id': _params.id,
       'reported_by': _params.reportedBy,
       'related_url': _params.relatedUrl,
-      'expiration_time': _params.expirationTime,
       'shared': _params.shared,
       'finding': _params.finding,
       'kpi': _params.kpi,
       'card': _params.card,
-      'section': _params.section
+      'section': _params.section,
     };
 
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'note_id': _params.noteId
+      'note_id': _params.noteId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNote');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateNote'
+    );
 
     const parameters = {
       options: {
@@ -458,16 +520,21 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a note.
@@ -482,8 +549,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.Empty>>}
    */
-  public deleteNote(params: FindingsV1.DeleteNoteParams): Promise<FindingsV1.Response<FindingsV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteNote(
+    params: FindingsV1.DeleteNoteParams
+  ): Promise<FindingsV1.Response<FindingsV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'noteId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -494,10 +563,14 @@ class FindingsV1 extends BaseService {
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'note_id': _params.noteId
+      'note_id': _params.noteId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNote');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteNote'
+    );
 
     const parameters = {
       options: {
@@ -506,15 +579,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get a note by occurrence.
@@ -530,8 +608,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiNote>>}
    */
-  public getOccurrenceNote(params: FindingsV1.GetOccurrenceNoteParams): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
-    const _params = Object.assign({}, params);
+  public getOccurrenceNote(
+    params: FindingsV1.GetOccurrenceNoteParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiNote>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'occurrenceId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -542,10 +622,14 @@ class FindingsV1 extends BaseService {
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'occurrence_id': _params.occurrenceId
+      'occurrence_id': _params.occurrenceId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'getOccurrenceNote');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOccurrenceNote'
+    );
 
     const parameters = {
       options: {
@@ -554,16 +638,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * occurrences
    ************************/
@@ -602,8 +690,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>>}
    */
-  public createOccurrence(params: FindingsV1.CreateOccurrenceParams): Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>> {
-    const _params = Object.assign({}, params);
+  public createOccurrence(
+    params: FindingsV1.CreateOccurrenceParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'noteName', 'kind', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -620,15 +710,19 @@ class FindingsV1 extends BaseService {
       'context': _params.context,
       'finding': _params.finding,
       'kpi': _params.kpi,
-      'reference_data': _params.referenceData
+      'reference_data': _params.referenceData,
     };
 
     const path = {
       'account_id': this.accountId,
-      'provider_id': _params.providerId
+      'provider_id': _params.providerId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'createOccurrence');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createOccurrence'
+    );
 
     const parameters = {
       options: {
@@ -638,17 +732,22 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId,
-          'Replace-If-Exists': _params.replaceIfExists
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+            'Replace-If-Exists': _params.replaceIfExists,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List occurrences.
@@ -664,8 +763,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>>}
    */
-  public listOccurrences(params: FindingsV1.ListOccurrencesParams): Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>> {
-    const _params = Object.assign({}, params);
+  public listOccurrences(
+    params: FindingsV1.ListOccurrencesParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>> {
+    const _params = { ...params };
     const requiredParams = ['providerId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -675,15 +776,19 @@ class FindingsV1 extends BaseService {
 
     const query = {
       'page_size': _params.pageSize,
-      'page_token': _params.pageToken
+      'page_token': _params.pageToken,
     };
 
     const path = {
       'account_id': this.accountId,
-      'provider_id': _params.providerId
+      'provider_id': _params.providerId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'listOccurrences');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOccurrences'
+    );
 
     const parameters = {
       options: {
@@ -693,15 +798,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List occurrences by note.
@@ -718,8 +828,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListNoteOccurrencesResponse>>}
    */
-  public listNoteOccurrences(params: FindingsV1.ListNoteOccurrencesParams): Promise<FindingsV1.Response<FindingsV1.ApiListNoteOccurrencesResponse>> {
-    const _params = Object.assign({}, params);
+  public listNoteOccurrences(
+    params: FindingsV1.ListNoteOccurrencesParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiListNoteOccurrencesResponse>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'noteId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -729,16 +841,20 @@ class FindingsV1 extends BaseService {
 
     const query = {
       'page_size': _params.pageSize,
-      'page_token': _params.pageToken
+      'page_token': _params.pageToken,
     };
 
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'note_id': _params.noteId
+      'note_id': _params.noteId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'listNoteOccurrences');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listNoteOccurrences'
+    );
 
     const parameters = {
       options: {
@@ -748,15 +864,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Get a specific occurrence.
@@ -772,8 +893,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>>}
    */
-  public getOccurrence(params: FindingsV1.GetOccurrenceParams): Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>> {
-    const _params = Object.assign({}, params);
+  public getOccurrence(
+    params: FindingsV1.GetOccurrenceParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'occurrenceId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -784,10 +907,14 @@ class FindingsV1 extends BaseService {
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'occurrence_id': _params.occurrenceId
+      'occurrence_id': _params.occurrenceId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'getOccurrence');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOccurrence'
+    );
 
     const parameters = {
       options: {
@@ -796,15 +923,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an occurrence.
@@ -837,8 +969,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>>}
    */
-  public updateOccurrence(params: FindingsV1.UpdateOccurrenceParams): Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>> {
-    const _params = Object.assign({}, params);
+  public updateOccurrence(
+    params: FindingsV1.UpdateOccurrenceParams
+  ): Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'occurrenceId', 'noteName', 'kind', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -855,16 +989,20 @@ class FindingsV1 extends BaseService {
       'context': _params.context,
       'finding': _params.finding,
       'kpi': _params.kpi,
-      'reference_data': _params.referenceData
+      'reference_data': _params.referenceData,
     };
 
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'occurrence_id': _params.occurrenceId
+      'occurrence_id': _params.occurrenceId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'updateOccurrence');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateOccurrence'
+    );
 
     const parameters = {
       options: {
@@ -874,16 +1012,21 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an occurrence.
@@ -899,8 +1042,10 @@ class FindingsV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<FindingsV1.Response<FindingsV1.Empty>>}
    */
-  public deleteOccurrence(params: FindingsV1.DeleteOccurrenceParams): Promise<FindingsV1.Response<FindingsV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteOccurrence(
+    params: FindingsV1.DeleteOccurrenceParams
+  ): Promise<FindingsV1.Response<FindingsV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['providerId', 'occurrenceId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -911,10 +1056,14 @@ class FindingsV1 extends BaseService {
     const path = {
       'account_id': this.accountId,
       'provider_id': _params.providerId,
-      'occurrence_id': _params.occurrenceId
+      'occurrence_id': _params.occurrenceId,
     };
 
-    const sdkHeaders = getSdkHeaders(FindingsV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteOccurrence');
+    const sdkHeaders = getSdkHeaders(
+      FindingsV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteOccurrence'
+    );
 
     const parameters = {
       options: {
@@ -923,16 +1072,20 @@ class FindingsV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Transaction-Id': _params.transactionId
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Transaction-Id': _params.transactionId,
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
 }
 
 /*************************
@@ -940,16 +1093,14 @@ class FindingsV1 extends BaseService {
  ************************/
 
 namespace FindingsV1 {
-
   /** Options for the `FindingsV1` constructor. */
   export interface Options extends UserOptions {
-
     /** Account ID. */
     accountId: string;
   }
 
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -960,7 +1111,7 @@ namespace FindingsV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -974,7 +1125,7 @@ namespace FindingsV1 {
   /** Parameters for the `postGraph` operation. */
   export interface PostGraphParams {
     /** Body for query findings. */
-    body: string|NodeJS.ReadableStream|Buffer;
+    body: string | NodeJS.ReadableStream | Buffer;
     /** The type of the input. */
     contentType?: PostGraphConstants.ContentType | string;
     /** The transaction ID for the request in UUID v4 format. */
@@ -1031,8 +1182,6 @@ namespace FindingsV1 {
     /** The entity reporting a note. */
     reportedBy: Reporter;
     relatedUrl?: ApiNoteRelatedUrl[];
-    /** Time of expiration for this note, null if note does not expire. */
-    expirationTime?: string;
     /** True if this note can be shared by multiple accounts. */
     shared?: boolean;
     /** FindingType provides details about a finding note. */
@@ -1107,8 +1256,6 @@ namespace FindingsV1 {
     /** The entity reporting a note. */
     reportedBy: Reporter;
     relatedUrl?: ApiNoteRelatedUrl[];
-    /** Time of expiration for this note, null if note does not expire. */
-    expirationTime?: string;
     /** True if this note can be shared by multiple accounts. */
     shared?: boolean;
     /** FindingType provides details about a finding note. */
@@ -1419,6 +1566,7 @@ namespace FindingsV1 {
 
   /** KpiType provides details about a KPI note. */
   export interface KpiType {
+    Severity?: string;
     /** The aggregation type of the KPI values. - SUM&#58; A single-value metrics aggregation type that sums up
      *  numeric values
      *    that are extracted from KPI occurrences.
@@ -1531,8 +1679,6 @@ namespace FindingsV1 {
      */
     kind: string;
     related_url?: ApiNoteRelatedUrl[];
-    /** Time of expiration for this note, null if note does not expire. */
-    expiration_time?: string;
     /** Output only. The time this note was created. This field can be used as a filter in list requests. */
     create_time?: string;
     /** Output only. The time this note was last updated. This field can be used as a filter in list requests. */
@@ -1676,7 +1822,6 @@ namespace FindingsV1 {
     /** The text of this element type. */
     text: string;
   }
-
 }
 
 export = FindingsV1;
