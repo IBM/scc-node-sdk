@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
 
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const FindingsV1 = require('../../dist/findings/v1');
@@ -127,7 +127,7 @@ describe('FindingsV1', () => {
   });
   describe('postGraph', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __postGraphTest() {
         // Construct the params object for operation postGraph
         const body = 'testString';
         const contentType = 'application/json';
@@ -146,16 +146,31 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/graph', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/graph', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = contentType;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Content-Type', contentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body).toEqual(body);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.body).toEqual(body);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __postGraphTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __postGraphTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __postGraphTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -177,7 +192,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.postGraph({});
@@ -189,11 +204,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const postGraphPromise = findingsService.postGraph();
         expectToBePromise(postGraphPromise);
 
-        postGraphPromise.catch(err => {
+        postGraphPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -202,7 +217,7 @@ describe('FindingsV1', () => {
   });
   describe('listProviders', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listProvidersTest() {
         // Construct the params object for operation listProviders
         const transactionId = 'testString';
         const limit = 2;
@@ -225,18 +240,33 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['skip']).toEqual(skip);
-        expect(options.qs['start_provider_id']).toEqual(startProviderId);
-        expect(options.qs['end_provider_id']).toEqual(endProviderId);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.skip).toEqual(skip);
+        expect(mockRequestOptions.qs.start_provider_id).toEqual(startProviderId);
+        expect(mockRequestOptions.qs.end_provider_id).toEqual(endProviderId);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listProvidersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __listProvidersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __listProvidersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -292,6 +322,7 @@ describe('FindingsV1', () => {
 
       // KpiType
       const kpiTypeModel = {
+        Severity: 'MEDIUM',
         aggregation_type: 'SUM',
       };
 
@@ -299,15 +330,15 @@ describe('FindingsV1', () => {
       const valueTypeModel = {
         kind: 'FINDING_COUNT',
         finding_note_names: ['testString'],
-        text: 'testString',
+        text: 'label',
       };
 
       // CardElementTimeSeriesCardElement
       const cardElementModel = {
         text: 'testString',
-        default_interval: 'testString',
+        default_interval: 'd',
         kind: 'TIME_SERIES',
-        default_time_range: '1d',
+        default_time_range: '4d',
         value_types: [valueTypeModel],
       };
 
@@ -318,7 +349,7 @@ describe('FindingsV1', () => {
         subtitle: 'testString',
         order: 1,
         finding_note_names: ['testString'],
-        requires_configuration: true,
+        requires_configuration: false,
         badge_text: 'testString',
         badge_image: 'testString',
         elements: [cardElementModel],
@@ -330,7 +361,7 @@ describe('FindingsV1', () => {
         image: 'testString',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createNoteTest() {
         // Construct the params object for operation createNote
         const providerId = 'testString';
         const shortDescription = 'testString';
@@ -339,7 +370,8 @@ describe('FindingsV1', () => {
         const id = 'testString';
         const reportedBy = reporterModel;
         const relatedUrl = [apiNoteRelatedUrlModel];
-        const expirationTime = '2019-01-01T12:00:00.000Z';
+        const createTime = '2019-01-01T12:00:00.000Z';
+        const updateTime = '2019-01-01T12:00:00.000Z';
         const shared = true;
         const finding = findingTypeModel;
         const kpi = kpiTypeModel;
@@ -354,7 +386,8 @@ describe('FindingsV1', () => {
           id: id,
           reportedBy: reportedBy,
           relatedUrl: relatedUrl,
-          expirationTime: expirationTime,
+          createTime: createTime,
+          updateTime: updateTime,
           shared: shared,
           finding: finding,
           kpi: kpi,
@@ -371,27 +404,43 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/notes', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['short_description']).toEqual(shortDescription);
-        expect(options.body['long_description']).toEqual(longDescription);
-        expect(options.body['kind']).toEqual(kind);
-        expect(options.body['id']).toEqual(id);
-        expect(options.body['reported_by']).toEqual(reportedBy);
-        expect(options.body['related_url']).toEqual(relatedUrl);
-        expect(options.body['expiration_time']).toEqual(expirationTime);
-        expect(options.body['shared']).toEqual(shared);
-        expect(options.body['finding']).toEqual(finding);
-        expect(options.body['kpi']).toEqual(kpi);
-        expect(options.body['card']).toEqual(card);
-        expect(options.body['section']).toEqual(section);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
+        expect(mockRequestOptions.body.short_description).toEqual(shortDescription);
+        expect(mockRequestOptions.body.long_description).toEqual(longDescription);
+        expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body.reported_by).toEqual(reportedBy);
+        expect(mockRequestOptions.body.related_url).toEqual(relatedUrl);
+        expect(mockRequestOptions.body.create_time).toEqual(createTime);
+        expect(mockRequestOptions.body.update_time).toEqual(updateTime);
+        expect(mockRequestOptions.body.shared).toEqual(shared);
+        expect(mockRequestOptions.body.finding).toEqual(finding);
+        expect(mockRequestOptions.body.kpi).toEqual(kpi);
+        expect(mockRequestOptions.body.card).toEqual(card);
+        expect(mockRequestOptions.body.section).toEqual(section);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createNoteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __createNoteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __createNoteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -423,7 +472,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.createNote({});
@@ -435,11 +484,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const createNotePromise = findingsService.createNote();
         expectToBePromise(createNotePromise);
 
-        createNotePromise.catch(err => {
+        createNotePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -448,7 +497,7 @@ describe('FindingsV1', () => {
   });
   describe('listNotes', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listNotesTest() {
         // Construct the params object for operation listNotes
         const providerId = 'testString';
         const transactionId = 'testString';
@@ -469,17 +518,32 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/notes', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['page_size']).toEqual(pageSize);
-        expect(options.qs['page_token']).toEqual(pageToken);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
+        expect(mockRequestOptions.qs.page_size).toEqual(pageSize);
+        expect(mockRequestOptions.qs.page_token).toEqual(pageToken);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listNotesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __listNotesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __listNotesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -501,7 +565,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.listNotes({});
@@ -513,11 +577,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const listNotesPromise = findingsService.listNotes();
         expectToBePromise(listNotesPromise);
 
-        listNotesPromise.catch(err => {
+        listNotesPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -526,7 +590,7 @@ describe('FindingsV1', () => {
   });
   describe('getNote', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getNoteTest() {
         // Construct the params object for operation getNote
         const providerId = 'testString';
         const noteId = 'testString';
@@ -545,16 +609,31 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['note_id']).toEqual(noteId);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.note_id).toEqual(noteId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getNoteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __getNoteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __getNoteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -578,7 +657,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.getNote({});
@@ -590,11 +669,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const getNotePromise = findingsService.getNote();
         expectToBePromise(getNotePromise);
 
-        getNotePromise.catch(err => {
+        getNotePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -632,6 +711,7 @@ describe('FindingsV1', () => {
 
       // KpiType
       const kpiTypeModel = {
+        Severity: 'MEDIUM',
         aggregation_type: 'SUM',
       };
 
@@ -639,15 +719,15 @@ describe('FindingsV1', () => {
       const valueTypeModel = {
         kind: 'FINDING_COUNT',
         finding_note_names: ['testString'],
-        text: 'testString',
+        text: 'label',
       };
 
       // CardElementTimeSeriesCardElement
       const cardElementModel = {
         text: 'testString',
-        default_interval: 'testString',
+        default_interval: 'd',
         kind: 'TIME_SERIES',
-        default_time_range: '1d',
+        default_time_range: '4d',
         value_types: [valueTypeModel],
       };
 
@@ -658,7 +738,7 @@ describe('FindingsV1', () => {
         subtitle: 'testString',
         order: 1,
         finding_note_names: ['testString'],
-        requires_configuration: true,
+        requires_configuration: false,
         badge_text: 'testString',
         badge_image: 'testString',
         elements: [cardElementModel],
@@ -670,7 +750,7 @@ describe('FindingsV1', () => {
         image: 'testString',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateNoteTest() {
         // Construct the params object for operation updateNote
         const providerId = 'testString';
         const noteId = 'testString';
@@ -680,7 +760,8 @@ describe('FindingsV1', () => {
         const id = 'testString';
         const reportedBy = reporterModel;
         const relatedUrl = [apiNoteRelatedUrlModel];
-        const expirationTime = '2019-01-01T12:00:00.000Z';
+        const createTime = '2019-01-01T12:00:00.000Z';
+        const updateTime = '2019-01-01T12:00:00.000Z';
         const shared = true;
         const finding = findingTypeModel;
         const kpi = kpiTypeModel;
@@ -696,7 +777,8 @@ describe('FindingsV1', () => {
           id: id,
           reportedBy: reportedBy,
           relatedUrl: relatedUrl,
-          expirationTime: expirationTime,
+          createTime: createTime,
+          updateTime: updateTime,
           shared: shared,
           finding: finding,
           kpi: kpi,
@@ -713,28 +795,44 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['short_description']).toEqual(shortDescription);
-        expect(options.body['long_description']).toEqual(longDescription);
-        expect(options.body['kind']).toEqual(kind);
-        expect(options.body['id']).toEqual(id);
-        expect(options.body['reported_by']).toEqual(reportedBy);
-        expect(options.body['related_url']).toEqual(relatedUrl);
-        expect(options.body['expiration_time']).toEqual(expirationTime);
-        expect(options.body['shared']).toEqual(shared);
-        expect(options.body['finding']).toEqual(finding);
-        expect(options.body['kpi']).toEqual(kpi);
-        expect(options.body['card']).toEqual(card);
-        expect(options.body['section']).toEqual(section);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['note_id']).toEqual(noteId);
+        expect(mockRequestOptions.body.short_description).toEqual(shortDescription);
+        expect(mockRequestOptions.body.long_description).toEqual(longDescription);
+        expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body.reported_by).toEqual(reportedBy);
+        expect(mockRequestOptions.body.related_url).toEqual(relatedUrl);
+        expect(mockRequestOptions.body.create_time).toEqual(createTime);
+        expect(mockRequestOptions.body.update_time).toEqual(updateTime);
+        expect(mockRequestOptions.body.shared).toEqual(shared);
+        expect(mockRequestOptions.body.finding).toEqual(finding);
+        expect(mockRequestOptions.body.kpi).toEqual(kpi);
+        expect(mockRequestOptions.body.card).toEqual(card);
+        expect(mockRequestOptions.body.section).toEqual(section);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.note_id).toEqual(noteId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateNoteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __updateNoteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __updateNoteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -768,7 +866,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.updateNote({});
@@ -780,11 +878,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const updateNotePromise = findingsService.updateNote();
         expectToBePromise(updateNotePromise);
 
-        updateNotePromise.catch(err => {
+        updateNotePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -793,7 +891,7 @@ describe('FindingsV1', () => {
   });
   describe('deleteNote', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteNoteTest() {
         // Construct the params object for operation deleteNote
         const providerId = 'testString';
         const noteId = 'testString';
@@ -812,16 +910,31 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['note_id']).toEqual(noteId);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.note_id).toEqual(noteId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteNoteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __deleteNoteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __deleteNoteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -845,7 +958,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.deleteNote({});
@@ -857,11 +970,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const deleteNotePromise = findingsService.deleteNote();
         expectToBePromise(deleteNotePromise);
 
-        deleteNotePromise.catch(err => {
+        deleteNotePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -870,7 +983,7 @@ describe('FindingsV1', () => {
   });
   describe('getOccurrenceNote', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getOccurrenceNoteTest() {
         // Construct the params object for operation getOccurrenceNote
         const providerId = 'testString';
         const occurrenceId = 'testString';
@@ -889,16 +1002,31 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}/note', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}/note', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['occurrence_id']).toEqual(occurrenceId);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.occurrence_id).toEqual(occurrenceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOccurrenceNoteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __getOccurrenceNoteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __getOccurrenceNoteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -922,7 +1050,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.getOccurrenceNote({});
@@ -934,11 +1062,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const getOccurrenceNotePromise = findingsService.getOccurrenceNote();
         expectToBePromise(getOccurrenceNotePromise);
 
-        getOccurrenceNotePromise.catch(err => {
+        getOccurrenceNotePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -1006,7 +1134,7 @@ describe('FindingsV1', () => {
         total: 72.5,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createOccurrenceTest() {
         // Construct the params object for operation createOccurrence
         const providerId = 'testString';
         const noteName = 'testString';
@@ -1043,25 +1171,40 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/occurrences', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
         checkUserHeader(createRequestMock, 'Replace-If-Exists', replaceIfExists);
-        expect(options.body['note_name']).toEqual(noteName);
-        expect(options.body['kind']).toEqual(kind);
-        expect(options.body['id']).toEqual(id);
-        expect(options.body['resource_url']).toEqual(resourceUrl);
-        expect(options.body['remediation']).toEqual(remediation);
-        expect(options.body['context']).toEqual(context);
-        expect(options.body['finding']).toEqual(finding);
-        expect(options.body['kpi']).toEqual(kpi);
-        expect(options.body['reference_data']).toEqual(referenceData);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
+        expect(mockRequestOptions.body.note_name).toEqual(noteName);
+        expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body.resource_url).toEqual(resourceUrl);
+        expect(mockRequestOptions.body.remediation).toEqual(remediation);
+        expect(mockRequestOptions.body.context).toEqual(context);
+        expect(mockRequestOptions.body.finding).toEqual(finding);
+        expect(mockRequestOptions.body.kpi).toEqual(kpi);
+        expect(mockRequestOptions.body.reference_data).toEqual(referenceData);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createOccurrenceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __createOccurrenceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __createOccurrenceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1089,7 +1232,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.createOccurrence({});
@@ -1101,11 +1244,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const createOccurrencePromise = findingsService.createOccurrence();
         expectToBePromise(createOccurrencePromise);
 
-        createOccurrencePromise.catch(err => {
+        createOccurrencePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -1114,7 +1257,7 @@ describe('FindingsV1', () => {
   });
   describe('listOccurrences', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listOccurrencesTest() {
         // Construct the params object for operation listOccurrences
         const providerId = 'testString';
         const transactionId = 'testString';
@@ -1135,17 +1278,32 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/occurrences', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['page_size']).toEqual(pageSize);
-        expect(options.qs['page_token']).toEqual(pageToken);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
+        expect(mockRequestOptions.qs.page_size).toEqual(pageSize);
+        expect(mockRequestOptions.qs.page_token).toEqual(pageToken);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listOccurrencesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __listOccurrencesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __listOccurrencesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1167,7 +1325,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.listOccurrences({});
@@ -1179,11 +1337,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const listOccurrencesPromise = findingsService.listOccurrences();
         expectToBePromise(listOccurrencesPromise);
 
-        listOccurrencesPromise.catch(err => {
+        listOccurrencesPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -1192,7 +1350,7 @@ describe('FindingsV1', () => {
   });
   describe('listNoteOccurrences', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listNoteOccurrencesTest() {
         // Construct the params object for operation listNoteOccurrences
         const providerId = 'testString';
         const noteId = 'testString';
@@ -1215,18 +1373,33 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}/occurrences', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/notes/{note_id}/occurrences', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.qs['page_size']).toEqual(pageSize);
-        expect(options.qs['page_token']).toEqual(pageToken);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['note_id']).toEqual(noteId);
+        expect(mockRequestOptions.qs.page_size).toEqual(pageSize);
+        expect(mockRequestOptions.qs.page_token).toEqual(pageToken);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.note_id).toEqual(noteId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listNoteOccurrencesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __listNoteOccurrencesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __listNoteOccurrencesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1250,7 +1423,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.listNoteOccurrences({});
@@ -1262,11 +1435,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const listNoteOccurrencesPromise = findingsService.listNoteOccurrences();
         expectToBePromise(listNoteOccurrencesPromise);
 
-        listNoteOccurrencesPromise.catch(err => {
+        listNoteOccurrencesPromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -1275,7 +1448,7 @@ describe('FindingsV1', () => {
   });
   describe('getOccurrence', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getOccurrenceTest() {
         // Construct the params object for operation getOccurrence
         const providerId = 'testString';
         const occurrenceId = 'testString';
@@ -1294,16 +1467,31 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['occurrence_id']).toEqual(occurrenceId);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.occurrence_id).toEqual(occurrenceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOccurrenceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __getOccurrenceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __getOccurrenceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1327,7 +1515,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.getOccurrence({});
@@ -1339,11 +1527,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const getOccurrencePromise = findingsService.getOccurrence();
         expectToBePromise(getOccurrencePromise);
 
-        getOccurrencePromise.catch(err => {
+        getOccurrencePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -1411,7 +1599,7 @@ describe('FindingsV1', () => {
         total: 72.5,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateOccurrenceTest() {
         // Construct the params object for operation updateOccurrence
         const providerId = 'testString';
         const occurrenceId = 'testString';
@@ -1448,25 +1636,40 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.body['note_name']).toEqual(noteName);
-        expect(options.body['kind']).toEqual(kind);
-        expect(options.body['id']).toEqual(id);
-        expect(options.body['resource_url']).toEqual(resourceUrl);
-        expect(options.body['remediation']).toEqual(remediation);
-        expect(options.body['context']).toEqual(context);
-        expect(options.body['finding']).toEqual(finding);
-        expect(options.body['kpi']).toEqual(kpi);
-        expect(options.body['reference_data']).toEqual(referenceData);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['occurrence_id']).toEqual(occurrenceId);
+        expect(mockRequestOptions.body.note_name).toEqual(noteName);
+        expect(mockRequestOptions.body.kind).toEqual(kind);
+        expect(mockRequestOptions.body.id).toEqual(id);
+        expect(mockRequestOptions.body.resource_url).toEqual(resourceUrl);
+        expect(mockRequestOptions.body.remediation).toEqual(remediation);
+        expect(mockRequestOptions.body.context).toEqual(context);
+        expect(mockRequestOptions.body.finding).toEqual(finding);
+        expect(mockRequestOptions.body.kpi).toEqual(kpi);
+        expect(mockRequestOptions.body.reference_data).toEqual(referenceData);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.occurrence_id).toEqual(occurrenceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateOccurrenceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __updateOccurrenceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __updateOccurrenceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1496,7 +1699,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.updateOccurrence({});
@@ -1508,11 +1711,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const updateOccurrencePromise = findingsService.updateOccurrence();
         expectToBePromise(updateOccurrencePromise);
 
-        updateOccurrencePromise.catch(err => {
+        updateOccurrencePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -1521,7 +1724,7 @@ describe('FindingsV1', () => {
   });
   describe('deleteOccurrence', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteOccurrenceTest() {
         // Construct the params object for operation deleteOccurrence
         const providerId = 'testString';
         const occurrenceId = 'testString';
@@ -1540,16 +1743,31 @@ describe('FindingsV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/v1/{account_id}/providers/{provider_id}/occurrences/{occurrence_id}', 'DELETE');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'Transaction-Id', transactionId);
-        expect(options.path['account_id']).toEqual(findingsServiceOptions.accountId);
-        expect(options.path['provider_id']).toEqual(providerId);
-        expect(options.path['occurrence_id']).toEqual(occurrenceId);
+        expect(mockRequestOptions.path.account_id).toEqual(findingsServiceOptions.accountId);
+        expect(mockRequestOptions.path.provider_id).toEqual(providerId);
+        expect(mockRequestOptions.path.occurrence_id).toEqual(occurrenceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteOccurrenceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.enableRetries();
+        __deleteOccurrenceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        // findingsService.disableRetries();
+        __deleteOccurrenceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1573,7 +1791,7 @@ describe('FindingsV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async (done) => {
         let err;
         try {
           await findingsService.deleteOccurrence({});
@@ -1585,11 +1803,11 @@ describe('FindingsV1', () => {
         done();
       });
 
-      test('should reject promise when required params are not given', done => {
+      test('should reject promise when required params are not given', (done) => {
         const deleteOccurrencePromise = findingsService.deleteOccurrence();
         expectToBePromise(deleteOccurrencePromise);
 
-        deleteOccurrencePromise.catch(err => {
+        deleteOccurrencePromise.catch((err) => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
