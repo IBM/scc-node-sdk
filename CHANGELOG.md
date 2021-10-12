@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/IBM/scc-node-sdk/compare/v1.0.2...v1.0.3) (2021-10-12)
+
+
+### Bug Fixes
+
+* **SemanticRelease:** latest SR needs node >= 14.17 ([16a36c2](https://github.com/IBM/scc-node-sdk/commit/16a36c22c6d6927c615101f60e42318fd1eca09e))
+
 ## [1.0.2](https://github.com/IBM/scc-node-sdk/compare/v1.0.1...v1.0.2) (2021-10-12)
 
 
