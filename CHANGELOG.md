@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/IBM/scc-node-sdk/compare/v1.0.1...v1.0.2) (2021-10-12)
+
+
+### Bug Fixes
+
+* **Findings:** createTime and updateTime in NoteOptions ([16d6af0](https://github.com/IBM/scc-node-sdk/commit/16d6af027539d7305eaf70dac21bf32998f23c21))
+
 ## [1.0.1](https://github.com/IBM/scc-node-sdk/compare/v1.0.0...v1.0.1) (2021-07-01)
 
 
