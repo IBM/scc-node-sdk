@@ -164,12 +164,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __postGraphTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __postGraphTest();
       });
 
@@ -260,12 +260,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __listProvidersTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __listProvidersTest();
       });
 
@@ -434,12 +434,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __createNoteTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __createNoteTest();
       });
 
@@ -537,12 +537,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __listNotesTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __listNotesTest();
       });
 
@@ -627,12 +627,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __getNoteTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __getNoteTest();
       });
 
@@ -826,12 +826,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __updateNoteTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __updateNoteTest();
       });
 
@@ -928,12 +928,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __deleteNoteTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __deleteNoteTest();
       });
 
@@ -1020,12 +1020,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __getOccurrenceNoteTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __getOccurrenceNoteTest();
       });
 
@@ -1198,12 +1198,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __createOccurrenceTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __createOccurrenceTest();
       });
 
@@ -1297,12 +1297,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __listOccurrencesTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __listOccurrencesTest();
       });
 
@@ -1393,12 +1393,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __listNoteOccurrencesTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __listNoteOccurrencesTest();
       });
 
@@ -1485,12 +1485,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __getOccurrenceTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __getOccurrenceTest();
       });
 
@@ -1663,12 +1663,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __updateOccurrenceTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __updateOccurrenceTest();
       });
 
@@ -1761,12 +1761,12 @@ describe('FindingsV1', () => {
 
         // enable retries and test again
         createRequestMock.mockClear();
-        // findingsService.enableRetries();
+        findingsService.enableRetries();
         __deleteOccurrenceTest();
 
         // disable retries and test again
         createRequestMock.mockClear();
-        // findingsService.disableRetries();
+        findingsService.disableRetries();
         __deleteOccurrenceTest();
       });
 
