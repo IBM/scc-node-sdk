@@ -1,6 +1,6 @@
 {
   "name": "ibm-scc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "IBM Cloud Security & Compliance Center Node SDK",
   "repository": {
     "type": "git",
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/git": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "axios": "^0.21.1",
