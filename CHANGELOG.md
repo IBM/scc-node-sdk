@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/IBM/scc-node-sdk/compare/v1.0.3...v1.0.4) (2021-12-10)
+
+
+### Bug Fixes
+
+* **FindingsAPI:** getOccurrence should not return list ([0756d43](https://github.com/IBM/scc-node-sdk/commit/0756d436b936e22f226b382dfe7d61345e457fbf))
+
 ## [1.0.3](https://github.com/IBM/scc-node-sdk/compare/v1.0.2...v1.0.3) (2021-10-12)
 
 
