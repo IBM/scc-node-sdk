@@ -903,11 +903,11 @@ class FindingsV1 extends BaseService {
    * providers/{provider_id}/occurrences/{occurrence_id}.
    * @param {string} [params.transactionId] - The transaction ID for the request in UUID v4 format.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>>}
+   * @returns {Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>>}
    */
   public getOccurrence(
     params: FindingsV1.GetOccurrenceParams
-  ): Promise<FindingsV1.Response<FindingsV1.ApiListOccurrencesResponse>> {
+  ): Promise<FindingsV1.Response<FindingsV1.ApiOccurrence>> {
     const _params = { ...params };
     const requiredParams = ['providerId', 'occurrenceId'];
 
