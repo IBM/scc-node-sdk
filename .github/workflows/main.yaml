@@ -35,8 +35,14 @@ jobs:
       - name: running unit tests
         run: npm run test-unit-travis
 
-      - name: publishing code coverage report
-        run: npm run report-coverage
+      - name: publishing code coverage report to codeclimate
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          build/publishCodeCoverage.sh
 
       - name: running integration tests
         env:
