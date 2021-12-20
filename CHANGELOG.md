@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/IBM/scc-node-sdk/compare/v2.0.0...v2.0.1) (2021-12-20)
+
+
+### Bug Fixes
+
+* **Security Vulnerabilities:** fixing dependabot reported security vulnerabilities ([b154517](https://github.com/IBM/scc-node-sdk/commit/b1545172865f595ef4fb7204359b78651cbeb7b4))
+
 # [2.0.0](https://github.com/IBM/scc-node-sdk/compare/v1.0.4...v2.0.0) (2021-12-20)
 
 
