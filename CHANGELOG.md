@@ -1,3 +1,13 @@
+# [2.0.0](https://github.com/IBM/scc-node-sdk/compare/v1.0.4...v2.0.0) (2021-12-20)
+
+
+* Merge pull request #36 from IBM/dep ([2dafbc5](https://github.com/IBM/scc-node-sdk/commit/2dafbc587aa09542dcb2a167a1608ab261931a1e)), closes [#36](https://github.com/IBM/scc-node-sdk/issues/36)
+
+
+### BREAKING CHANGES
+
+* release SDK without NotificationsAPI
+
 ## [1.0.4](https://github.com/IBM/scc-node-sdk/compare/v1.0.3...v1.0.4) (2021-12-10)
 
 
