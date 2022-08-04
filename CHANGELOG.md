@@ -1,3 +1,19 @@
+# [3.0.0](https://github.com/IBM/scc-node-sdk/compare/v2.0.2...v3.0.0) (2022-08-04)
+
+
+### Bug Fixes
+
+* **FindingsAPI:** deprecated ([61a2d12](https://github.com/IBM/scc-node-sdk/commit/61a2d12333da2da4ad661b743919e6ebe35d913c))
+
+
+* Merge pull request #40 from IBM/si-deprecation ([2a4053b](https://github.com/IBM/scc-node-sdk/commit/2a4053bb0a038c8bfb2441aaeba2224d79450a2a)), closes [#40](https://github.com/IBM/scc-node-sdk/issues/40)
+
+
+### BREAKING CHANGES
+
+* Deprecating Security Insights
+* **FindingsAPI:** deprecating Security Insights
+
 ## [2.0.2](https://github.com/IBM/scc-node-sdk/compare/v2.0.1...v2.0.2) (2022-01-17)
 
 
