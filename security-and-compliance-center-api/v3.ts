@@ -37,7 +37,7 @@ import { getQueryParam } from 'ibm-cloud-sdk-core';
 /**
  * Security and Compliance Center API
  *
- * API Version: 3.0.0
+ * API Version: 4.0.0
  */
 
 class SecurityAndComplianceCenterApiV3 extends BaseService {
