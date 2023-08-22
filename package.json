@@ -1,6 +1,6 @@
 {
   "name": "ibm-scc",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "IBM Cloud Security & Compliance Center Node SDK",
   "repository": {
     "type": "git",
