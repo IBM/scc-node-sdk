@@ -11,7 +11,7 @@
 # IBM Cloud Security & Compliance Center Node.js SDK
 
 Node.js client library to interact with various 
-[IBM Cloud Security & Compliance Center APIs](https://cloud.ibm.com/apidocs/security-compliance?code=node)).
+[IBM Cloud Security & Compliance Center APIs](https://cloud.ibm.com/apidocs/security-compliance?code=node).
 
 ## Table of Contents
 
