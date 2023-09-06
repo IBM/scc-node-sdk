@@ -48,7 +48,7 @@ IBM Cloud services:
 
 Service Name | Import Path
 --- | ---
-[Configuration Governance](https://cloud.ibm.com/apidocs/security-compliance/config) | ibm-scc/configuration-governance/v1
+[Security and Compliance Center](https://cloud.ibm.com/apidocs/security-compliance/) | ibm-scc/security-and-compliance-center-api/v3
 
 ## Prerequisites
 * You need an [IBM Cloud][ibm-cloud-onboarding] account.
