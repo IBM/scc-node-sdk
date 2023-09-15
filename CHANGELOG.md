@@ -1,3 +1,22 @@
+# [4.0.0](https://github.com/IBM/scc-node-sdk/compare/v3.0.0...v4.0.0) (2023-09-15)
+
+
+### Features
+
+* SCC v2 node SDK  ([#49](https://github.com/IBM/scc-node-sdk/issues/49)) ([9dca785](https://github.com/IBM/scc-node-sdk/commit/9dca78595d17bb3b88bebe506fb5816ce5c903f7))
+
+
+### Performance Improvements
+
+* **SCC:** Releasing SCC v2 Node SDK ([422caf1](https://github.com/IBM/scc-node-sdk/commit/422caf1097b5dfe3745c013406af3f34aa57196e))
+
+
+### BREAKING CHANGES
+
+* **SCC:** SCC v2 Node SDK
+
+Signed-off-by: Gaurav Goswami <gouravgoswami48@gmail.com>
+
 # [3.0.0](https://github.com/IBM/scc-node-sdk/compare/v2.0.2...v3.0.0) (2022-08-04)
 
 
