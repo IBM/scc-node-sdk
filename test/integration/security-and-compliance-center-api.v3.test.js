@@ -1439,8 +1439,6 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
       format: 'csv',
-      scopeId: '132009ff-b982-412e-a110-ad8797e10f84',
-      subscopeId: 'c7ddcbcc-6a43-4ab3-b6a7-b2d8f65cd54a',
     };
 
     const res = await securityAndComplianceCenterApiService.createScanReport(params);
