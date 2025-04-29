@@ -130,7 +130,6 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
       limit: 25,
       sort: 'created_on',
       direction: 'desc',
-      start: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.listInstanceAttachments(params);
