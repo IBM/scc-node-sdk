@@ -284,19 +284,55 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     // Request models needed by this operation.
 
     // Parameter
-    const parameterModel = {
-      assessment_type: 'testString',
-      assessment_id: 'testString',
-      parameter_name: 'location',
-      parameter_display_name: 'Location',
-      parameter_type: 'string',
-      parameter_value: 'testString',
-    };
+    const parameterModels = [
+      {
+        assessment_id: 'rule-e16fcfea-fe21-4d30-a721-423611481fea',
+        parameter_name: 'tls_version',
+        parameter_display_name: 'IBM Cloud Internet Services TLS version',
+        parameter_type: 'string_list',
+        parameter_value: '["1.2", "1.3"]',
+      },
+      {
+        assessment_id: 'rule-f9137be8-2490-4afb-8cd5-a201cb167eb2',
+        parameter_name: 'ssh_port',
+        parameter_display_name: 'Network ACL rule for allowed IPs to SSH port',
+        parameter_type: 'numeric',
+        parameter_value: '22',
+      },
+      {
+        assessment_id: 'rule-9653d2c7-6290-4128-a5a3-65487ba40370',
+        parameter_name: 'rdp_port',
+        parameter_display_name: 'Security group rule RDP allow port number',
+        parameter_type: 'numeric',
+        parameter_value: '22',
+      },
+      {
+        assessment_id: 'rule-7c5f6385-67e4-4edf-bec8-c722558b2dec',
+        parameter_name: 'ssh_port',
+        parameter_display_name: 'Security group rule SSH allow port number',
+        parameter_type: 'numeric',
+        parameter_value: '22',
+      },
+      {
+        assessment_id: 'rule-f1e80ee7-88d5-4bf2-b42f-c863bb24601c',
+        parameter_name: 'rdp_port',
+        parameter_display_name: 'Disallowed IPs for ingress to RDP port',
+        parameter_type: 'numeric',
+        parameter_value: '3389',
+      },
+      {
+        assessment_id: 'rule-96527f89-1867-4581-b923-1400e04661e0',
+        parameter_name: 'exclude_default_security_groups',
+        parameter_display_name: 'Exclude the default security groups',
+        parameter_type: 'string_list',
+        parameter_value: '["Default"]',
+      },
+    ];
 
     // AttachmentNotificationsControls
     const attachmentNotificationsControlsModel = {
       threshold_limit: 15,
-      failed_control_ids: ['testString'],
+      failed_control_ids: [],
     };
 
     // AttachmentNotifications
@@ -307,26 +343,27 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
     // MultiCloudScopePayloadById
     const multiCloudScopePayloadModel = {
-      id: 'testString',
+      id: '8baad3b5-2e69-4027-9967-efac19508e1c',
     };
 
     // DateRange
+    const endDate = new Date(Date.now()).toISOString();
     const dateRangeModel = {
       start_date: '2025-02-28T05:42:58.000Z',
-      end_date: '2025-02-28T05:42:58.000Z',
+      end_date: endDate,
     };
 
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       profileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3f',
       attachmentId: attachmentIdLink,
-      attachmentParameters: [parameterModel],
-      description: 'testString',
-      name: 'testString',
+      attachmentParameters: parameterModels,
+      description: 'New Profile Attachment Update',
+      name: 'SDK Updated Test',
       notifications: attachmentNotificationsModel,
       schedule: 'daily',
       scope: [multiCloudScopePayloadModel],
-      status: 'enabled',
+      status: 'disabled',
       dataSelectionRange: dateRangeModel,
       accountId: accountIdForReportLink,
     };
