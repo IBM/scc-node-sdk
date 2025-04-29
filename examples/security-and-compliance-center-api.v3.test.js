@@ -1099,17 +1099,23 @@ describe('SecurityAndComplianceCenterApiV3', () => {
     // Request models needed by this operation.
 
     // ScopePropertyScopeAny
-    const scopePropertyModel = {
-      name: 'scope_id',
-      value: 'ff88f007f9ff4622aac4fbc0eda36255',
-    };
+    const scopePropertyModels = [
+      {
+        name: 'scope_id',
+        value: 'ff88f007f9ff4622aac4fbc0eda36255',
+      },
+      {
+        name: 'scope_type',
+        value: 'account',
+      },
+    ];
 
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       name: 'ibm scope',
       description: 'The scope that is defined for IBM resources.',
       environment: 'ibm-cloud',
-      properties: [scopePropertyModel],
+      properties: scopePropertyModels,
     };
 
     let res;
