@@ -1356,16 +1356,9 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      id: 'testString',
-      resourceName: 'testString',
       accountId: accountIdForReportLink,
-      componentId: 'testString',
       status: 'compliant',
-      sort: 'account_id',
-      start: 'testString',
       limit: 50,
-      scopeId: 'testString',
-      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.listReportResources(params);
