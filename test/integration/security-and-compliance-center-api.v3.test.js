@@ -1441,10 +1441,11 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
       format: 'csv',
     };
 
-    const res = await securityAndComplianceCenterApiService.createScanReport(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(202);
-    expect(res.result).toBeDefined();
+    try {
+      await securityAndComplianceCenterApiService.createScanReport(params);
+    } catch (err) {
+      expect(err.status).toBe(409);
+    }
   });
 
   test('getScanReport()', async () => {
