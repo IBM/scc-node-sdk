@@ -1478,10 +1478,7 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       limit: 50,
-      start: 'testString',
       type: 'system_defined',
-      search: 'testString',
-      serviceName: 'testString',
       sort: 'updated_on',
     };
 
