@@ -1287,14 +1287,8 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      controlId: 'testString',
-      controlName: 'testString',
-      controlDescription: 'testString',
-      controlCategory: 'testString',
       status: 'compliant',
       sort: 'control_name',
-      scopeId: 'testString',
-      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.getReportControls(params);
