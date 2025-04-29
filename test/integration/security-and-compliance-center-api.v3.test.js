@@ -1534,11 +1534,16 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     };
 
     // RequiredConfigConditionBase
+    const conditionItemModel = {
+      description: 'The Cloud Object Storage rule.',
+      property: 'hard_quota',
+      operator: 'num_equals',
+      value: '${hard_quota}',
+    };
+
     const requiredConfigModel = {
       description: 'The Cloud Object Storage rule.',
-      property: 'testString',
-      operator: 'string_equals',
-      value: 'testString',
+      and: [conditionItemModel],
     };
 
     // RuleParameter
