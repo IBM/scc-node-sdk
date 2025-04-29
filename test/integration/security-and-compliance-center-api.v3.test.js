@@ -1206,7 +1206,6 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
       groupId: groupIdForReportLink,
       reportProfileId: profileIdForReportLink,
       type: typeForReportLink,
-      start: 'testString',
       limit: 50,
       sort: 'profile_name',
     };
