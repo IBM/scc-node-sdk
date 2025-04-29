@@ -1520,6 +1520,8 @@ describe('SecurityAndComplianceCenterApiV3', () => {
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       providerTypeId: '3e25966275dccfa2c3a34786919c5af7',
+      name: 'Caveonix-instance-1',
+      attributes: {},
     };
 
     let res;
