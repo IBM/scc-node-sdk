@@ -1424,8 +1424,6 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      scopeId: 'testString',
-      subscopeId: 'testString',
       sort: 'status',
     };
 
