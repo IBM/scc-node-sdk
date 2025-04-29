@@ -251,14 +251,50 @@ describe('SecurityAndComplianceCenterApiV3', () => {
     // Request models needed by this operation.
 
     // Parameter
-    const parameterModel = {
-      assessment_type: 'automated',
-      assessment_id: 'rule-e16fcfea-fe21-4d30-a721-423611481fea',
-      parameter_name: 'tls_version',
-      parameter_display_name: 'IBM Cloud Internet Services TLS version',
-      parameter_type: 'string_list',
-      parameter_value: '["1.2", "1.3"]',
-    };
+    const parameterModels = [
+      {
+        assessment_id: 'rule-e16fcfea-fe21-4d30-a721-423611481fea',
+        parameter_name: 'tls_version',
+        parameter_display_name: 'IBM Cloud Internet Services TLS version',
+        parameter_type: 'string_list',
+        parameter_value: '["1.2", "1.3"]',
+      },
+      {
+        assessment_id: 'rule-f9137be8-2490-4afb-8cd5-a201cb167eb2',
+        parameter_name: 'ssh_port',
+        parameter_display_name: 'Network ACL rule for allowed IPs to SSH port',
+        parameter_type: 'numeric',
+        parameter_value: '22',
+      },
+      {
+        assessment_id: 'rule-9653d2c7-6290-4128-a5a3-65487ba40370',
+        parameter_name: 'rdp_port',
+        parameter_display_name: 'Security group rule RDP allow port number',
+        parameter_type: 'numeric',
+        parameter_value: '22',
+      },
+      {
+        assessment_id: 'rule-7c5f6385-67e4-4edf-bec8-c722558b2dec',
+        parameter_name: 'ssh_port',
+        parameter_display_name: 'Security group rule SSH allow port number',
+        parameter_type: 'numeric',
+        parameter_value: '22',
+      },
+      {
+        assessment_id: 'rule-f1e80ee7-88d5-4bf2-b42f-c863bb24601c',
+        parameter_name: 'rdp_port',
+        parameter_display_name: 'Disallowed IPs for ingress to RDP port',
+        parameter_type: 'numeric',
+        parameter_value: '3389',
+      },
+      {
+        assessment_id: 'rule-96527f89-1867-4581-b923-1400e04661e0',
+        parameter_name: 'exclude_default_security_groups',
+        parameter_display_name: 'Exclude the default security groups',
+        parameter_type: 'string_list',
+        parameter_value: '["Default"]',
+      },
+    ];
 
     // AttachmentNotificationsControls
     const attachmentNotificationsControlsModel = {
@@ -279,7 +315,7 @@ describe('SecurityAndComplianceCenterApiV3', () => {
 
     // ProfileAttachmentBase
     const profileAttachmentBaseModel = {
-      attachment_parameters: [parameterModel],
+      attachment_parameters: parameterModels,
       description: 'This is a profile attachment targeting IBM CIS Foundation using a SDK',
       name: 'Profile Attachment for IBM CIS Foundation SDK test',
       notifications: attachmentNotificationsModel,
