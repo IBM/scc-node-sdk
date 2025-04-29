@@ -107,7 +107,7 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
     const res = await securityAndComplianceCenterApiService.updateSettings(params);
     expect(res).toBeDefined();
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(204);
     expect(res.result).toBeDefined();
   });
 
