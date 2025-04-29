@@ -1244,17 +1244,23 @@ describe('SecurityAndComplianceCenterApiV3', () => {
     // Request models needed by this operation.
 
     // ScopePropertyScopeAny
-    const scopePropertyModel = {
-      name: 'scope_id',
-      value: '1f689f08ec9b47b885c2659c17029581',
-    };
+    const scopePropertyModels = [
+      {
+        name: 'scope_id',
+        value: '1f689f08ec9b47b885c2659c17029581',
+      },
+      {
+        name: 'scope_type',
+        value: 'account.resource_group',
+      },
+    ];
 
     // ScopePrototype
     const scopePrototypeModel = {
       name: 'ibm subscope update',
       description: 'The subscope that is defined for IBM resources.',
       environment: 'ibm-cloud',
-      properties: [scopePropertyModel],
+      properties: scopePropertyModels,
     };
 
     const params = {
