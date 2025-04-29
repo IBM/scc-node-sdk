@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 
-const SecurityAndComplianceCenterApiV3 = require('../../dist/security-and-compliance-center-api/v3');
 const { readExternalSources } = require('ibm-cloud-sdk-core');
+const SecurityAndComplianceCenterApiV3 = require('../../dist/security-and-compliance-center-api/v3');
 const authHelper = require('../resources/auth-helper.js');
 
 // testcase timeout value (200s).
@@ -48,14 +48,14 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
   let objectStorageLocationForUpdateSettingsLink;
   let profileIdForReportLink;
   let profileIdLink;
-  let providerTypeIdLink;
   let providerTypeInstanceIdLink;
   let reportIdForReportLink;
   let ruleIdLink;
+  let scanIdForScanReportLink;
+  let scopeIdLink;
+  let subScopeIdLink;
+  let targetIdLink;
   let typeForReportLink;
-  let accountId; 
-  let instanceId;
-  let createScanAttachmentId;
 
   test('Initialize service', async () => {
     securityAndComplianceCenterApiService = SecurityAndComplianceCenterApiV3.newInstance();
@@ -64,19 +64,13 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
     const config = readExternalSources(SecurityAndComplianceCenterApiV3.DEFAULT_SERVICE_NAME);
     expect(config).not.toBeNull();
-    accountId = config['accountid'];
-    instanceId = config['instanceid'];
-    if (instanceId == ""){
-      console.log("Unable to load instanceID configuration property, skipping tests")
-    } 
-    createScanAttachmentId = config['attachmentid'];
+
     securityAndComplianceCenterApiService.enableRetries();
   });
 
   test('getSettings()', async () => {
     const params = {
-      xCorrelationId: '1a2b3c4d-5e6f-4a7b-8c9d-e0f1a2b3c4d5',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
     };
 
     const res = await securityAndComplianceCenterApiService.getSettings(params);
@@ -89,215 +83,311 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     objectStorageLocationForUpdateSettingsLink = res.result.object_storage.bucket_location;
   });
 
-  test('createRule()', async () => {
-    // Request models needed by this operation.
-
-    // AdditionalTargetAttribute
-    const additionalTargetAttributeModel = {
-      name: 'location',
-      operator: 'string_equals',
-      value: 'us-east',
-    };
-
-    // Target
-    const targetModel = {
-      service_name: 'cloud-object-storage',
-      service_display_name: 'testString',
-      resource_kind: 'bucket',
-      additional_target_attributes: [additionalTargetAttributeModel],
-    };
-
-    // RequiredConfigItemsRequiredConfigBase
-    const requiredConfigItemsModel = {
-      description: 'testString',
-      property: 'hard_quota',
-      operator: 'num_equals',
-      value: '${hard_quota}',
-    };
-
-    // RequiredConfigRequiredConfigAnd
-    const requiredConfigModel = {
-      description: 'The Cloud Object Storage rule.',
-      and: [requiredConfigItemsModel],
-    };
-
-    // Parameter
-    const parameterModel = {
-      name: 'hard_quota',
-      display_name: 'The Cloud Object Storage bucket quota.',
-      description: 'The maximum bytes that are allocated to the Cloud Object Storage bucket.',
-      type: 'numeric',
-    };
-
-    // Import
-    const importModel = {
-      parameters: [parameterModel],
-    };
-
-    const params = {
-      description: 'Example rule',
-      target: targetModel,
-      requiredConfig: requiredConfigModel,
-      type: 'user_defined',
-      version: '1.0.0',
-      _import: importModel,
-      labels: [],
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.createRule(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
-    expect(res.result).toBeDefined();
-    ruleIdLink = res.result.id;
-  });
-
-  test('getRule()', async () => {
-    const params = {
-      ruleId: ruleIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.getRule(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-    eTagLink = res.headers['etag'];
-  });
-
-  test('getLatestReports()', async () => {
-    const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-      sort: 'profile_name',
-    };
-
-    const res = await securityAndComplianceCenterApiService.getLatestReports(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-    accountIdForReportLink = res.result.reports[0].account.id;
-    reportIdForReportLink = res.result.reports[0].id;
-    attachmentIdForReportLink = res.result.reports[0].attachment.id;
-    groupIdForReportLink = res.result.reports[0].group_id;
-    profileIdForReportLink = res.result.reports[0].profile.id;
-    typeForReportLink = res.result.reports[0].type;
-  });
-
   test('updateSettings()', async () => {
     // Request models needed by this operation.
 
-    // EventNotifications
-    const eventNotificationsModel = {
-      instance_crn: eventNotificationsCrnForUpdateSettingsLink,
-      updated_on: '2019-01-01T12:00:00.000Z',
-      source_id: 'crn:v1:staging:public:event-notifications:us-south:a/ff88f007f9ff4622aac4fbc0eda36255:b8b07245-0bbe-4478-b11c-0dce523105fd::',
-      source_description: 'This source is used for integration with IBM Cloud Security and Compliance Center.',
-      source_name: 'compliance',
+    // ObjectStoragePrototype
+    const objectStoragePrototypeModel = {
+      bucket: 'px-scan-results',
+      instance_crn: 'crn:v1:staging:public:cloud-object-storage:global:a/ff88f007f9ff4622aac4fbc0eda36255:7199ae60-a214-4dd8-9bf7-ce571de49d01::',
     };
 
-    // ObjectStorage
-    const objectStorageModel = {
-      instance_crn: objectStorageCrnForUpdateSettingsLink,
-      bucket: objectStorageBucketForUpdateSettingsLink,
-      bucket_location: objectStorageLocationForUpdateSettingsLink,
-      bucket_endpoint: 'testString',
-      updated_on: '2019-01-01T12:00:00.000Z',
+    // EventNotificationsPrototype
+    const eventNotificationsPrototypeModel = {
+      instance_crn: 'crn:v1:staging:public:event-notifications:us-south:a/ff88f007f9ff4622aac4fbc0eda36255:b8b07245-0bbe-4478-b11c-0dce523105fd::',
+      source_description: 'This source is used for integration with IBM Cloud Security and Compliance Center.',
+      source_name: 'scc-sdk-integration',
     };
 
     const params = {
-      eventNotifications: eventNotificationsModel,
-      objectStorage: objectStorageModel,
-      xCorrelationId: '1a2b3c4d-5e6f-4a7b-8c9d-e0f1a2b3c4d5',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      objectStorage: objectStoragePrototypeModel,
+      eventNotifications: eventNotificationsPrototypeModel,
     };
 
     const res = await securityAndComplianceCenterApiService.updateSettings(params);
     expect(res).toBeDefined();
-    expect(res.status).toBe(204);
+    expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  // test('postTestEvent()', async () => {
-  //   const params = {
-  //     xCorrelationId: '1a2b3c4d-5e6f-4a7b-8c9d-e0f1a2b3c4d5',
-  //     xRequestId: 'testString',
-  //   };
+  test('postTestEvent()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+    };
 
-  //   const res = await securityAndComplianceCenterApiService.postTestEvent(params);
-  //   expect(res).toBeDefined();
-  //   expect(res.status).toBe(202);
-  //   expect(res.result).toBeDefined();
-  // });
+    const res = await securityAndComplianceCenterApiService.postTestEvent(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
 
-  test('createCustomControlLibrary()', async () => {
+  test('listInstanceAttachments()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      accountId: accountIdForReportLink,
+      versionGroupLabel: '6702d85a-6437-4d6f-8701-c0146648787b',
+      limit: 25,
+      sort: 'created_on',
+      direction: 'desc',
+      start: 'testString',
+    };
+
+    const res = await securityAndComplianceCenterApiService.listInstanceAttachments(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listInstanceAttachments() via InstanceAttachmentsPager', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      accountId: accountIdForReportLink,
+      versionGroupLabel: '6702d85a-6437-4d6f-8701-c0146648787b',
+      limit: 10,
+      sort: 'created_on',
+      direction: 'desc',
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new SecurityAndComplianceCenterApiV3.InstanceAttachmentsPager(securityAndComplianceCenterApiService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new SecurityAndComplianceCenterApiV3.InstanceAttachmentsPager(securityAndComplianceCenterApiService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createProfileAttachment()', async () => {
     // Request models needed by this operation.
 
-    // ParameterInfo
-    const parameterInfoModel = {
-      parameter_name: 'session_invalidation_in_seconds',
-      parameter_display_name: 'Sign out due to inactivity in seconds',
-      parameter_type: 'numeric',
-      parameter_value: 'public',
-    };
-
-    // Implementation
-    const implementationModel = {
-      assessment_id: 'rule-a637949b-7e51-46c4-afd4-b96619001bf1',
-      assessment_method: 'ibm-cloud-rule',
+    // Parameter
+    const parameterModel = {
       assessment_type: 'automated',
-      assessment_description: 'Check that there is an Activity Tracker event route defined to collect global events generated by IBM Cloud services',
-      parameter_count: 38,
-      parameters: [parameterInfoModel],
+      assessment_id: 'rule-e16fcfea-fe21-4d30-a721-423611481fea',
+      parameter_name: 'tls_version',
+      parameter_display_name: 'IBM Cloud Internet Services TLS version',
+      parameter_type: 'string_list',
+      parameter_value: '["1.2", "1.3"]',
     };
 
-    // ControlSpecifications
-    const controlSpecificationsModel = {
-      control_specification_id: '5c7d6f88-a92f-4734-9b49-bd22b0900184',
-      responsibility: 'user',
-      component_id: 'iam-identity',
-      componenet_name: 'testString',
-      environment: 'ibm-cloud',
-      control_specification_description: 'IBM cloud',
-      assessments_count: 38,
-      assessments: [implementationModel],
+    // AttachmentNotificationsControls
+    const attachmentNotificationsControlsModel = {
+      threshold_limit: 15,
+      failed_control_ids: [],
     };
 
-    // ControlDocs
-    const controlDocsModel = {
-      control_docs_id: 'sc-7',
-      control_docs_type: 'ibm-cloud',
+    // AttachmentNotifications
+    const attachmentNotificationsModel = {
+      enabled: true,
+      controls: attachmentNotificationsControlsModel,
     };
 
-    // ControlsInControlLib
-    const controlsInControlLibModel = {
-      control_name: 'SC-7',
-      control_id: '1fa45e17-9322-4e6c-bbd6-1c51db08e790',
-      control_description: 'Boundary Protection',
-      control_category: 'System and Communications Protection',
-      control_parent: '',
-      control_tags: ['1fa45e17-9322-4e6c-bbd6-1c51db08e790'],
-      control_specifications: [controlSpecificationsModel],
-      control_docs: controlDocsModel,
-      control_requirement: true,
-      status: 'enabled',
+    // MultiCloudScopePayloadById
+    const multiCloudScopePayloadModel = {
+      id: '8baad3b5-2e69-4027-9967-efac19508e1c',
+    };
+
+    // DateRange
+    const dateRangeModel = {
+      start_date: '2025-02-28T05:42:58.000Z',
+      end_date: '2025-02-28T05:42:58.000Z',
+    };
+
+    // ProfileAttachmentBase
+    const profileAttachmentBaseModel = {
+      attachment_parameters: [parameterModel],
+      description: 'This is a profile attachment targeting IBM CIS Foundation using a SDK',
+      name: 'Profile Attachment for IBM CIS Foundation SDK test',
+      notifications: attachmentNotificationsModel,
+      schedule: 'daily',
+      scope: [multiCloudScopePayloadModel],
+      status: 'disabled',
+      data_selection_range: dateRangeModel,
     };
 
     const params = {
-      controlLibraryName: 'IBM Cloud for Financial Services',
-      controlLibraryDescription: 'IBM Cloud for Financial Services',
-      controlLibraryType: 'custom',
-      controls: [controlsInControlLibModel],
-      controlLibraryVersion: '1.0.0',
-      latest: true,
-      controlsCount: 38,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3f',
+      newAttachments: [profileAttachmentBaseModel],
+      newProfileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3',
+      accountId: accountIdForReportLink,
     };
 
-    const res = await securityAndComplianceCenterApiService.createCustomControlLibrary(params);
+    const res = await securityAndComplianceCenterApiService.createProfileAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    attachmentIdLink = res.result.attachments[0].id;
+  });
+
+  test('getProfileAttachment()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3f',
+      attachmentId: attachmentIdLink,
+      accountId: accountIdForReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.getProfileAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('replaceProfileAttachment()', async () => {
+    // Request models needed by this operation.
+
+    // Parameter
+    const parameterModel = {
+      assessment_type: 'testString',
+      assessment_id: 'testString',
+      parameter_name: 'location',
+      parameter_display_name: 'Location',
+      parameter_type: 'string',
+      parameter_value: 'testString',
+    };
+
+    // AttachmentNotificationsControls
+    const attachmentNotificationsControlsModel = {
+      threshold_limit: 15,
+      failed_control_ids: ['testString'],
+    };
+
+    // AttachmentNotifications
+    const attachmentNotificationsModel = {
+      enabled: true,
+      controls: attachmentNotificationsControlsModel,
+    };
+
+    // MultiCloudScopePayloadById
+    const multiCloudScopePayloadModel = {
+      id: 'testString',
+    };
+
+    // DateRange
+    const dateRangeModel = {
+      start_date: '2025-02-28T05:42:58.000Z',
+      end_date: '2025-02-28T05:42:58.000Z',
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3f',
+      attachmentId: attachmentIdLink,
+      attachmentParameters: [parameterModel],
+      description: 'testString',
+      name: 'testString',
+      notifications: attachmentNotificationsModel,
+      schedule: 'daily',
+      scope: [multiCloudScopePayloadModel],
+      status: 'enabled',
+      dataSelectionRange: dateRangeModel,
+      accountId: accountIdForReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.replaceProfileAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('upgradeAttachment()', async () => {
+    // Request models needed by this operation.
+
+    // Parameter
+    const parameterModel = {
+      assessment_type: 'testString',
+      assessment_id: 'testString',
+      parameter_name: 'location',
+      parameter_display_name: 'Location',
+      parameter_type: 'string',
+      parameter_value: 'testString',
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3f',
+      attachmentId: attachmentIdLink,
+      attachmentParameters: [parameterModel],
+      accountId: accountIdForReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.upgradeAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createScan()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      attachmentId: '4deb572c-9f37-4126-9cc0-d550672533cb',
+      accountId: accountIdForReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.createScan(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createControlLibrary()', async () => {
+    // Request models needed by this operation.
+
+    // AssessmentPrototype
+    const assessmentPrototypeModel = {
+      assessment_id: 'rule-d1bd9f3f-bee1-46c5-9533-da8bba9eed4e',
+      assessment_description: 'This rule will check on regulation',
+    };
+
+    // ControlSpecificationPrototype
+    const controlSpecificationPrototypeModel = {
+      component_id: 'apprapp',
+      environment: 'ibm-cloud',
+      control_specification_id: 'testString',
+      control_specification_description: 'This field is used to describe a control specification',
+      assessments: [assessmentPrototypeModel],
+    };
+
+    // ControlDoc
+    const controlDocModel = {
+      control_docs_id: 'testString',
+      control_docs_type: 'testString',
+    };
+
+    // ControlPrototype
+    const controlPrototypeModel = {
+      control_name: 'security',
+      control_description: 'This is a description of a control',
+      control_category: 'test-control',
+      control_requirement: true,
+      control_parent: 'testString',
+      control_specifications: [controlSpecificationPrototypeModel],
+      control_docs: controlDocModel,
+      status: 'disabled',
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      controlLibraryName: 'custom control library from SDK',
+      controlLibraryDescription: 'This is a custom control library made from the SDK test framework',
+      controlLibraryType: 'custom',
+      controlLibraryVersion: '0.0.1',
+      controls: [controlPrototypeModel],
+      accountId: accountIdForReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.createControlLibrary(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
@@ -306,10 +396,10 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listControlLibraries()', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      accountId: accountIdForReportLink,
       limit: 50,
-      controlLibraryType: 'custom',
+      start: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.listControlLibraries(params);
@@ -320,10 +410,9 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listControlLibraries() via ControlLibrariesPager', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-      limit: 50,
-      controlLibraryType: 'custom',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      accountId: accountIdForReportLink,
+      limit: 10,
     };
 
     const allResults = [];
@@ -344,94 +433,67 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
   });
 
-  test('getControlLibrary()', async () => {
-    const params = {
-      controlLibrariesId: controlLibraryIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+  test('replaceCustomControlLibrary()', async () => {
+    // Request models needed by this operation.
+
+    // AssessmentPrototype
+    const assessmentPrototypeModel = {
+      assessment_id: 'rule-d1bd9f3f-bee1-46c5-9533-da8bba9eed4e',
+      assessment_description: 'This rule will check on regulation',
     };
 
-    const res = await securityAndComplianceCenterApiService.getControlLibrary(params);
+    // ControlSpecificationPrototype
+    const controlSpecificationPrototypeModel = {
+      component_id: 'apprapp',
+      environment: 'ibm-cloud',
+      control_specification_id: 'testString',
+      control_specification_description: 'This field is used to describe a control specification',
+      assessments: [assessmentPrototypeModel],
+    };
+
+    // ControlDoc
+    const controlDocModel = {
+      control_docs_id: 'testString',
+      control_docs_type: 'testString',
+    };
+
+    // ControlPrototype
+    const controlPrototypeModel = {
+      control_name: 'security',
+      control_description: 'This is a description of a control',
+      control_category: 'test-control',
+      control_requirement: true,
+      control_parent: 'testString',
+      control_specifications: [controlSpecificationPrototypeModel],
+      control_docs: controlDocModel,
+      status: 'disabled',
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      controlLibraryId: controlLibraryIdLink,
+      controlLibraryName: 'custom control library from SDK',
+      controlLibraryDescription: 'This is a custom control library made from the SDK test framework',
+      controlLibraryType: 'custom',
+      controlLibraryVersion: '0.0.2',
+      controls: [controlPrototypeModel],
+      bssAccount: 'testString',
+    };
+
+    const res = await securityAndComplianceCenterApiService.replaceCustomControlLibrary(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('replaceCustomControlLibrary()', async () => {
-    // Request models needed by this operation.
-
-    // ParameterInfo
-    const parameterInfoModel = {
-      parameter_name: 'session_invalidation_in_seconds',
-      parameter_display_name: 'Sign out due to inactivity in seconds',
-      parameter_type: 'numeric',
-      parameter_value: 'public',
-    };
-
-    // Implementation
-    const implementationModel = {
-      assessment_id: 'rule-a637949b-7e51-46c4-afd4-b96619001bf1',
-      assessment_method: 'ibm-cloud-rule',
-      assessment_type: 'automated',
-      assessment_description: 'Check that there is an Activity Tracker event route defined to collect global events generated by IBM Cloud services',
-      parameter_count: 38,
-      parameters: [parameterInfoModel],
-    };
-
-    // ControlSpecifications
-    const controlSpecificationsModel = {
-      control_specification_id: '5c7d6f88-a92f-4734-9b49-bd22b0900184',
-      responsibility: 'user',
-      component_id: 'iam-identity',
-      componenet_name: 'testString',
-      environment: 'ibm-cloud',
-      control_specification_description: 'IBM cloud',
-      assessments_count: 38,
-      assessments: [implementationModel],
-    };
-
-    // ControlDocs
-    const controlDocsModel = {
-      control_docs_id: 'sc-7',
-      control_docs_type: 'ibm-cloud',
-    };
-
-    // ControlsInControlLib
-    const controlsInControlLibModel = {
-      control_name: 'SC-7',
-      control_id: '1fa45e17-9322-4e6c-bbd6-1c51db08e790',
-      control_description: 'Boundary Protection',
-      control_category: 'System and Communications Protection',
-      control_parent: '',
-      control_tags: ['1fa45e17-9322-4e6c-bbd6-1c51db08e790'],
-      control_specifications: [controlSpecificationsModel],
-      control_docs: controlDocsModel,
-      control_requirement: true,
-      status: 'enabled',
-    };
-
+  test('getControlLibrary()', async () => {
     const params = {
-      controlLibrariesId: controlLibraryIdLink,
-      id: 'testString',
-      accountId: accountId,
-      controlLibraryName: 'IBM Cloud for Financial Services',
-      controlLibraryDescription: 'IBM Cloud for Financial Services',
-      controlLibraryType: 'custom',
-      controlLibraryVersion: '1.1.0',
-      createdOn: '2019-01-01T12:00:00.000Z',
-      createdBy: 'testString',
-      updatedOn: '2019-01-01T12:00:00.000Z',
-      updatedBy: 'testString',
-      latest: true,
-      hierarchyEnabled: true,
-      controlsCount: 38,
-      controlParentsCount: 38,
-      controls: [controlsInControlLibModel],
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      controlLibraryId: controlLibraryIdLink,
+      accountId: accountIdForReportLink,
     };
 
-    const res = await securityAndComplianceCenterApiService.replaceCustomControlLibrary(params);
+    const res = await securityAndComplianceCenterApiService.getControlLibrary(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -442,28 +504,30 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
     // ProfileControlsPrototype
     const profileControlsPrototypeModel = {
-      control_library_id: controlLibraryIdLink,
-      control_id: '1fa45e17-9322-4e6c-bbd6-1c51db08e790',
+      control_library_id: 'a046fb6b-aba5-4646-b190-a2c76241e7af',
+      control_id: '60dae3b5-6104-4b3e-bac7-26cc7b741aca',
     };
 
-    // DefaultParametersPrototype
-    const defaultParametersPrototypeModel = {
-      assessment_type: 'Automated',
-      assessment_id: 'rule-a637949b-7e51-46c4-afd4-b96619001bf1',
-      parameter_name: 'session_invalidation_in_seconds',
-      parameter_default_value: '120',
-      parameter_display_name: 'Sign out due to inactivity in seconds',
-      parameter_type: 'numeric',
+    // DefaultParameters
+    const defaultParametersModel = {
+      assessment_type: 'automated',
+      assessment_id: 'rule-e16fcfea-fe21-4d30-a721-423611481fea',
+      parameter_name: 'tls_version',
+      parameter_default_value: '["1.2","1.3"]',
+      parameter_display_name: 'IBM Cloud Internet Services TLS version',
+      parameter_type: 'string_list',
     };
 
     const params = {
-      profileName: 'test_profile1',
-      profileDescription: 'test_description1',
-      profileType: 'custom',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileName: 'Example Profile',
+      profileVersion: '0.0.1',
       controls: [profileControlsPrototypeModel],
-      defaultParameters: [defaultParametersPrototypeModel],
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      defaultParameters: [defaultParametersModel],
+      profileDescription: 'This profile is created as an example of the SDK gen',
+      latest: true,
+      versionGroupLabel: 'testString',
+      accountId: accountIdForReportLink,
     };
 
     const res = await securityAndComplianceCenterApiService.createProfile(params);
@@ -475,10 +539,10 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listProfiles()', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      accountId: accountIdForReportLink,
       limit: 50,
-      profileType: 'custom',
+      start: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.listProfiles(params);
@@ -489,10 +553,9 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listProfiles() via ProfilesPager', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      accountId: accountIdForReportLink,
       limit: 10,
-      profileType: 'custom',
     };
 
     const allResults = [];
@@ -509,50 +572,98 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     pager = new SecurityAndComplianceCenterApiV3.ProfilesPager(securityAndComplianceCenterApiService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
-  });
-
-  test('getProfile()', async () => {
-    const params = {
-      profilesId: profileIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.getProfile(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
   });
 
   test('replaceProfile()', async () => {
     // Request models needed by this operation.
 
-    // ProfileControlsPrototype
-    const profileControlsPrototypeModel = {
-      control_library_id: controlLibraryIdLink,
-      control_id: '1fa45e17-9322-4e6c-bbd6-1c51db08e790',
+    // ControlDoc
+    const controlDocModel = {
+      control_docs_id: 'testString',
+      control_docs_type: 'testString',
     };
 
-    // DefaultParametersPrototype
-    const defaultParametersPrototypeModel = {
-      assessment_type: 'Automated',
-      assessment_id: 'rule-a637949b-7e51-46c4-afd4-b96619001bf1',
-      parameter_name: 'session_invalidation_in_seconds',
-      parameter_default_value: '120',
-      parameter_display_name: 'Sign out due to inactivity in seconds',
-      parameter_type: 'numeric',
+    // Parameter
+    const parameterModel = {
+      assessment_type: 'testString',
+      assessment_id: 'testString',
+      parameter_name: 'location',
+      parameter_display_name: 'Location',
+      parameter_type: 'string',
+      parameter_value: 'testString',
+    };
+
+    // Assessment
+    const assessmentModel = {
+      assessment_id: '382c2b06-e6b2-43ee-b189-c1c7743b67ee',
+      assessment_type: 'ibm-cloud-rule',
+      assessment_method: 'ibm-cloud-rule',
+      assessment_description: 'Check whether Cloud Object Storage is accessible only by using private endpoints',
+      parameter_count: 1,
+      parameters: [parameterModel],
+    };
+
+    // ControlSpecification
+    const controlSpecificationModel = {
+      id: 'testString',
+      responsibility: 'testString',
+      component_id: 'testString',
+      component_name: 'testString',
+      component_type: 'testString',
+      environment: 'testString',
+      description: 'testString',
+      assessments_count: 38,
+      assessments: [assessmentModel],
+    };
+
+    // ProfileControls
+    const profileControlsModel = {
+      control_requirement: true,
+      control_library_id: 'a046fb6b-aba5-4646-b190-a2c76241e7af',
+      control_id: '60dae3b5-6104-4b3e-bac7-26cc7b741aca',
+      control_library_version: 'testString',
+      control_name: 'testString',
+      control_description: 'testString',
+      control_severity: 'testString',
+      control_category: 'testString',
+      control_parent: 'testString',
+      control_docs: controlDocModel,
+      control_specifications: [controlSpecificationModel],
+    };
+
+    // DefaultParameters
+    const defaultParametersModel = {
+      assessment_type: 'automated',
+      assessment_id: 'rule-e16fcfea-fe21-4d30-a721-423611481fea',
+      parameter_name: 'tls_version',
+      parameter_default_value: '["1.2","1.3"]',
+      parameter_display_name: 'IBM Cloud Internet Services TLS version',
+      parameter_type: 'string_list',
     };
 
     const params = {
-      profilesId: profileIdLink,
-      profileName: 'test_profile1',
-      profileDescription: 'test_description1',
-      profileType: 'custom',
-      controls: [profileControlsPrototypeModel],
-      defaultParameters: [defaultParametersPrototypeModel],
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: profileIdLink,
+      newProfileType: 'custom',
+      newControls: [profileControlsModel],
+      newDefaultParameters: [defaultParametersModel],
+      newId: 'testString',
+      newProfileName: 'Example Profile Updated',
+      newInstanceId: 'testString',
+      newHierarchyEnabled: true,
+      newProfileDescription: 'This profile has been updated',
+      newProfileVersion: '0.0.2',
+      newVersionGroupLabel: 'testString',
+      newLatest: true,
+      newCreatedBy: 'testString',
+      newCreatedOn: '2019-01-01T12:00:00.000Z',
+      newUpdatedBy: 'testString',
+      newUpdatedOn: '2019-01-01T12:00:00.000Z',
+      newControlsCount: 38,
+      newAttachmentsCount: 38,
+      accountId: accountIdForReportLink,
     };
 
     const res = await securityAndComplianceCenterApiService.replaceProfile(params);
@@ -561,328 +672,137 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('listRules()', async () => {
+  test('getProfile()', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-      type: 'system_defined',
-      search: 'testString',
-      serviceName: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.listRules(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  test('replaceRule()', async () => {
-    // Request models needed by this operation.
-
-    // AdditionalTargetAttribute
-    const additionalTargetAttributeModel = {
-      name: 'location',
-      operator: 'string_equals',
-      value: 'us-south',
-    };
-
-    // Target
-    const targetModel = {
-      service_name: 'cloud-object-storage',
-      service_display_name: 'Cloud Object Storage',
-      resource_kind: 'bucket',
-      additional_target_attributes: [additionalTargetAttributeModel],
-    };
-
-    // RequiredConfigItemsRequiredConfigBase
-    const requiredConfigItemsModel = {
-      description: 'testString',
-      property: 'hard_quota',
-      operator: 'num_equals',
-      value: '${hard_quota}',
-    };
-
-    // RequiredConfigRequiredConfigAnd
-    const requiredConfigModel = {
-      description: 'The Cloud Object Storage rule.',
-      and: [requiredConfigItemsModel],
-    };
-
-    // Parameter
-    const parameterModel = {
-      name: 'hard_quota',
-      display_name: 'The Cloud Object Storage bucket quota.',
-      description: 'The maximum bytes that are allocated to the Cloud Object Storage bucket.',
-      type: 'numeric',
-    };
-
-    // Import
-    const importModel = {
-      parameters: [parameterModel],
-    };
-
-    const params = {
-      ruleId: ruleIdLink,
-      ifMatch: eTagLink,
-      description: 'Example rule',
-      target: targetModel,
-      requiredConfig: requiredConfigModel,
-      type: 'user_defined',
-      version: '1.0.1',
-      _import: importModel,
-      labels: [],
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.replaceRule(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  test('createAttachment()', async () => {
-    // Request models needed by this operation.
-
-    // PropertyItem
-    const propertyScopeId = {
-      name: 'scope_id',
-      value: accountId,
-    };
-    const propertyScopeType = {
-      name: 'scope_type',
-      value: "account",
-    }
-    // MultiCloudScope
-    const multiCloudScopeModel = {
-      environment: 'ibm-cloud',
-      properties: [propertyScopeId, propertyScopeType],
-    };
-
-    // FailedControls
-    const failedControlsModel = {
-      threshold_limit: 15,
-      failed_control_ids: [],
-    };
-
-    // AttachmentsNotificationsPrototype
-    const attachmentsNotificationsPrototypeModel = {
-      enabled: false,
-      controls: failedControlsModel,
-    };
-
-    // AttachmentParameterPrototype
-    const attachmentParameterPrototypeModel = {
-      assessment_type: 'Automated',
-      assessment_id: 'rule-a637949b-7e51-46c4-afd4-b96619001bf1',
-      parameter_name: 'session_invalidation_in_seconds',
-      parameter_value: '120',
-      parameter_display_name: 'Sign out due to inactivity in seconds',
-      parameter_type: 'numeric',
-    };
-
-    // AttachmentsPrototype
-    const attachmentsPrototypeModel = {
-      id: '130003ea8bfa43c5aacea07a86da3000',
-      name: 'account-0d8c3805dfea40aa8ad02265a18eb12b',
-      description: 'Test description',
-      scope: [multiCloudScopeModel],
-      status: 'enabled',
-      schedule: 'every_30_days',
-      notifications: attachmentsNotificationsPrototypeModel,
-      attachment_parameters: [attachmentParameterPrototypeModel],
-    };
-
-    const params = {
-      profilesId: profileIdLink,
-      attachments: [attachmentsPrototypeModel],
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       profileId: profileIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      accountId: accountIdForReportLink,
     };
 
-    const res = await securityAndComplianceCenterApiService.createAttachment(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
-    expect(res.result).toBeDefined();
-    attachmentIdLink = res.result.attachments[0].id;
-  });
-
-  test('listAttachments()', async () => {
-    const params = {
-      profilesId: profileIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-      limit: 50,
-    };
-
-    const res = await securityAndComplianceCenterApiService.listAttachments(params);
+    const res = await securityAndComplianceCenterApiService.getProfile(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('listAttachments() via AttachmentsPager', async () => {
-    const params = {
-      profilesId: profileIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-      limit: 10,
-    };
-
-    const allResults = [];
-
-    // Test getNext().
-    let pager = new SecurityAndComplianceCenterApiV3.AttachmentsPager(securityAndComplianceCenterApiService, params);
-    while (pager.hasNext()) {
-      const nextPage = await pager.getNext();
-      expect(nextPage).not.toBeNull();
-      allResults.push(...nextPage);
-    }
-
-    // Test getAll().
-    pager = new SecurityAndComplianceCenterApiV3.AttachmentsPager(securityAndComplianceCenterApiService, params);
-    const allItems = await pager.getAll();
-    expect(allItems).not.toBeNull();
-    expect(allItems).toHaveLength(allResults.length);
-    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
-  });
-
-  test('getProfileAttachment()', async () => {
-    const params = {
-      attachmentId: attachmentIdLink,
-      profilesId: profileIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.getProfileAttachment(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
-  test('replaceProfileAttachment()', async () => {
+  test('replaceProfileParameters()', async () => {
     // Request models needed by this operation.
 
-    // PropertyItem
-    const propertyScopeId = {
-      name: 'scope_id',
-      value: accountId
-    };
-    const propertyScopeType = {
-      name: 'scope_type',
-      value: "account",
-    }
-    // MultiCloudScope
-    const multiCloudScopeModel = {
-      environment: 'ibm-cloud',
-      properties: [propertyScopeId, propertyScopeType],
-    };
-
-    // FailedControls
-    const failedControlsModel = {
-      threshold_limit: 15,
-      failed_control_ids: [],
-    };
-
-    // AttachmentsNotificationsPrototype
-    const attachmentsNotificationsPrototypeModel = {
-      enabled: false,
-      controls: failedControlsModel,
-    };
-
-    // AttachmentParameterPrototype
-    const attachmentParameterPrototypeModel = {
-      assessment_type: 'Automated',
-      assessment_id: 'rule-a637949b-7e51-46c4-afd4-b96619001bf1',
-      parameter_name: 'session_invalidation_in_seconds',
-      parameter_value: '120',
-      parameter_display_name: 'Sign out due to inactivity in seconds',
-      parameter_type: 'numeric',
-    };
-
-    // LastScan
-    const lastScanModel = {
-      id: 'e8a39d25-0051-4328-8462-988ad321f49a',
-      status: 'in_progress',
-      time: '2019-01-01T12:00:00.000Z',
+    // DefaultParameters
+    const defaultParametersModel = {
+      assessment_type: 'testString',
+      assessment_id: 'testString',
+      parameter_name: 'testString',
+      parameter_default_value: 'testString',
+      parameter_display_name: 'testString',
+      parameter_type: 'testString',
     };
 
     const params = {
-      attachmentId: attachmentIdLink,
-      profilesId: profileIdLink,
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: profileIdLink,
+      defaultParameters: [defaultParametersModel],
       id: 'testString',
-      profileId: profileIdLink,
-      accountId: accountId,
-      instanceId: instanceId,
-      scope: [multiCloudScopeModel],
-      createdOn: '2019-01-01T12:00:00.000Z',
-      createdBy: 'testString',
-      updatedOn: '2019-01-01T12:00:00.000Z',
-      updatedBy: 'testString',
-      status: 'enabled',
-      schedule: 'every_30_days',
-      notifications: attachmentsNotificationsPrototypeModel,
-      attachmentParameters: [attachmentParameterPrototypeModel],
-      lastScan: lastScanModel,
-      nextScanTime: '2019-01-01T12:00:00.000Z',
-      name: 'account-0d8c3805dfea40aa8ad02265a18eb12b',
-      description: 'Test description',
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      accountId: accountIdForReportLink,
     };
 
-    const res = await securityAndComplianceCenterApiService.replaceProfileAttachment(params);
+    const res = await securityAndComplianceCenterApiService.replaceProfileParameters(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('createScan()', async () => {
+  test('listProfileParameters()', async () => {
     const params = {
-      attachmentId: createScanAttachmentId,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: profileIdLink,
     };
 
-    let res;
-    try{
-      res = await securityAndComplianceCenterApiService.createScan(params);
-    } catch(ex){
-      if( ex.status == 400 && ex.message.toLowerCase().includes('another scan is currently in progress')){
-        return;
-      }
-    }
+    const res = await securityAndComplianceCenterApiService.listProfileParameters(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('compareProfiles()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: '2f598907-970d-4d52-9071-5cc95912f55e',
+      accountId: accountIdForReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.compareProfiles(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listProfileAttachments()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3f',
+      accountId: accountIdForReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.listProfileAttachments(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createScope()', async () => {
+    // Request models needed by this operation.
+
+    // ScopePropertyScopeAny
+    const scopePropertyModel = {
+      name: 'scope_id',
+      value: 'ff88f007f9ff4622aac4fbc0eda36255',
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      name: 'ibm scope',
+      description: 'The scope that is defined for IBM resources.',
+      environment: 'ibm-cloud',
+      properties: [scopePropertyModel],
+    };
+
+    const res = await securityAndComplianceCenterApiService.createScope(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
+    scopeIdLink = res.result.id;
   });
 
-  test('listAttachmentsAccount()', async () => {
+  test('listScopes()', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       limit: 50,
+      start: 'testString',
+      name: 'testString',
+      description: 'testString',
+      environment: 'testString',
     };
 
-    const res = await securityAndComplianceCenterApiService.listAttachmentsAccount(params);
+    const res = await securityAndComplianceCenterApiService.listScopes(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('listAttachmentsAccount() via AttachmentsAccountPager', async () => {
+  test('listScopes() via ScopesPager', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       limit: 10,
+      name: 'testString',
+      description: 'testString',
+      environment: 'testString',
     };
 
     const allResults = [];
 
     // Test getNext().
-    let pager = new SecurityAndComplianceCenterApiV3.AttachmentsAccountPager(securityAndComplianceCenterApiService, params);
+    let pager = new SecurityAndComplianceCenterApiV3.ScopesPager(securityAndComplianceCenterApiService, params);
     while (pager.hasNext()) {
       const nextPage = await pager.getNext();
       expect(nextPage).not.toBeNull();
@@ -890,21 +810,389 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     }
 
     // Test getAll().
-    pager = new SecurityAndComplianceCenterApiV3.AttachmentsAccountPager(securityAndComplianceCenterApiService, params);
+    pager = new SecurityAndComplianceCenterApiV3.ScopesPager(securityAndComplianceCenterApiService, params);
     const allItems = await pager.getAll();
     expect(allItems).not.toBeNull();
     expect(allItems).toHaveLength(allResults.length);
     console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('updateScope()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+      name: 'updated name of scope',
+      description: 'updated scope description',
+    };
+
+    const res = await securityAndComplianceCenterApiService.updateScope(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getScope()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.getScope(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createSubscope()', async () => {
+    // Request models needed by this operation.
+
+    // ScopePropertyScopeAny
+    const scopePropertyModel = {
+      name: 'scope_id',
+      value: '1f689f08ec9b47b885c2659c17029581',
+    };
+
+    // ScopePrototype
+    const scopePrototypeModel = {
+      name: 'ibm subscope update',
+      description: 'The subscope that is defined for IBM resources.',
+      environment: 'ibm-cloud',
+      properties: [scopePropertyModel],
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+      subscopes: [scopePrototypeModel],
+    };
+
+    const res = await securityAndComplianceCenterApiService.createSubscope(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    subScopeIdLink = res.result.subscopes[0].id;
+  });
+
+  test('listSubscopes()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+      limit: 50,
+      start: 'testString',
+      name: 'testString',
+      description: 'testString',
+      environment: 'testString',
+    };
+
+    const res = await securityAndComplianceCenterApiService.listSubscopes(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listSubscopes() via SubscopesPager', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+      limit: 10,
+      name: 'testString',
+      description: 'testString',
+      environment: 'testString',
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new SecurityAndComplianceCenterApiV3.SubscopesPager(securityAndComplianceCenterApiService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new SecurityAndComplianceCenterApiV3.SubscopesPager(securityAndComplianceCenterApiService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('getSubscope()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+      subscopeId: subScopeIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.getSubscope(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateSubscope()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+      subscopeId: subScopeIdLink,
+      name: 'updated name of scope',
+      description: 'updated scope description',
+    };
+
+    const res = await securityAndComplianceCenterApiService.updateSubscope(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createTarget()', async () => {
+    // Request models needed by this operation.
+
+    // Account
+    const accountModel = {
+      id: '531fc3e28bfc43c5a2cea07786d93f5c',
+      name: 'NIST',
+      type: 'account_type',
+    };
+
+    // Tags
+    const tagsModel = {
+      user: ['testString'],
+      access: ['testString'],
+      service: ['testString'],
+    };
+
+    // Resource
+    const resourceModel = {
+      report_id: '30b434b3-cb08-4845-af10-7a8fc682b6a8',
+      home_account_id: '2411ffdc16844b07b42521c3443f456d',
+      id: 'crn:v1:bluemix:public:kms:us-south:a/5af747ca19a8a278b1b6e4eec20df507:03502a50-4ea9-463c-80e5-e27ed838cdb6::',
+      resource_name: 'jeff\'s key',
+      account: accountModel,
+      component_id: 'cloud-object_storage',
+      component_name: 'cloud-object_storage',
+      environment: 'ibm cloud',
+      tags: tagsModel,
+      status: 'compliant',
+      total_count: 140,
+      pass_count: 123,
+      failure_count: 12,
+      error_count: 5,
+      skipped_count: 7,
+      completed_count: 135,
+      service_name: 'pm-20',
+      instance_crn: 'testString',
+    };
+
+    // Credential
+    const credentialModel = {
+      secret_crn: 'testString',
+      resources: [resourceModel],
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      accountId: '62ecf99b240144dea9125666249edfcb',
+      trustedProfileId: 'Profile-cb2c1829-9a8d-4218-b9cd-9f83fc814e54',
+      name: 'Target for IBM account',
+      credentials: [credentialModel],
+    };
+
+    const res = await securityAndComplianceCenterApiService.createTarget(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    targetIdLink = res.result.id;
+  });
+
+  test('listTargets()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+    };
+
+    const res = await securityAndComplianceCenterApiService.listTargets(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getTarget()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      targetId: targetIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.getTarget(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('replaceTarget()', async () => {
+    // Request models needed by this operation.
+
+    // Account
+    const accountModel = {
+      id: '531fc3e28bfc43c5a2cea07786d93f5c',
+      name: 'NIST',
+      type: 'account_type',
+    };
+
+    // Tags
+    const tagsModel = {
+      user: ['testString'],
+      access: ['testString'],
+      service: ['testString'],
+    };
+
+    // Resource
+    const resourceModel = {
+      report_id: '30b434b3-cb08-4845-af10-7a8fc682b6a8',
+      home_account_id: '2411ffdc16844b07b42521c3443f456d',
+      id: 'crn:v1:bluemix:public:kms:us-south:a/5af747ca19a8a278b1b6e4eec20df507:03502a50-4ea9-463c-80e5-e27ed838cdb6::',
+      resource_name: 'jeff\'s key',
+      account: accountModel,
+      component_id: 'cloud-object_storage',
+      component_name: 'cloud-object_storage',
+      environment: 'ibm cloud',
+      tags: tagsModel,
+      status: 'compliant',
+      total_count: 140,
+      pass_count: 123,
+      failure_count: 12,
+      error_count: 5,
+      skipped_count: 7,
+      completed_count: 135,
+      service_name: 'pm-20',
+      instance_crn: 'testString',
+    };
+
+    // Credential
+    const credentialModel = {
+      secret_crn: 'dummy',
+      resources: [resourceModel],
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      targetId: targetIdLink,
+      accountId: 'be200c80cabc456e91139e4152327823',
+      trustedProfileId: 'Profile-a0a4c149-4fed-47ff-bfb2-680bcfaa64d3',
+      name: 'Sample Target Name',
+      credentials: [credentialModel],
+    };
+
+    const res = await securityAndComplianceCenterApiService.replaceTarget(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createProviderTypeInstance()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      providerTypeId: '3e25966275dccfa2c3a34786919c5af7',
+      name: 'workload-protection-instance-1',
+      attributes: { wp_crn: 'crn:v1:staging:public:sysdig-secure:eu-gb:a/14q5SEnVIbwxzvP4AWPCjr2dJg5BAvPb:d1461d1ae-df1eee12fa81812e0-12-aa259::' },
+    };
+
+    const res = await securityAndComplianceCenterApiService.createProviderTypeInstance(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    providerTypeInstanceIdLink = res.result.id;
+  });
+
+  test('listProviderTypeInstances()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      providerTypeId: '3e25966275dccfa2c3a34786919c5af7',
+    };
+
+    const res = await securityAndComplianceCenterApiService.listProviderTypeInstances(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getProviderTypeInstance()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      providerTypeId: '3e25966275dccfa2c3a34786919c5af7',
+      providerTypeInstanceId: providerTypeInstanceIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.getProviderTypeInstance(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateProviderTypeInstance()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      providerTypeId: '3e25966275dccfa2c3a34786919c5af7',
+      providerTypeInstanceId: providerTypeInstanceIdLink,
+      name: 'workload-protection-instance-1',
+      attributes: { wp_crn: 'crn:v1:staging:public:sysdig-secure:eu-gb:a/14q5SEnVIbwxzvP4AWPCjr2dJg5BAvPb:d1461d1ae-df1eee12fa81812e0-12-aa259::' },
+    };
+
+    const res = await securityAndComplianceCenterApiService.updateProviderTypeInstance(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listProviderTypes()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+    };
+
+    const res = await securityAndComplianceCenterApiService.listProviderTypes(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getProviderTypeById()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      providerTypeId: '3e25966275dccfa2c3a34786919c5af7',
+    };
+
+    const res = await securityAndComplianceCenterApiService.getProviderTypeById(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getLatestReports()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      sort: 'profile_name',
+    };
+
+    const res = await securityAndComplianceCenterApiService.getLatestReports(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    accountIdForReportLink = res.result.reports[0].account.id;
+    reportIdForReportLink = res.result.reports[0].id;
+    attachmentIdForReportLink = res.result.reports[0].attachment.id;
+    groupIdForReportLink = res.result.reports[0].group_id;
+    profileIdForReportLink = res.result.reports[0].profile.id;
+    typeForReportLink = res.result.reports[0].type;
   });
 
   test('listReports()', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-      attachmentId: attachmentIdForReportLink,
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      reportAttachmentId: attachmentIdForReportLink,
       groupId: groupIdForReportLink,
-      profileId: profileIdForReportLink,
+      reportProfileId: profileIdForReportLink,
       type: typeForReportLink,
+      start: 'testString',
       limit: 50,
       sort: 'profile_name',
     };
@@ -917,11 +1205,10 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listReports() via ReportsPager', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-      attachmentId: attachmentIdForReportLink,
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      reportAttachmentId: attachmentIdForReportLink,
       groupId: groupIdForReportLink,
-      profileId: profileIdForReportLink,
+      reportProfileId: profileIdForReportLink,
       type: typeForReportLink,
       limit: 10,
       sort: 'profile_name',
@@ -948,8 +1235,9 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
   test('getReport()', async () => {
     const params = {
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: 'testString',
+      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.getReport(params);
@@ -960,9 +1248,8 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('getReportSummary()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.getReportSummary(params);
@@ -971,15 +1258,15 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('getReportEvaluation()', async () => {
+  test('getReportDownloadFile()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      accept: 'application/csv',
       excludeSummary: true,
     };
 
-    const res = await securityAndComplianceCenterApiService.getReportEvaluation(params);
+    const res = await securityAndComplianceCenterApiService.getReportDownloadFile(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -987,15 +1274,16 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('getReportControls()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
       controlId: 'testString',
       controlName: 'testString',
       controlDescription: 'testString',
       controlCategory: 'testString',
       status: 'compliant',
       sort: 'control_name',
+      scopeId: 'testString',
+      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.getReportControls(params);
@@ -1004,31 +1292,35 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  // test('getReportRule()', async () => {
-  //   const params = {
-  //     reportId: reportIdForReportLink,
-  //     ruleId: 'rule-8d444f8c-fd1d-48de-bcaa-f43732568761',
-  //     xCorrelationId: 'testString',
-  //     xRequestId: 'testString',
-  //   };
+  test('getReportRule()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      reportId: reportIdForReportLink,
+      ruleId: 'rule-61fa114a-2bb9-43fd-8068-b873b48bdf79',
+    };
 
-  //   const res = await securityAndComplianceCenterApiService.getReportRule(params);
-  //   expect(res).toBeDefined();
-  //   expect(res.status).toBe(200);
-  //   expect(res.result).toBeDefined();
-  // });
+    const res = await securityAndComplianceCenterApiService.getReportRule(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
 
   test('listReportEvaluations()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
       assessmentId: 'testString',
+      assessmentMethod: 'testString',
       componentId: 'testString',
       targetId: 'testString',
+      targetEnv: 'testString',
       targetName: 'testString',
       status: 'failure',
+      start: 'testString',
       limit: 50,
+      sort: 'assessment_id',
+      scopeId: 'testString',
+      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.listReportEvaluations(params);
@@ -1039,11 +1331,19 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listReportEvaluations() via ReportEvaluationsPager', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      assessmentId: 'testString',
+      assessmentMethod: 'testString',
+      componentId: 'testString',
+      targetId: 'testString',
+      targetEnv: 'testString',
+      targetName: 'testString',
       status: 'failure',
       limit: 10,
+      sort: 'assessment_id',
+      scopeId: 'testString',
+      subscopeId: 'testString',
     };
 
     const allResults = [];
@@ -1066,16 +1366,18 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listReportResources()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
       id: 'testString',
       resourceName: 'testString',
       accountId: accountIdForReportLink,
       componentId: 'testString',
       status: 'compliant',
       sort: 'account_id',
+      start: 'testString',
       limit: 50,
+      scopeId: 'testString',
+      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.listReportResources(params);
@@ -1086,13 +1388,17 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('listReportResources() via ReportResourcesPager', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      id: 'testString',
+      resourceName: 'testString',
       accountId: accountIdForReportLink,
+      componentId: 'testString',
       status: 'compliant',
       sort: 'account_id',
       limit: 10,
+      scopeId: 'testString',
+      subscopeId: 'testString',
     };
 
     const allResults = [];
@@ -1115,9 +1421,8 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('getReportTags()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.getReportTags(params);
@@ -1128,10 +1433,11 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('getReportViolationsDrift()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
       scanTimeDuration: 0,
+      scopeId: 'testString',
+      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.getReportViolationsDrift(params);
@@ -1140,98 +1446,246 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('listProviderTypes()', async () => {
+  test('listScanReports()', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      reportId: reportIdForReportLink,
+      scopeId: 'testString',
+      subscopeId: 'testString',
+      sort: 'status',
     };
 
-    const res = await securityAndComplianceCenterApiService.listProviderTypes(params);
+    const res = await securityAndComplianceCenterApiService.listScanReports(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
-    providerTypeIdLink = res.result.provider_types[1].id;
+    scanIdForScanReportLink = res.result.scan_reports[0].id;
   });
 
-  test('getProviderTypeById()', async () => {
+  test('createScanReport()', async () => {
     const params = {
-      providerTypeId: providerTypeIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      reportId: reportIdForReportLink,
+      format: 'csv',
+      scopeId: '132009ff-b982-412e-a110-ad8797e10f84',
+      subscopeId: 'c7ddcbcc-6a43-4ab3-b6a7-b2d8f65cd54a',
     };
 
-    const res = await securityAndComplianceCenterApiService.getProviderTypeById(params);
+    const res = await securityAndComplianceCenterApiService.createScanReport(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getScanReport()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      reportId: reportIdForReportLink,
+      jobId: scanIdForScanReportLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.getScanReport(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('listProviderTypeInstances()', async () => {
+  test('getScanReportDownloadFile()', async () => {
     const params = {
-      providerTypeId: providerTypeIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      reportId: reportIdForReportLink,
+      jobId: scanIdForScanReportLink,
+      accept: 'application/csv',
     };
 
-    const res = await securityAndComplianceCenterApiService.listProviderTypeInstances(params);
+    const res = await securityAndComplianceCenterApiService.getScanReportDownloadFile(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('createProviderTypeInstance()', async () => {
+  test('listRules()', async () => {
     const params = {
-      providerTypeId: providerTypeIdLink,
-      name: 'workload-protection-instance-1',
-      attributes: { wp_crn: 'crn:v1:staging:public:sysdig-secure:us-south:a/ff88f007f9ff4622aac4fbc0eda36255:0df4004c-fb74-483b-97be-dd9bd35af4d8::' },
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      limit: 50,
+      start: 'testString',
+      type: 'system_defined',
+      search: 'testString',
+      serviceName: 'testString',
+      sort: 'updated_on',
     };
 
-    const res = await securityAndComplianceCenterApiService.createProviderTypeInstance(params);
+    const res = await securityAndComplianceCenterApiService.listRules(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listRules() via RulesPager', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      limit: 10,
+      type: 'system_defined',
+      search: 'testString',
+      serviceName: 'testString',
+      sort: 'updated_on',
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new SecurityAndComplianceCenterApiV3.RulesPager(securityAndComplianceCenterApiService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new SecurityAndComplianceCenterApiV3.RulesPager(securityAndComplianceCenterApiService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createRule()', async () => {
+    // Request models needed by this operation.
+
+    // AdditionalTargetAttribute
+    const additionalTargetAttributeModel = {
+      name: 'location',
+      operator: 'string_equals',
+      value: 'us-east',
+    };
+
+    // RuleTargetPrototype
+    const ruleTargetPrototypeModel = {
+      service_name: 'cloud-object-storage',
+      resource_kind: 'bucket',
+      additional_target_attributes: [additionalTargetAttributeModel],
+    };
+
+    // RequiredConfigConditionBase
+    const requiredConfigModel = {
+      description: 'The Cloud Object Storage rule.',
+      property: 'testString',
+      operator: 'string_equals',
+      value: 'testString',
+    };
+
+    // RuleParameter
+    const ruleParameterModel = {
+      name: 'hard_quota',
+      display_name: 'The Cloud Object Storage bucket quota.',
+      description: 'The maximum bytes that are allocated to the Cloud Object Storage bucket.',
+      type: 'numeric',
+    };
+
+    // Import
+    const importModel = {
+      parameters: [ruleParameterModel],
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      description: 'Example rule',
+      target: ruleTargetPrototypeModel,
+      requiredConfig: requiredConfigModel,
+      version: '1.0.0',
+      _import: importModel,
+      labels: [],
+    };
+
+    const res = await securityAndComplianceCenterApiService.createRule(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
-    providerTypeInstanceIdLink = res.result.id;
+    ruleIdLink = res.result.id;
   });
 
-  test('getProviderTypeInstance()', async () => {
+  test('getRule()', async () => {
     const params = {
-      providerTypeId: providerTypeIdLink,
-      providerTypeInstanceId: providerTypeInstanceIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      ruleId: ruleIdLink,
     };
 
-    const res = await securityAndComplianceCenterApiService.getProviderTypeInstance(params);
+    const res = await securityAndComplianceCenterApiService.getRule(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+    eTagLink = res.headers['etag'];
+  });
+
+  test('replaceRule()', async () => {
+    // Request models needed by this operation.
+
+    // AdditionalTargetAttribute
+    const additionalTargetAttributeModel = {
+      name: 'location',
+      operator: 'string_equals',
+      value: 'us-south',
+    };
+
+    // RuleTargetPrototype
+    const ruleTargetPrototypeModel = {
+      service_name: 'cloud-object-storage',
+      resource_kind: 'bucket',
+      additional_target_attributes: [additionalTargetAttributeModel],
+    };
+
+    // RequiredConfigConditionBase
+    const requiredConfigModel = {
+      description: 'The Cloud Object Storage rule.',
+      property: 'testString',
+      operator: 'string_equals',
+      value: 'testString',
+    };
+
+    // RuleParameter
+    const ruleParameterModel = {
+      name: 'hard_quota',
+      display_name: 'The Cloud Object Storage bucket quota.',
+      description: 'The maximum bytes that are allocated to the Cloud Object Storage bucket.',
+      type: 'numeric',
+    };
+
+    // Import
+    const importModel = {
+      parameters: [ruleParameterModel],
+    };
+
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      ruleId: ruleIdLink,
+      ifMatch: eTagLink,
+      description: 'Example rule',
+      target: ruleTargetPrototypeModel,
+      requiredConfig: requiredConfigModel,
+      version: '1.0.1',
+      _import: importModel,
+      labels: [],
+    };
+
+    const res = await securityAndComplianceCenterApiService.replaceRule(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('updateProviderTypeInstance()', async () => {
-    const params = {
-      providerTypeId: providerTypeIdLink,
-      providerTypeInstanceId: providerTypeInstanceIdLink,
-      name: 'workload-protection-instance-1',
-      attributes: { wp_crn: 'crn:v1:staging:public:sysdig-secure:us-south:a/ff88f007f9ff4622aac4fbc0eda36255:0df4004c-fb74-483b-97be-dd9bd35af4d8::' },
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.updateProviderTypeInstance(params);
+  test('listServices()', async () => {
+    const res = await securityAndComplianceCenterApiService.listServices();
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
   });
 
-  test('getProviderTypesInstances()', async () => {
+  test('getService()', async () => {
     const params = {
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      servicesName: 'cloud-object-storage',
     };
 
-    const res = await securityAndComplianceCenterApiService.getProviderTypesInstances(params);
+    const res = await securityAndComplianceCenterApiService.getService(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
     expect(res.result).toBeDefined();
@@ -1239,10 +1693,10 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('deleteProfileAttachment()', async () => {
     const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: '9c265b4a-4cdf-47f1-acd3-17b5808f7f3f',
       attachmentId: attachmentIdLink,
-      profilesId: profileIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      accountId: accountIdForReportLink,
     };
 
     const res = await securityAndComplianceCenterApiService.deleteProfileAttachment(params);
@@ -1251,24 +1705,11 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('deleteCustomProfile()', async () => {
-    const params = {
-      profilesId: profileIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
-    };
-
-    const res = await securityAndComplianceCenterApiService.deleteCustomProfile(params);
-    expect(res).toBeDefined();
-    expect(res.status).toBe(200);
-    expect(res.result).toBeDefined();
-  });
-
   test('deleteCustomControlLibrary()', async () => {
     const params = {
-      controlLibrariesId: controlLibraryIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      controlLibraryId: controlLibraryIdLink,
+      accountId: accountIdForReportLink,
     };
 
     const res = await securityAndComplianceCenterApiService.deleteCustomControlLibrary(params);
@@ -1277,14 +1718,51 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('deleteRule()', async () => {
+  test('deleteCustomProfile()', async () => {
     const params = {
-      ruleId: ruleIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      profileId: profileIdLink,
+      accountId: accountIdForReportLink,
     };
 
-    const res = await securityAndComplianceCenterApiService.deleteRule(params);
+    const res = await securityAndComplianceCenterApiService.deleteCustomProfile(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteSubscope()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+      subscopeId: subScopeIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.deleteSubscope(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteScope()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      scopeId: scopeIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.deleteScope(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteTarget()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      targetId: targetIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.deleteTarget(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(204);
     expect(res.result).toBeDefined();
@@ -1292,13 +1770,24 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
 
   test('deleteProviderTypeInstance()', async () => {
     const params = {
-      providerTypeId: providerTypeIdLink,
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      providerTypeId: '3e25966275dccfa2c3a34786919c5af7',
       providerTypeInstanceId: providerTypeInstanceIdLink,
-      xCorrelationId: 'testString',
-      xRequestId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.deleteProviderTypeInstance(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(204);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteRule()', async () => {
+    const params = {
+      instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
+      ruleId: ruleIdLink,
+    };
+
+    const res = await securityAndComplianceCenterApiService.deleteRule(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(204);
     expect(res.result).toBeDefined();
