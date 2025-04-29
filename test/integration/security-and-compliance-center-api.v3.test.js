@@ -1412,8 +1412,6 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
       scanTimeDuration: 0,
-      scopeId: 'testString',
-      subscopeId: 'testString',
     };
 
     const res = await securityAndComplianceCenterApiService.getReportViolationsDrift(params);
