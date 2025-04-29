@@ -463,15 +463,8 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
     const controlSpecificationPrototypeModel = {
       component_id: 'apprapp',
       environment: 'ibm-cloud',
-      control_specification_id: 'testString',
       control_specification_description: 'This field is used to describe a control specification',
       assessments: [assessmentPrototypeModel],
-    };
-
-    // ControlDoc
-    const controlDocModel = {
-      control_docs_id: 'testString',
-      control_docs_type: 'testString',
     };
 
     // ControlPrototype
@@ -480,9 +473,7 @@ describe('SecurityAndComplianceCenterApiV3_integration', () => {
       control_description: 'This is a description of a control',
       control_category: 'test-control',
       control_requirement: true,
-      control_parent: 'testString',
       control_specifications: [controlSpecificationPrototypeModel],
-      control_docs: controlDocModel,
       status: 'disabled',
     };
 
