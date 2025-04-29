@@ -50,8 +50,11 @@ const originalWarn = console.warn;
 // Mocks for console.log and console.warn
 const consoleLogMock = jest.spyOn(console, 'log');
 const consoleWarnMock = jest.spyOn(console, 'warn');
+const timeout = 200000;
 
 describe('SecurityAndComplianceCenterApiV3', () => {
+  jest.setTimeout(timeout);
+
   // Service instance
   let securityAndComplianceCenterApiService;
 
