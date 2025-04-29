@@ -1739,7 +1739,7 @@ describe('SecurityAndComplianceCenterApiV3', () => {
       groupId: groupIdForReportLink,
       reportProfileId: profileIdForReportLink,
       type: typeForReportLink,
-      limit: 10,
+      limit: 100,
       sort: 'profile_name',
     };
 
