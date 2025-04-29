@@ -1923,17 +1923,9 @@ describe('SecurityAndComplianceCenterApiV3', () => {
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       reportId: reportIdForReportLink,
-      assessmentId: 'testString',
-      assessmentMethod: 'testString',
-      componentId: 'testString',
-      targetId: 'testString',
-      targetEnv: 'testString',
-      targetName: 'testString',
       status: 'failure',
       limit: 10,
       sort: 'assessment_id',
-      scopeId: 'testString',
-      subscopeId: 'testString',
     };
 
     const allResults = [];
