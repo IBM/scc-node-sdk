@@ -712,20 +712,15 @@ describe('SecurityAndComplianceCenterApiV3', () => {
       assessments: [assessmentPrototypeModel],
     };
 
-    // ControlDoc
-    const controlDocModel = {
-    };
-
     // ControlPrototype
     const controlPrototypeModel = {
       control_name: 'security',
       control_description: 'This is a description of a control',
       control_category: 'test-control',
       control_requirement: true,
-      control_parent: 'testString',
+      control_parent: '',
       control_specifications: [controlSpecificationPrototypeModel],
-      control_docs: controlDocModel,
-      status: 'disabled',
+      status: 'enabled',
     };
 
     const params = {
