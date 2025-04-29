@@ -1488,9 +1488,9 @@ describe('SecurityAndComplianceCenterApiV3', () => {
     const params = {
       instanceId: 'acd7032c-15a3-484f-bf5b-67d41534d940',
       targetId: targetIdLink,
-      accountId: 'be200c80cabc456e91139e4152327823',
-      trustedProfileId: 'Profile-a0a4c149-4fed-47ff-bfb2-680bcfaa64d3',
-      name: 'Sample Target Name',
+      accountId: '62ecf99b240144dea9125666249edfcb',
+      trustedProfileId: 'Profile-cb2c1829-9a8d-4218-b9cd-9f83fc814e54',
+      name: 'Updated SDK target',
     };
 
     let res;
