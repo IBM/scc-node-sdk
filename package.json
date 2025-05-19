@@ -28,11 +28,11 @@
     "test-travis": "jest --runInBand --testNamePattern='^((?!@slow).)*$' test/",
     "test-unit-travis": "jest --runInBand test/unit/",
     "test-integration-travis": "jest --runInBand --no-colors --testNamePattern='^((?!@slow).)*$' --json test/integration > test-output.log",
-    "check-packages": "installed-check -e -d -v"
+    "check-packages": "installed-check -e -d -v 2>&1 | grep -v 'extend: Missing engine: node'"
   },
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=14.17.0"
+    "node": ">=20.19.2"
   },
   "dependencies": {
     "@semantic-release/changelog": "^6.0.3",
