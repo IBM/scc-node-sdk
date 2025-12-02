@@ -7,6 +7,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d9ee122b1df32e1da7f2/test_coverage)](https://codeclimate.com/github/IBM/scc-node-sdk/test_coverage)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+> **⚠️ Important Notice:** SDK support for this service will be discontinued after December 15 2025.
 
 # IBM Cloud Security & Compliance Center Node.js SDK
 
